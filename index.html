@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>German Practice</title>
+  <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --accent-vocab: #5b7dff;
+  --accent-sentence: #1dd1a1;
+  --accent-a1: #ff7675;
+  --accent-a2: #fdcb6e;
+  --accent-b1: #0984e3;
+  --accent-b2: #9b59b6;
+  --accent-mixed: #27ae60;
+  --text-primary: #ffffff;
+  --bg-dark: #0f1419;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.screen {
+  display: none;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── HOME SCREEN ── */
+#screen-home.active {
+  justify-content: center;
+  align-items: center;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.logo-icon {
+  font-size: clamp(4rem, 15vw, 8rem);
+  margin-bottom: 1rem;
+}
+
+.app-title {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #5b7dff, #ff6b9d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.app-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: #aaa;
+}
+
+.home-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 4vw, 2rem);
+  width: 100%;
+  max-width: 900px;
+}
+
+.home-btn {
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: clamp(1rem, 3vw, 2rem);
+  background: linear-gradient(135deg, rgba(91, 125, 255, 0.1), rgba(91, 125, 255, 0.05));
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  transition: all 0.3s ease;
+}
+
+.home-btn:hover {
+  transform: translateY(-0.5rem);
+  background: linear-gradient(135deg, rgba(91, 125, 255, 0.2), rgba(91, 125, 255, 0.15));
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.vocab-btn {
+  background: linear-gradient(135deg, rgba(91, 125, 255, 0.15), rgba(91, 125, 255, 0.05));
+  border-color: var(--accent-vocab);
+}
+
+.sentence-btn {
+  background: linear-gradient(135deg, rgba(29, 209, 161, 0.15), rgba(29, 209, 161, 0.05));
+  border-color: var(--accent-sentence);
+}
+
+.btn-icon {
+  font-size: clamp(2rem, 6vw, 4rem);
+}
+
+.btn-label {
+  font-weight: 700;
+}
+
+.btn-sub {
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  color: #aaa;
+  font-weight: 400;
+}
+
+/* ── LEVEL SELECTION SCREEN ── */
+#screen-level.active,
+#screen-vocabulary.active,
+#screen-sentence.active {
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(1rem, 2vw, 2rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 1rem;
+}
+
+.back-btn {
+  padding: clamp(0.5rem, 1vw, 1rem) clamp(1rem, 2vw, 1.5rem);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mode-title {
+  flex: 1;
+  text-align: center;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+}
+
+.counter {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: #aaa;
+  min-width: 5rem;
+  text-align: right;
+}
+
+.level-select-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(2rem, 4vw, 4rem);
+}
+
+.level-select-heading {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  color: #ccc;
+}
+
+.level-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 3vw, 2rem);
+  width: 100%;
+  max-width: 700px;
+}
+
+.level-btn {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: clamp(0.8rem, 2vw, 1.5rem);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.5rem, 1vw, 0.8rem);
+  transition: all 0.3s ease;
+}
+
+.level-btn:hover {
+  transform: translateY(-0.3rem);
+}
+
+.level-code {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+}
+
+.level-desc {
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  color: #aaa;
+  font-weight: 400;
+}
+
+.level-a1 {
+  background: linear-gradient(135deg, rgba(255, 118, 117, 0.1), rgba(255, 118, 117, 0.05));
+  border-color: var(--accent-a1);
+}
+
+.level-a1:hover {
+  background: linear-gradient(135deg, rgba(255, 118, 117, 0.15), rgba(255, 118, 117, 0.1));
+}
+
+.level-a2 {
+  background: linear-gradient(135deg, rgba(253, 203, 110, 0.1), rgba(253, 203, 110, 0.05));
+  border-color: var(--accent-a2);
+}
+
+.level-a2:hover {
+  background: linear-gradient(135deg, rgba(253, 203, 110, 0.15), rgba(253, 203, 110, 0.1));
+}
+
+.level-b1 {
+  background: linear-gradient(135deg, rgba(9, 132, 227, 0.1), rgba(9, 132, 227, 0.05));
+  border-color: var(--accent-b1);
+}
+
+.level-b1:hover {
+  background: linear-gradient(135deg, rgba(9, 132, 227, 0.15), rgba(9, 132, 227, 0.1));
+}
+
+.level-b2 {
+  background: linear-gradient(135deg, rgba(155, 89, 182, 0.1), rgba(155, 89, 182, 0.05));
+  border-color: var(--accent-b2);
+}
+
+.level-b2:hover {
+  background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.1));
+}
+
+
+
+.level-mixed {
+  background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.05));
+  border-color: var(--accent-mixed);
+  grid-column: 1 / -1;
+}
+
+.level-mixed:hover {
+  background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.1));
+}
+
+/* ── VOCABULARY SCREEN ── */
+.vocab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(2rem, 4vw, 4rem);
+  text-align: center;
+}
+
+.level-badge {
+  display: inline-block;
+  padding: clamp(0.3rem, 1vw, 0.6rem) clamp(0.8rem, 2vw, 1.2rem);
+  background-color: rgba(91, 125, 255, 0.2);
+  border: 1px solid var(--accent-vocab);
+  border-radius: 999px;
+  color: var(--accent-vocab);
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  margin-bottom: clamp(1rem, 2vw, 2rem);
+}
+
+.word-display {
+  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-weight: 700;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.example-sentence {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border-radius: clamp(0.8rem, 1.5vw, 1rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.example-label {
+  color: var(--accent-vocab);
+  font-weight: 700;
+}
+
+.question-display {
+  font-size: clamp(1.8rem, 7vw, 3.5rem);
+  font-weight: 700;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.sentence-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(2rem, 4vw, 4rem);
+  text-align: center;
+}
+
+.options-section,
+.answers-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1rem, 2vw, 2rem);
+  width: 100%;
+}
+
+.show-btn {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background-color: var(--accent-vocab);
+  border: none;
+  color: white;
+  border-radius: clamp(0.8rem, 1.5vw, 1rem);
+  cursor: pointer;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+#sentence-show-btn {
+  background-color: var(--accent-sentence);
+}
+
+.show-btn:hover {
+  transform: translateY(-0.3rem);
+  opacity: 0.9;
+}
+
+.show-btn.hidden {
+  display: none;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.8rem, 2vw, 1.5rem);
+  margin-top: clamp(1rem, 2vw, 2rem);
+}
+
+.options-grid.hidden {
+  display: none;
+}
+
+.option-card {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background-color: rgba(91, 125, 255, 0.1);
+  border: 2px solid rgba(91, 125, 255, 0.3);
+  color: var(--text-primary);
+  border-radius: clamp(0.6rem, 1.5vw, 1rem);
+  cursor: pointer;
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.option-card:hover {
+  background-color: rgba(91, 125, 255, 0.2);
+  border-color: rgba(91, 125, 255, 0.5);
+}
+
+.option-card.correct {
+  background-color: rgba(39, 174, 96, 0.3);
+  border-color: var(--accent-mixed);
+  color: #1dd1a1;
+}
+
+.option-card.wrong {
+  background-color: rgba(231, 76, 60, 0.3);
+  border-color: #e74c3c;
+  color: #ff7675;
+}
+
+.answers-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 2vw, 1.5rem);
+  margin-top: clamp(1rem, 2vw, 2rem);
+}
+
+.answers-list.hidden {
+  display: none;
+}
+
+.answer-card {
+  display: flex;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background-color: rgba(29, 209, 161, 0.1);
+  border: 2px solid rgba(29, 209, 161, 0.3);
+  border-left: 4px solid var(--accent-sentence);
+  border-radius: clamp(0.6rem, 1.5vw, 1rem);
+  color: var(--text-primary);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.5;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.answer-num {
+  min-width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent-sentence);
+  color: var(--bg-dark);
+  border-radius: 50%;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: #888;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+}
+
+.no-results span {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: clamp(1rem, 2vw, 2rem);
+  padding: clamp(1rem, 2vw, 2rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn {
+  flex: 1;
+  padding: clamp(0.8rem, 1.5vw, 1.2rem);
+  background-color: rgba(91, 125, 255, 0.15);
+  border: 2px solid rgba(91, 125, 255, 0.3);
+  color: var(--text-primary);
+  border-radius: clamp(0.6rem, 1.5vw, 1rem);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+#sentence-prev,
+#sentence-next {
+  background-color: rgba(29, 209, 161, 0.15);
+  border-color: rgba(29, 209, 161, 0.3);
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: rgba(91, 125, 255, 0.25);
+  border-color: rgba(91, 125, 255, 0.5);
+}
+
+#sentence-prev:hover:not(:disabled),
+#sentence-next:hover:not(:disabled) {
+  background-color: rgba(29, 209, 161, 0.25);
+  border-color: rgba(29, 209, 161, 0.5);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.inline-translate-btn {
+  background-color: rgba(91, 125, 255, 0.15);
+  border: 1px solid rgba(91, 125, 255, 0.5);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  width: clamp(2.5rem, 4vw, 3.5rem);
+  height: clamp(2.5rem, 4vw, 3.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.inline-translate-btn:hover {
+  background-color: rgba(91, 125, 255, 0.3);
+  border-color: rgba(91, 125, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.answer-translate-btn {
+  margin-left: auto;
+}
+
+.top-bar-spacer {
+  min-width: 5rem;
+}
+  </style>
+</head>
+<body>
+
+  <!-- HOME SCREEN -->
+  <div id="screen-home" class="screen active">
+    <div class="home-header">
+      <div class="logo-icon">📚</div>
+      <h1 class="app-title">German Practice</h1>
+      <p class="app-subtitle">Volkan DENİZ- Aslı AYKURT</p>
+    </div>
+    <div class="home-buttons">
+      <button class="home-btn vocab-btn" onclick="startMode('vocabulary')">
+        <span class="btn-icon">🔤</span>
+        <span class="btn-label">Vocabulary</span>
+        <span class="btn-sub">Word Recognition</span>
+      </button>
+      <button class="home-btn sentence-btn" onclick="startMode('sentence')">
+        <span class="btn-icon">💬</span>
+        <span class="btn-label">Sentence<br>Practice</span>
+        <span class="btn-sub">Answer Formation</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- LEVEL SELECTION SCREEN -->
+  <div id="screen-level" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goHome()">← Main Menu</button>
+      <div class="mode-title" id="level-mode-title">Vocabulary</div>
+      <div class="top-bar-spacer"></div>
+    </div>
+    <div class="level-select-content">
+      <p class="level-select-heading">Select a level to begin</p>
+      <div class="level-grid">
+        <button class="level-btn level-a1" onclick="selectLevel('A1')">
+          <span class="level-code">A1</span>
+          <span class="level-desc">Beginner</span>
+        </button>
+        <button class="level-btn level-a2" onclick="selectLevel('A2')">
+          <span class="level-code">A2</span>
+          <span class="level-desc">Elementary</span>
+        </button>
+        <button class="level-btn level-b1" onclick="selectLevel('B1')">
+          <span class="level-code">B1</span>
+          <span class="level-desc">Pre-Intermediate</span>
+        </button>
+        <button class="level-btn level-b2" onclick="selectLevel('B2')">
+          <span class="level-code">B2</span>
+          <span class="level-desc">Upper-Intermediate</span>
+        </button>
+          <span class="level-desc">Advanced</span>
+        </button>
+        <button class="level-btn level-mixed" onclick="selectLevel('mixed')">
+          <span class="level-code">🔀</span>
+          <span class="level-desc">Mixed – All Levels</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOCABULARY SCREEN -->
+  <div id="screen-vocabulary" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goLevelSelect()">← Levels</button>
+      <div class="mode-title">Vocabulary</div>
+      <div class="counter" id="vocab-counter">1 / 10</div>
+    </div>
+
+    <div class="vocab-content">
+      <div class="level-badge" id="vocab-level">B2</div>
+      <div class="word-display" id="vocab-word">Persistence</div>
+      <div class="example-sentence">
+        <div style="display: flex; align-items: flex-start; justify-content: center; gap: 1rem;">
+          <div>
+            <span class="example-label">Example:</span>
+            <span id="vocab-example-text">His persistence finally paid off when he got the job.</span>
+          </div>
+          <button class="inline-translate-btn" onclick="toggleVocabTranslation()" title="Çeviriyi Göster/Gizle">🇹🇷</button>
+        </div>
+        <div id="vocab-example-tr" style="display: none; color: #ffeb3b; margin-top: 0.5rem; font-size: 0.95rem;"></div>
+      </div>
+    </div>
+
+    <div class="options-section">
+      <button class="show-btn" id="vocab-show-btn" onclick="showVocabOptions()">
+        👁 Show Options
+      </button>
+      <div class="options-grid hidden" id="vocab-options"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <button class="nav-btn" id="vocab-prev" onclick="prevItem('vocabulary')">◀ Previous</button>
+      <button class="nav-btn next-btn" id="vocab-next" onclick="nextItem('vocabulary')">Next ▶</button>
+    </div>
+  </div>
+
+  <!-- SENTENCE SCREEN -->
+  <div id="screen-sentence" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goLevelSelect()">← Levels</button>
+      <div class="mode-title">Sentence Practice</div>
+      <div class="counter" id="sentence-counter">1 / 8</div>
+    </div>
+
+    <div class="sentence-content">
+      <div class="level-badge" id="sentence-level">A1</div>
+      <div style="display: flex; align-items: flex-start; justify-content: center; gap: 1rem; margin-bottom: clamp(2rem, 4vw, 3rem);">
+        <div class="question-display" id="sentence-question" style="margin-bottom: 0;">
+          What would you do if you were the president?
+        </div>
+        <button class="inline-translate-btn" onclick="toggleQuestionTranslation()" title="Çeviriyi Göster/Gizle">🇹🇷</button>
+      </div>
+      <div class="question-display" id="sentence-question-tr" style="display: none; color: #ffeb3b; font-size: clamp(1.2rem, 5vw, 2.5rem); margin-bottom: clamp(2rem, 4vw, 3rem);">
+      </div>
+    </div>
+
+    <div class="answers-section">
+      <button class="show-btn" id="sentence-show-btn" onclick="showSentenceAnswers()">
+        💡 Show Answers
+      </button>
+      <div class="answers-list hidden" id="sentence-answers"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <button class="nav-btn" id="sentence-prev" onclick="prevItem('sentence')">◀ Previous</button>
+      <button class="nav-btn next-btn" id="sentence-next" onclick="nextItem('sentence')">Next ▶</button>
+    </div>
+  </div>
+
+  <script>
+const data = {
+  "vocabulary": [
+    {"word":"Hallo","level":"A1","options":["Merhaba","Güle güle","Teşekkürler","Özür dilerim"],"answer":"Merhaba","example":"Hallo! Wie geht es dir?","example_tr":"Merhaba! Nasılsın?"},
+    {"word":"danke","level":"A1","options":["teşekkürler","lütfen","evet","hayır"],"answer":"teşekkürler","example":"Danke für deine Hilfe!","example_tr":"Yardımın için teşekkürler!"},
+    {"word":"bitte","level":"A1","options":["lütfen","hayır","evet","güle güle"],"answer":"lütfen","example":"Bitte hilf mir!","example_tr":"Lütfen bana yardım et!"},
+    {"word":"ja","level":"A1","options":["evet","hayır","belki","hiç"],"answer":"evet","example":"Ja, ich komme morgen.","example_tr":"Evet, yarın geleceğim."},
+    {"word":"nein","level":"A1","options":["hayır","evet","belki","tamam"],"answer":"hayır","example":"Nein, ich mag das nicht.","example_tr":"Hayır, bunu sevmiyorum."},
+    {"word":"gut","level":"A1","options":["iyi","kötü","büyük","küçük"],"answer":"iyi","example":"Das Essen ist sehr gut.","example_tr":"Yemek çok güzel."},
+    {"word":"schlecht","level":"A1","options":["kötü","iyi","güzel","hızlı"],"answer":"kötü","example":"Das Wetter ist heute schlecht.","example_tr":"Hava bugün kötü."},
+    {"word":"groß","level":"A1","options":["büyük","küçük","uzun","kısa"],"answer":"büyük","example":"Das Haus ist sehr groß.","example_tr":"Ev çok büyük."},
+    {"word":"klein","level":"A1","options":["küçük","büyük","yeni","eski"],"answer":"küçük","example":"Die Katze ist sehr klein.","example_tr":"Kedi çok küçük."},
+    {"word":"schön","level":"A1","options":["güzel","çirkin","büyük","eski"],"answer":"güzel","example":"Das ist ein schöner Tag.","example_tr":"Bu güzel bir gün."},
+    {"word":"alt","level":"A1","options":["yaşlı/eski","yeni/genç","büyük","küçük"],"answer":"yaşlı/eski","example":"Dieses Buch ist sehr alt.","example_tr":"Bu kitap çok eski."},
+    {"word":"neu","level":"A1","options":["yeni","eski","büyük","küçük"],"answer":"yeni","example":"Ich habe ein neues Auto.","example_tr":"Yeni bir arabam var."},
+    {"word":"kalt","level":"A1","options":["soğuk","sıcak","ıslak","kuru"],"answer":"soğuk","example":"Das Wasser ist kalt.","example_tr":"Su soğuk."},
+    {"word":"warm","level":"A1","options":["sıcak","soğuk","yağmurlu","rüzgarlı"],"answer":"sıcak","example":"Es ist heute sehr warm.","example_tr":"Bugün hava çok sıcak."},
+    {"word":"Haus","level":"A1","options":["ev","araba","okul","mağaza"],"answer":"ev","example":"Ich wohne in einem großen Haus.","example_tr":"Büyük bir evde yaşıyorum."},
+    {"word":"Wohnung","level":"A1","options":["daire","ev","oda","mutfak"],"answer":"daire","example":"Meine Wohnung ist klein aber schön.","example_tr":"Dairem küçük ama güzel."},
+    {"word":"Zimmer","level":"A1","options":["oda","ev","mutfak","banyo"],"answer":"oda","example":"Mein Zimmer ist sehr ordentlich.","example_tr":"Odam çok düzenli."},
+    {"word":"Familie","level":"A1","options":["aile","arkadaş","komşu","akraba"],"answer":"aile","example":"Meine Familie ist sehr groß.","example_tr":"Ailem çok büyük."},
+    {"word":"Mutter","level":"A1","options":["anne","baba","abla","kardeş"],"answer":"anne","example":"Meine Mutter kocht sehr gut.","example_tr":"Annem çok iyi yemek yapar."},
+    {"word":"Vater","level":"A1","options":["baba","anne","abla","dede"],"answer":"baba","example":"Mein Vater arbeitet in einer Fabrik.","example_tr":"Babam bir fabrikada çalışıyor."},
+    {"word":"Bruder","level":"A1","options":["erkek kardeş","kız kardeş","baba","anne"],"answer":"erkek kardeş","example":"Mein Bruder ist zehn Jahre alt.","example_tr":"Erkek kardeşim on yaşında."},
+    {"word":"Schwester","level":"A1","options":["kız kardeş","erkek kardeş","anne","teyze"],"answer":"kız kardeş","example":"Meine Schwester studiert Medizin.","example_tr":"Kız kardeşim tıp okuyor."},
+    {"word":"Kind","level":"A1","options":["çocuk","yetişkin","yaşlı","bebek"],"answer":"çocuk","example":"Das Kind spielt im Garten.","example_tr":"Çocuk bahçede oynuyor."},
+    {"word":"Freund","level":"A1","options":["arkadaş/sevgili","komşu","öğretmen","yabancı"],"answer":"arkadaş/sevgili","example":"Mein Freund heißt Max.","example_tr":"Arkadaşımın adı Max."},
+    {"word":"Schule","level":"A1","options":["okul","üniversite","hastane","market"],"answer":"okul","example":"Ich gehe jeden Tag in die Schule.","example_tr":"Her gün okula gidiyorum."},
+    {"word":"Lehrer","level":"A1","options":["öğretmen","doktor","polis","şoför"],"answer":"öğretmen","example":"Unser Lehrer erklärt sehr gut.","example_tr":"Öğretmenimiz çok iyi anlatıyor."},
+    {"word":"Buch","level":"A1","options":["kitap","defter","kalem","çanta"],"answer":"kitap","example":"Ich lese gerne ein Buch.","example_tr":"Kitap okumayı seviyorum."},
+    {"word":"Auto","level":"A1","options":["araba","bisiklet","otobüs","uçak"],"answer":"araba","example":"Das Auto ist rot.","example_tr":"Araba kırmızı."},
+    {"word":"Wasser","level":"A1","options":["su","süt","çay","meyve suyu"],"answer":"su","example":"Ich trinke viel Wasser.","example_tr":"Çok su içiyorum."},
+    {"word":"Brot","level":"A1","options":["ekmek","peynir","et","sebze"],"answer":"ekmek","example":"Ich esse morgens Brot mit Butter.","example_tr":"Sabahları tereyağlı ekmek yiyorum."},
+    {"word":"Milch","level":"A1","options":["süt","su","çay","kahve"],"answer":"süt","example":"Kinder trinken gerne Milch.","example_tr":"Çocuklar süt içmeyi sever."},
+    {"word":"Kaffee","level":"A1","options":["kahve","çay","su","meyve suyu"],"answer":"kahve","example":"Ich trinke jeden Morgen Kaffee.","example_tr":"Her sabah kahve içerim."},
+    {"word":"Tag","level":"A1","options":["gün","gece","hafta","ay"],"answer":"gün","example":"Heute ist ein schöner Tag.","example_tr":"Bugün güzel bir gün."},
+    {"word":"Nacht","level":"A1","options":["gece","gün","sabah","akşam"],"answer":"gece","example":"Die Nacht ist sehr ruhig.","example_tr":"Gece çok sessiz."},
+    {"word":"Morgen","level":"A1","options":["sabah","akşam","gece","öğle"],"answer":"sabah","example":"Guten Morgen! Wie geht es dir?","example_tr":"Günaydın! Nasılsın?"},
+    {"word":"Abend","level":"A1","options":["akşam","sabah","öğle","gece"],"answer":"akşam","example":"Am Abend esse ich mit der Familie.","example_tr":"Akşamları ailemle yemek yerim."},
+    {"word":"Woche","level":"A1","options":["hafta","gün","ay","yıl"],"answer":"hafta","example":"Die Woche hat sieben Tage.","example_tr":"Haftanın yedi günü vardır."},
+    {"word":"Monat","level":"A1","options":["ay","hafta","yıl","gün"],"answer":"ay","example":"Januar ist der erste Monat des Jahres.","example_tr":"Ocak yılın ilk ayıdır."},
+    {"word":"Jahr","level":"A1","options":["yıl","ay","hafta","gün"],"answer":"yıl","example":"Ich lerne seit einem Jahr Deutsch.","example_tr":"Bir yıldır Almanca öğreniyorum."},
+    {"word":"Geld","level":"A1","options":["para","banka","fatura","çek"],"answer":"para","example":"Ich habe kein Geld dabei.","example_tr":"Yanımda hiç param yok."},
+    {"word":"Stadt","level":"A1","options":["şehir","köy","ülke","kasaba"],"answer":"şehir","example":"Berlin ist eine große Stadt.","example_tr":"Berlin büyük bir şehir."},
+    {"word":"Hund","level":"A1","options":["köpek","kedi","kuş","balık"],"answer":"köpek","example":"Mein Hund heißt Bello.","example_tr":"Köpeğimin adı Bello."},
+    {"word":"Katze","level":"A1","options":["kedi","köpek","tavşan","hamster"],"answer":"kedi","example":"Die Katze schläft auf dem Sofa.","example_tr":"Kedi koltukta uyuyor."},
+    {"word":"sein","level":"A1","options":["olmak","sahip olmak","gitmek","gelmek"],"answer":"olmak","example":"Ich bin Student.","example_tr":"Ben öğrenciyim."},
+    {"word":"haben","level":"A1","options":["sahip olmak","olmak","yapmak","gitmek"],"answer":"sahip olmak","example":"Ich habe zwei Geschwister.","example_tr":"İki kardeşim var."},
+    {"word":"gehen","level":"A1","options":["gitmek","gelmek","durmak","oturmak"],"answer":"gitmek","example":"Ich gehe in die Schule.","example_tr":"Okula gidiyorum."},
+    {"word":"kommen","level":"A1","options":["gelmek","gitmek","durmak","beklemek"],"answer":"gelmek","example":"Er kommt aus Deutschland.","example_tr":"O Almanya'dan geliyor."},
+    {"word":"essen","level":"A1","options":["yemek yemek","içmek","uyumak","koşmak"],"answer":"yemek yemek","example":"Wir essen zusammen zu Abend.","example_tr":"Birlikte akşam yemeği yiyoruz."},
+    {"word":"trinken","level":"A1","options":["içmek","yemek","uyumak","oynamak"],"answer":"içmek","example":"Ich trinke gerne Tee.","example_tr":"Çay içmeyi seviyorum."},
+    {"word":"spielen","level":"A1","options":["oynamak","çalışmak","uyumak","yemek"],"answer":"oynamak","example":"Die Kinder spielen im Park.","example_tr":"Çocuklar parkta oynuyor."},
+    {"word":"Bahnhof","level":"A2","options":["tren istasyonu","otobüs durağı","havalimanı","liman"],"answer":"tren istasyonu","example":"Ich warte am Bahnhof auf meinen Zug.","example_tr":"İstasyonda trenimi bekliyorum."},
+    {"word":"Supermarkt","level":"A2","options":["süpermarket","fırın","eczane","restoran"],"answer":"süpermarket","example":"Ich kaufe im Supermarkt ein.","example_tr":"Süpermarketten alışveriş yapıyorum."},
+    {"word":"Apotheke","level":"A2","options":["eczane","hastane","klinik","market"],"answer":"eczane","example":"Ich hole das Medikament aus der Apotheke.","example_tr":"İlacı eczaneden alıyorum."},
+    {"word":"Krankenhaus","level":"A2","options":["hastane","eczane","klinik","okul"],"answer":"hastane","example":"Er liegt im Krankenhaus.","example_tr":"O hastanede yatıyor."},
+    {"word":"Bibliothek","level":"A2","options":["kütüphane","kitabevi","okul","müze"],"answer":"kütüphane","example":"Ich leihe Bücher aus der Bibliothek.","example_tr":"Kütüphaneden kitap ödünç alıyorum."},
+    {"word":"Wetter","level":"A2","options":["hava durumu","mevsim","sıcaklık","yağmur"],"answer":"hava durumu","example":"Wie ist das Wetter heute?","example_tr":"Hava bugün nasıl?"},
+    {"word":"Regen","level":"A2","options":["yağmur","kar","fırtına","güneş"],"answer":"yağmur","example":"Es gibt heute viel Regen.","example_tr":"Bugün çok yağmur var."},
+    {"word":"Schnee","level":"A2","options":["kar","yağmur","buz","dolu"],"answer":"kar","example":"Im Winter fällt viel Schnee.","example_tr":"Kışın çok kar yağar."},
+    {"word":"Sonne","level":"A2","options":["güneş","bulut","ay","yıldız"],"answer":"güneş","example":"Die Sonne scheint heute hell.","example_tr":"Güneş bugün parlak parlıyor."},
+    {"word":"Wind","level":"A2","options":["rüzgar","fırtına","yağmur","kar"],"answer":"rüzgar","example":"Der Wind ist heute sehr stark.","example_tr":"Rüzgar bugün çok kuvvetli."},
+    {"word":"früh","level":"A2","options":["erken","geç","hızlı","yavaş"],"answer":"erken","example":"Ich stehe immer früh auf.","example_tr":"Hep erken kalkarım."},
+    {"word":"spät","level":"A2","options":["geç","erken","hızlı","yavaş"],"answer":"geç","example":"Es ist schon spät, ich muss gehen.","example_tr":"Çok geç oldu, gitmem lazım."},
+    {"word":"schnell","level":"A2","options":["hızlı","yavaş","erken","geç"],"answer":"hızlı","example":"Bitte fahr nicht so schnell!","example_tr":"Lütfen bu kadar hızlı sürme!"},
+    {"word":"langsam","level":"A2","options":["yavaş","hızlı","erken","geç"],"answer":"yavaş","example":"Sprich bitte langsamer!","example_tr":"Lütfen daha yavaş konuş!"},
+    {"word":"manchmal","level":"A2","options":["bazen","her zaman","hiç","sık sık"],"answer":"bazen","example":"Ich gehe manchmal ins Kino.","example_tr":"Bazen sinemaya giderim."},
+    {"word":"immer","level":"A2","options":["her zaman","bazen","hiç","nadiren"],"answer":"her zaman","example":"Er ist immer pünktlich.","example_tr":"O her zaman dakiktir."},
+    {"word":"nie","level":"A2","options":["hiç","her zaman","bazen","sık sık"],"answer":"hiç","example":"Ich rauche nie.","example_tr":"Asla sigara içmem."},
+    {"word":"oft","level":"A2","options":["sık sık","bazen","hiç","nadiren"],"answer":"sık sık","example":"Wir treffen uns oft am Wochenende.","example_tr":"Hafta sonları sık sık görüşürüz."},
+    {"word":"zusammen","level":"A2","options":["birlikte","yalnız","ayrı","uzakta"],"answer":"birlikte","example":"Wir essen zusammen zu Mittag.","example_tr":"Birlikte öğle yemeği yiyoruz."},
+    {"word":"Frühstück","level":"A2","options":["kahvaltı","öğle yemeği","akşam yemeği","atıştırmalık"],"answer":"kahvaltı","example":"Das Frühstück ist das wichtigste Essen.","example_tr":"Kahvaltı en önemli öğündür."},
+    {"word":"Mittagessen","level":"A2","options":["öğle yemeği","kahvaltı","akşam yemeği","atıştırmalık"],"answer":"öğle yemeği","example":"Das Mittagessen ist um 12 Uhr.","example_tr":"Öğle yemeği saat 12'de."},
+    {"word":"Abendessen","level":"A2","options":["akşam yemeği","kahvaltı","öğle yemeği","atıştırmalık"],"answer":"akşam yemeği","example":"Wir essen das Abendessen zusammen.","example_tr":"Akşam yemeğini birlikte yeriz."},
+    {"word":"Fleisch","level":"A2","options":["et","sebze","meyve","ekmek"],"answer":"et","example":"Ich esse kein Fleisch.","example_tr":"Et yemiyorum."},
+    {"word":"Gemüse","level":"A2","options":["sebze","meyve","et","ekmek"],"answer":"sebze","example":"Frisches Gemüse ist sehr gesund.","example_tr":"Taze sebze çok sağlıklıdır."},
+    {"word":"Obst","level":"A2","options":["meyve","sebze","et","süt"],"answer":"meyve","example":"Ich esse täglich frisches Obst.","example_tr":"Her gün taze meyve yerim."},
+    {"word":"Rechnung","level":"A2","options":["hesap/fatura","para","ödeme","indirim"],"answer":"hesap/fatura","example":"Kann ich bitte die Rechnung haben?","example_tr":"Hesabı alabilir miyim lütfen?"},
+    {"word":"Zug","level":"A2","options":["tren","otobüs","uçak","gemi"],"answer":"tren","example":"Der Zug fährt um 10 Uhr ab.","example_tr":"Tren saat 10'da kalkıyor."},
+    {"word":"Bus","level":"A2","options":["otobüs","tren","taksi","metro"],"answer":"otobüs","example":"Ich fahre jeden Tag mit dem Bus.","example_tr":"Her gün otobüsle gidiyorum."},
+    {"word":"Flugzeug","level":"A2","options":["uçak","tren","gemi","otobüs"],"answer":"uçak","example":"Das Flugzeug landet um 15 Uhr.","example_tr":"Uçak saat 15'te iniyor."},
+    {"word":"Fahrrad","level":"A2","options":["bisiklet","motosiklet","araba","scooter"],"answer":"bisiklet","example":"Ich fahre mit dem Fahrrad zur Arbeit.","example_tr":"İşe bisikletle gidiyorum."},
+    {"word":"Reise","level":"A2","options":["yolculuk/seyahat","tatil","gezi","tur"],"answer":"yolculuk/seyahat","example":"Die Reise nach Paris war wunderbar.","example_tr":"Paris yolculuğu harikaydı."},
+    {"word":"Urlaub","level":"A2","options":["tatil","seyahat","izin","gezi"],"answer":"tatil","example":"Im Sommer fahren wir in den Urlaub.","example_tr":"Yazın tatile gideriz."},
+    {"word":"Hotel","level":"A2","options":["otel","pansiyon","hostel","daire"],"answer":"otel","example":"Wir haben ein Zimmer im Hotel gebucht.","example_tr":"Otelde bir oda rezerve ettik."},
+    {"word":"Reservierung","level":"A2","options":["rezervasyon","bilet","ödeme","iptal"],"answer":"rezervasyon","example":"Ich habe eine Reservierung für zwei Personen.","example_tr":"İki kişilik bir rezervasyonum var."},
+    {"word":"Termin","level":"A2","options":["randevu","toplantı","buluşma","görüşme"],"answer":"randevu","example":"Ich habe einen Termin beim Arzt.","example_tr":"Doktor randevum var."},
+    {"word":"Arzt","level":"A2","options":["doktor","hemşire","eczacı","diş hekimi"],"answer":"doktor","example":"Der Arzt untersucht den Patienten.","example_tr":"Doktor hastayı muayene ediyor."},
+    {"word":"krank","level":"A2","options":["hasta","sağlıklı","yorgun","mutlu"],"answer":"hasta","example":"Ich bin krank und bleibe zu Hause.","example_tr":"Hastayım ve evde kalıyorum."},
+    {"word":"gesund","level":"A2","options":["sağlıklı","hasta","yorgun","zayıf"],"answer":"sağlıklı","example":"Sport ist gesund.","example_tr":"Spor sağlıklıdır."},
+    {"word":"Kopfschmerzen","level":"A2","options":["baş ağrısı","ateş","öksürük","mide ağrısı"],"answer":"baş ağrısı","example":"Ich habe starke Kopfschmerzen.","example_tr":"Şiddetli baş ağrım var."},
+    {"word":"Fieber","level":"A2","options":["ateş","öksürük","baş ağrısı","grip"],"answer":"ateş","example":"Das Kind hat hohes Fieber.","example_tr":"Çocuğun yüksek ateşi var."},
+    {"word":"Medikament","level":"A2","options":["ilaç","hap","şurup","aşı"],"answer":"ilaç","example":"Der Arzt hat mir ein Medikament verschrieben.","example_tr":"Doktor bana ilaç yazdı."},
+    {"word":"anrufen","level":"A2","options":["aramak","yazmak","beklemek","gitmek"],"answer":"aramak","example":"Ich rufe dich morgen an.","example_tr":"Yarın seni ararım."},
+    {"word":"bestellen","level":"A2","options":["sipariş vermek","ödemek","almak","vermek"],"answer":"sipariş vermek","example":"Ich möchte eine Pizza bestellen.","example_tr":"Pizza sipariş etmek istiyorum."},
+    {"word":"bezahlen","level":"A2","options":["ödemek","almak","vermek","satmak"],"answer":"ödemek","example":"Kann ich mit Karte bezahlen?","example_tr":"Kartla ödeyebilir miyim?"},
+    {"word":"empfehlen","level":"A2","options":["önermek","istemek","denemek","reddetmek"],"answer":"önermek","example":"Können Sie mir ein gutes Restaurant empfehlen?","example_tr":"Bana iyi bir restoran önerebilir misiniz?"},
+    {"word":"helfen","level":"A2","options":["yardım etmek","istemek","söylemek","götürmek"],"answer":"yardım etmek","example":"Kannst du mir bitte helfen?","example_tr":"Bana yardım edebilir misin lütfen?"},
+    {"word":"brauchen","level":"A2","options":["ihtiyaç duymak","istemek","sevmek","bilmek"],"answer":"ihtiyaç duymak","example":"Ich brauche deine Hilfe.","example_tr":"Yardımına ihtiyacım var."},
+    {"word":"suchen","level":"A2","options":["aramak","bulmak","görmek","istemek"],"answer":"aramak","example":"Ich suche meine Schlüssel.","example_tr":"Anahtarlarımı arıyorum."},
+    {"word":"finden","level":"A2","options":["bulmak","aramak","kaybetmek","götürmek"],"answer":"bulmak","example":"Hast du meinen Stift gefunden?","example_tr":"Kalemimi buldun mu?"},
+    {"word":"warten","level":"A2","options":["beklemek","gitmek","gelmek","durmak"],"answer":"beklemek","example":"Ich warte schon eine Stunde auf den Bus.","example_tr":"Bir saattir otobüs bekliyorum."},
+    {"word":"Erfahrung","level":"B1","options":["deneyim","bilgi","beceri","yetenek"],"answer":"deneyim","example":"Sie hat viel Erfahrung in diesem Bereich.","example_tr":"Bu alanda çok deneyimi var."},
+    {"word":"Meinung","level":"B1","options":["görüş/fikir","bilgi","karar","sonuç"],"answer":"görüş/fikir","example":"Meiner Meinung nach ist das falsch.","example_tr":"Bana göre bu yanlış."},
+    {"word":"Umwelt","level":"B1","options":["çevre","doğa","hava","iklim"],"answer":"çevre","example":"Wir müssen die Umwelt schützen.","example_tr":"Çevreyi korumalıyız."},
+    {"word":"Gesellschaft","level":"B1","options":["toplum","devlet","aile","grup"],"answer":"toplum","example":"Die Gesellschaft verändert sich ständig.","example_tr":"Toplum sürekli değişiyor."},
+    {"word":"Kultur","level":"B1","options":["kültür","sanat","gelenek","din"],"answer":"kültür","example":"Jedes Land hat eine eigene Kultur.","example_tr":"Her ülkenin kendine ait bir kültürü vardır."},
+    {"word":"Beruf","level":"B1","options":["meslek","iş","görev","kariyer"],"answer":"meslek","example":"Was ist dein Beruf?","example_tr":"Mesleğin ne?"},
+    {"word":"Ausbildung","level":"B1","options":["eğitim/mesleki eğitim","okul","üniversite","kurs"],"answer":"eğitim/mesleki eğitim","example":"Er macht eine Ausbildung zum Koch.","example_tr":"Aşçılık eğitimi alıyor."},
+    {"word":"Möglichkeit","level":"B1","options":["olasılık/fırsat","zorunluluk","tehlike","sorun"],"answer":"olasılık/fırsat","example":"Es gibt keine Möglichkeit, das zu ändern.","example_tr":"Bunu değiştirmenin imkanı yok."},
+    {"word":"Entscheidung","level":"B1","options":["karar","seçim","sonuç","fikir"],"answer":"karar","example":"Das ist eine schwierige Entscheidung.","example_tr":"Bu zor bir karar."},
+    {"word":"Ergebnis","level":"B1","options":["sonuç","neden","başlangıç","süreç"],"answer":"sonuç","example":"Das Ergebnis der Prüfung war gut.","example_tr":"Sınavın sonucu iyiydi."},
+    {"word":"Lösung","level":"B1","options":["çözüm","sorun","neden","sonuç"],"answer":"çözüm","example":"Wir müssen eine Lösung finden.","example_tr":"Bir çözüm bulmalıyız."},
+    {"word":"Vorteil","level":"B1","options":["avantaj","dezavantaj","sorun","risk"],"answer":"avantaj","example":"Das hat viele Vorteile.","example_tr":"Bunun birçok avantajı var."},
+    {"word":"Nachteil","level":"B1","options":["dezavantaj","avantaj","fayda","sonuç"],"answer":"dezavantaj","example":"Alles hat seine Nachteile.","example_tr":"Her şeyin dezavantajları vardır."},
+    {"word":"Verständnis","level":"B1","options":["anlayış","bilgi","düşünce","fikir"],"answer":"anlayış","example":"Danke für dein Verständnis.","example_tr":"Anlayışın için teşekkürler."},
+    {"word":"Verantwortung","level":"B1","options":["sorumluluk","görev","hak","özgürlük"],"answer":"sorumluluk","example":"Du trägst die Verantwortung dafür.","example_tr":"Bunun sorumluluğu sende."},
+    {"word":"Unterschied","level":"B1","options":["fark","benzerlik","ilişki","bağlantı"],"answer":"fark","example":"Was ist der Unterschied zwischen den beiden?","example_tr":"İkisi arasındaki fark nedir?"},
+    {"word":"Bedeutung","level":"B1","options":["anlam/önem","değer","etki","sonuç"],"answer":"anlam/önem","example":"Das hat eine große Bedeutung für mich.","example_tr":"Bunun benim için büyük bir önemi var."},
+    {"word":"Gelegenheit","level":"B1","options":["fırsat","tehlike","sorun","durum"],"answer":"fırsat","example":"Das ist eine gute Gelegenheit.","example_tr":"Bu iyi bir fırsat."},
+    {"word":"versuchen","level":"B1","options":["denemek","başarmak","bırakmak","istemek"],"answer":"denemek","example":"Ich versuche, besser Deutsch zu sprechen.","example_tr":"Daha iyi Almanca konuşmaya çalışıyorum."},
+    {"word":"verbessern","level":"B1","options":["geliştirmek","bozmak","değiştirmek","durdurmak"],"answer":"geliştirmek","example":"Ich möchte mein Deutsch verbessern.","example_tr":"Almancamı geliştirmek istiyorum."},
+    {"word":"entwickeln","level":"B1","options":["geliştirmek","bozmak","kaybetmek","durdurmak"],"answer":"geliştirmek","example":"Wir entwickeln neue Technologien.","example_tr":"Yeni teknolojiler geliştiriyoruz."},
+    {"word":"beschreiben","level":"B1","options":["tarif etmek","sormak","cevaplamak","anlatmak"],"answer":"tarif etmek","example":"Beschreib mir deine Wohnung.","example_tr":"Bana dairenizi tarif et."},
+    {"word":"erklären","level":"B1","options":["açıklamak","sormak","anlatmak","göstermek"],"answer":"açıklamak","example":"Kannst du mir das erklären?","example_tr":"Bunu bana açıklayabilir misin?"},
+    {"word":"verstehen","level":"B1","options":["anlamak","duymak","görmek","bilmek"],"answer":"anlamak","example":"Ich verstehe das nicht ganz.","example_tr":"Bunu tam anlamıyorum."},
+    {"word":"vorstellen","level":"B1","options":["tanıtmak/hayal etmek","görmek","bilmek","duymak"],"answer":"tanıtmak/hayal etmek","example":"Stell dir das mal vor!","example_tr":"Bir hayal et bunu!"},
+    {"word":"ausdrücken","level":"B1","options":["ifade etmek","söylemek","yazmak","düşünmek"],"answer":"ifade etmek","example":"Er kann seine Gefühle gut ausdrücken.","example_tr":"Duygularını iyi ifade edebiliyor."},
+    {"word":"neugierig","level":"B1","options":["meraklı","kıskanç","üzgün","mutlu"],"answer":"meraklı","example":"Kinder sind sehr neugierig.","example_tr":"Çocuklar çok meraklıdır."},
+    {"word":"geduldig","level":"B1","options":["sabırlı","sabırsız","sinirli","sakin"],"answer":"sabırlı","example":"Du musst geduldig sein.","example_tr":"Sabırlı olmalısın."},
+    {"word":"zuverlässig","level":"B1","options":["güvenilir","güvenilmez","tembel","dürüst"],"answer":"güvenilir","example":"Er ist ein sehr zuverlässiger Mitarbeiter.","example_tr":"Çok güvenilir bir çalışan."},
+    {"word":"erfolgreich","level":"B1","options":["başarılı","başarısız","tembel","çalışkan"],"answer":"başarılı","example":"Sie ist eine erfolgreiche Unternehmerin.","example_tr":"O başarılı bir iş kadını."},
+    {"word":"wichtig","level":"B1","options":["önemli","önemsiz","zor","kolay"],"answer":"önemli","example":"Das ist sehr wichtig für mich.","example_tr":"Bu benim için çok önemli."},
+    {"word":"notwendig","level":"B1","options":["gerekli","gereksiz","faydalı","zararlı"],"answer":"gerekli","example":"Eine gute Ausbildung ist notwendig.","example_tr":"İyi bir eğitim gereklidir."},
+    {"word":"schwierig","level":"B1","options":["zor","kolay","sıradan","basit"],"answer":"zor","example":"Die Prüfung war sehr schwierig.","example_tr":"Sınav çok zordu."},
+    {"word":"möglich","level":"B1","options":["mümkün","imkansız","zor","kolay"],"answer":"mümkün","example":"Ist das möglich?","example_tr":"Bu mümkün mü?"},
+    {"word":"Klimawandel","level":"B1","options":["iklim değişikliği","hava durumu","doğa","çevre"],"answer":"iklim değişikliği","example":"Der Klimawandel ist ein globales Problem.","example_tr":"İklim değişikliği küresel bir sorundur."},
+    {"word":"Nachhaltigkeit","level":"B1","options":["sürdürülebilirlik","çevre","doğa","ekonomi"],"answer":"sürdürülebilirlik","example":"Nachhaltigkeit ist sehr wichtig.","example_tr":"Sürdürülebilirlik çok önemlidir."},
+    {"word":"Technologie","level":"B1","options":["teknoloji","bilim","araştırma","inovasyon"],"answer":"teknoloji","example":"Moderne Technologie verändert unser Leben.","example_tr":"Modern teknoloji hayatımızı değiştiriyor."},
+    {"word":"Gesundheit","level":"B1","options":["sağlık","hastalık","tedavi","ilaç"],"answer":"sağlık","example":"Gesundheit ist das Wichtigste im Leben.","example_tr":"Sağlık hayattaki en önemli şeydir."},
+    {"word":"Bewegung","level":"B1","options":["hareket/egzersiz","dinlenme","uyku","beslenme"],"answer":"hareket/egzersiz","example":"Regelmäßige Bewegung ist gesund.","example_tr":"Düzenli egzersiz sağlıklıdır."},
+    {"word":"Gewohnheit","level":"B1","options":["alışkanlık","kural","görev","zorunluluk"],"answer":"alışkanlık","example":"Rauchen ist eine schlechte Gewohnheit.","example_tr":"Sigara içmek kötü bir alışkanlıktır."},
+    {"word":"Ratschlag","level":"B1","options":["tavsiye","emir","yasak","kural"],"answer":"tavsiye","example":"Kannst du mir einen Ratschlag geben?","example_tr":"Bana bir tavsiye verebilir misin?"},
+    {"word":"Fortschritt","level":"B1","options":["ilerleme","gerileme","duraksama","değişim"],"answer":"ilerleme","example":"Die Medizin hat große Fortschritte gemacht.","example_tr":"Tıp büyük ilerlemeler kaydetti."},
+    {"word":"Zusammenarbeit","level":"B1","options":["işbirliği","rekabet","çatışma","bağımsızlık"],"answer":"işbirliği","example":"Die Zusammenarbeit im Team ist wichtig.","example_tr":"Ekip içinde işbirliği önemlidir."},
+    {"word":"Rücksicht","level":"B1","options":["saygı/nezaket","bencillik","umursamazlık","kibir"],"answer":"saygı/nezaket","example":"Nimm bitte Rücksicht auf andere!","example_tr":"Lütfen başkalarını dikkate al!"},
+    {"word":"Voraussetzung","level":"B2","options":["ön koşul","sonuç","mazeret","karar"],"answer":"ön koşul","example":"Gute Sprachkenntnisse sind eine Voraussetzung.","example_tr":"İyi dil bilgisi bir ön koşuldur."},
+    {"word":"Auswirkung","level":"B2","options":["etki/sonuç","neden","süreç","durum"],"answer":"etki/sonuç","example":"Die Auswirkungen des Klimawandels sind spürbar.","example_tr":"İklim değişikliğinin etkileri hissediliyor."},
+    {"word":"Herausforderung","level":"B2","options":["meydan okuma/zorluk","kolaylık","fırsat","şans"],"answer":"meydan okuma/zorluk","example":"Das ist eine große Herausforderung.","example_tr":"Bu büyük bir zorluk."},
+    {"word":"Überzeugung","level":"B2","options":["inanç/kanı","şüphe","korku","endişe"],"answer":"inanç/kanı","example":"Es ist meine feste Überzeugung.","example_tr":"Bu benim sağlam inancım."},
+    {"word":"Bedürfnis","level":"B2","options":["ihtiyaç","istek","hak","özgürlük"],"answer":"ihtiyaç","example":"Jeder hat das Bedürfnis nach Sicherheit.","example_tr":"Herkesin güvenliğe ihtiyacı vardır."},
+    {"word":"Eigenschaft","level":"B2","options":["özellik/nitelik","eksiklik","hata","kusur"],"answer":"özellik/nitelik","example":"Geduld ist eine wichtige Eigenschaft.","example_tr":"Sabır önemli bir özelliktir."},
+    {"word":"Zusammenhang","level":"B2","options":["bağlantı/bağlam","zıtlık","ayrılık","fark"],"answer":"bağlantı/bağlam","example":"In diesem Zusammenhang ist das wichtig.","example_tr":"Bu bağlamda bu önemlidir."},
+    {"word":"Maßnahme","level":"B2","options":["önlem/tedbir","hata","tehlike","sorun"],"answer":"önlem/tedbir","example":"Die Regierung ergreift neue Maßnahmen.","example_tr":"Hükümet yeni önlemler alıyor."},
+    {"word":"Förderung","level":"B2","options":["teşvik/destek","engel","baskı","ceza"],"answer":"teşvik/destek","example":"Die Förderung junger Talente ist wichtig.","example_tr":"Genç yeteneklerin desteklenmesi önemlidir."},
+    {"word":"Gerechtigkeit","level":"B2","options":["adalet","haksızlık","suç","ceza"],"answer":"adalet","example":"Soziale Gerechtigkeit ist ein Grundrecht.","example_tr":"Sosyal adalet temel bir haktır."},
+    {"word":"Vielfalt","level":"B2","options":["çeşitlilik","tekdüzelik","azlık","bütünlük"],"answer":"çeşitlilik","example":"Kulturelle Vielfalt bereichert uns.","example_tr":"Kültürel çeşitlilik bizi zenginleştirir."},
+    {"word":"Kompromiss","level":"B2","options":["uzlaşma","kavga","savaş","ayrılık"],"answer":"uzlaşma","example":"Wir müssen einen Kompromiss finden.","example_tr":"Bir uzlaşma bulmalıyız."},
+    {"word":"Widerspruch","level":"B2","options":["çelişki/itiraz","onay","anlaşma","destek"],"answer":"çelişki/itiraz","example":"Das steht im Widerspruch zu den Fakten.","example_tr":"Bu gerçeklerle çelişiyor."},
+    {"word":"Erwartung","level":"B2","options":["beklenti","sonuç","karar","plan"],"answer":"beklenti","example":"Die Erwartungen sind sehr hoch.","example_tr":"Beklentiler çok yüksek."},
+    {"word":"Einfluss","level":"B2","options":["etki/nüfuz","neden","sonuç","durum"],"answer":"etki/nüfuz","example":"Medien haben großen Einfluss auf uns.","example_tr":"Medya üzerimizde büyük bir etkiye sahiptir."},
+    {"word":"Tatsache","level":"B2","options":["gerçek/olgu","yalan","fikir","varsayım"],"answer":"gerçek/olgu","example":"Das ist eine bewiesene Tatsache.","example_tr":"Bu kanıtlanmış bir gerçektir."},
+    {"word":"Vorurteil","level":"B2","options":["önyargı","bilgi","deneyim","gerçek"],"answer":"önyargı","example":"Wir müssen Vorurteile abbauen.","example_tr":"Önyargıları kırmamız gerekiyor."},
+    {"word":"Anspruch","level":"B2","options":["hak/talep","sorumluluk","görev","ceza"],"answer":"hak/talep","example":"Sie hat Anspruch auf Urlaub.","example_tr":"Tatil hakkı var."},
+    {"word":"Zufall","level":"B2","options":["tesadüf","plan","niyet","kader"],"answer":"tesadüf","example":"Das war ein reiner Zufall.","example_tr":"Tamamen bir tesadüftü."},
+    {"word":"Verlust","level":"B2","options":["kayıp","kazanç","kar","fayda"],"answer":"kayıp","example":"Der Verlust war sehr schmerzhaft.","example_tr":"Kayıp çok acı vericiydi."},
+    {"word":"berücksichtigen","level":"B2","options":["göz önünde bulundurmak","unutmak","reddetmek","görmezden gelmek"],"answer":"göz önünde bulundurmak","example":"Das müssen wir berücksichtigen.","example_tr":"Bunu dikkate almalıyız."},
+    {"word":"beeinflussen","level":"B2","options":["etkilemek","değiştirmek","durdurmak","engellemek"],"answer":"etkilemek","example":"Soziale Medien beeinflussen unser Verhalten.","example_tr":"Sosyal medya davranışlarımızı etkiliyor."},
+    {"word":"bewältigen","level":"B2","options":["üstesinden gelmek","kaçmak","kabullenmek","reddetmek"],"answer":"üstesinden gelmek","example":"Sie konnte die Krise gut bewältigen.","example_tr":"Krizi iyi bir şekilde atlattı."},
+    {"word":"widersprechen","level":"B2","options":["karşı çıkmak/çelişmek","onaylamak","desteklemek","kabul etmek"],"answer":"karşı çıkmak/çelişmek","example":"Ich muss dir widersprechen.","example_tr":"Sana karşı çıkmalıyım."},
+    {"word":"ablehnen","level":"B2","options":["reddetmek","kabul etmek","onaylamak","desteklemek"],"answer":"reddetmek","example":"Er hat das Angebot abgelehnt.","example_tr":"Teklifi reddetti."},
+    {"word":"hinweisen","level":"B2","options":["işaret etmek/belirtmek","sormak","cevaplamak","anlatmak"],"answer":"işaret etmek/belirtmek","example":"Ich möchte auf ein Problem hinweisen.","example_tr":"Bir soruna dikkat çekmek istiyorum."},
+    {"word":"nachhaltig","level":"B2","options":["sürdürülebilir","geçici","anlık","kısa vadeli"],"answer":"sürdürülebilir","example":"Wir brauchen nachhaltige Lösungen.","example_tr":"Sürdürülebilir çözümlere ihtiyacımız var."},
+    {"word":"kritisch","level":"B2","options":["eleştirel","olumlu","tarafsız","nötr"],"answer":"eleştirel","example":"Sei kritisch gegenüber Informationen.","example_tr":"Bilgilere karşı eleştirel ol."},
+    {"word":"komplex","level":"B2","options":["karmaşık","basit","kolay","sıradan"],"answer":"karmaşık","example":"Das ist ein sehr komplexes Problem.","example_tr":"Bu çok karmaşık bir sorun."},
+    {"word":"wesentlich","level":"B2","options":["temel/önemli","önemsiz","gereksiz","basit"],"answer":"temel/önemli","example":"Das ist ein wesentlicher Unterschied.","example_tr":"Bu önemli bir fark."},
+    {"word":"zunehmend","level":"B2","options":["giderek artan","azalan","sabit","değişmeyen"],"answer":"giderek artan","example":"Die Probleme nehmen zunehmend zu.","example_tr":"Sorunlar giderek artıyor."},
+    {"word":"grundlegend","level":"B2","options":["temel/köklü","yüzeysel","geçici","anlık"],"answer":"temel/köklü","example":"Das ist eine grundlegende Veränderung.","example_tr":"Bu temel bir değişiklik."},
+    {"word":"Globalisierung","level":"B2","options":["küreselleşme","milliyetçilik","izolasyon","yerelleşme"],"answer":"küreselleşme","example":"Die Globalisierung hat Vor- und Nachteile.","example_tr":"Küreselleşmenin artı ve eksileri vardır."},
+    {"word":"Integration","level":"B2","options":["entegrasyon","ayrışma","dışlanma","izolasyon"],"answer":"entegrasyon","example":"Integration erfordert Anstrengungen beider Seiten.","example_tr":"Entegrasyon her iki tarafın da çabasını gerektirir."},
+    {"word":"Digitalisierung","level":"B2","options":["dijitalleşme","sanayileşme","modernleşme","gelişme"],"answer":"dijitalleşme","example":"Die Digitalisierung verändert die Arbeitswelt.","example_tr":"Dijitalleşme iş dünyasını değiştiriyor."},
+    {"word":"Wirtschaft","level":"B2","options":["ekonomi","politika","kültür","toplum"],"answer":"ekonomi","example":"Die Wirtschaft wächst langsam.","example_tr":"Ekonomi yavaş büyüyor."},
+    {"word":"Medien","level":"B2","options":["medya","gazete","televizyon","internet"],"answer":"medya","example":"Die Medien spielen eine wichtige Rolle.","example_tr":"Medya önemli bir rol oynuyor."},
+    {"word":"Bevölkerung","level":"B2","options":["nüfus","toplum","grup","birlik"],"answer":"nüfus","example":"Die Bevölkerung wächst weltweit.","example_tr":"Dünya nüfusu artıyor."},
+    {"word":"Arbeitsmarkt","level":"B2","options":["iş piyasası","ekonomi","ticaret","sanayi"],"answer":"iş piyasası","example":"Der Arbeitsmarkt hat sich verändert.","example_tr":"İş piyasası değişti."},
+    {"word":"Gleichberechtigung","level":"B2","options":["eşit haklar","ayrımcılık","hiyerarşi","imtiyaz"],"answer":"eşit haklar","example":"Gleichberechtigung ist ein Menschenrecht.","example_tr":"Eşit haklar bir insan hakkıdır."}
+  ],
+  "sentence_practice": [
+    {"question":"Wie heißt du?","question_tr":"Adın ne?","level":"A1","alternatives":["Ich heiße Anna.","Mein Name ist Thomas.","Ich bin Maria."],"alternatives_tr":["Adım Anna.","Adım Thomas.","Ben Maria'yım."]},
+    {"question":"Woher kommst du?","question_tr":"Nerelisin?","level":"A1","alternatives":["Ich komme aus Deutschland.","Ich komme aus der Türkei.","Ich bin aus Österreich."],"alternatives_tr":["Almanya'dan geliyorum.","Türkiye'den geliyorum.","Avusturya'lıyım."]},
+    {"question":"Wie alt bist du?","question_tr":"Kaç yaşındasın?","level":"A1","alternatives":["Ich bin zwanzig Jahre alt.","Ich bin dreißig Jahre alt.","Ich bin fünfundzwanzig Jahre alt."],"alternatives_tr":["Yirmi yaşındayım.","Otuz yaşındayım.","Yirmi beş yaşındayım."]},
+    {"question":"Was machst du gerne?","question_tr":"Ne yapmayı seversin?","level":"A1","alternatives":["Ich lese gerne Bücher.","Ich spiele gerne Fußball.","Ich höre gerne Musik."],"alternatives_tr":["Kitap okumayı severim.","Futbol oynamayı severim.","Müzik dinlemeyi severim."]},
+    {"question":"Was isst du zum Frühstück?","question_tr":"Kahvaltıda ne yersin?","level":"A1","alternatives":["Ich esse Brot mit Butter.","Ich trinke Kaffee und esse ein Ei.","Ich esse Müsli mit Milch."],"alternatives_tr":["Tereyağlı ekmek yerim.","Kahve içip yumurta yerim.","Sütlü müsli yerim."]},
+    {"question":"Hast du Geschwister?","question_tr":"Kardeşin var mı?","level":"A1","alternatives":["Ja, ich habe einen Bruder.","Ich habe eine Schwester.","Nein, ich bin ein Einzelkind."],"alternatives_tr":["Evet, bir erkek kardeşim var.","Bir kız kardeşim var.","Hayır, tek çocuğum."]},
+    {"question":"Wo wohnst du?","question_tr":"Nerede oturuyorsun?","level":"A1","alternatives":["Ich wohne in Berlin.","Ich wohne in einer kleinen Stadt.","Ich wohne bei meinen Eltern."],"alternatives_tr":["Berlin'de oturuyorum.","Küçük bir şehirde oturuyorum.","Ailemle birlikte oturuyorum."]},
+    {"question":"Was trinkst du gerne?","question_tr":"Ne içmeyi seversin?","level":"A1","alternatives":["Ich trinke gerne Kaffee.","Ich trinke am liebsten Wasser.","Ich mag Tee sehr gerne."],"alternatives_tr":["Kahve içmeyi severim.","En çok su içmeyi severim.","Çayı çok severim."]},
+    {"question":"Hast du ein Haustier?","question_tr":"Evcil hayvanın var mı?","level":"A1","alternatives":["Ja, ich habe einen Hund.","Ich habe eine Katze.","Nein, ich habe kein Haustier."],"alternatives_tr":["Evet, bir köpeğim var.","Bir kedim var.","Hayır, evcil hayvanım yok."]},
+    {"question":"Wie ist das Wetter heute?","question_tr":"Bugün hava nasıl?","level":"A1","alternatives":["Es ist sonnig und warm.","Es regnet heute.","Es ist bewölkt und kalt."],"alternatives_tr":["Güneşli ve sıcak.","Bugün yağmur yağıyor.","Bulutlu ve soğuk."]},
+    {"question":"Was machst du am Wochenende?","question_tr":"Hafta sonu ne yapıyorsun?","level":"A1","alternatives":["Ich schlafe lange und entspanne mich.","Ich treffe mich mit Freunden.","Ich mache Sport und koche."],"alternatives_tr":["Uzun süre uyur ve dinlenirim.","Arkadaşlarımla buluşurum.","Spor yapar ve yemek pişiririm."]},
+    {"question":"Kannst du Deutsch sprechen?","question_tr":"Almanca konuşabiliyor musun?","level":"A1","alternatives":["Ja, aber nur ein bisschen.","Ich lerne gerade Deutsch.","Ich spreche noch nicht sehr gut."],"alternatives_tr":["Evet, ama sadece biraz.","Şu an Almanca öğreniyorum.","Henüz çok iyi konuşamıyorum."]},
+    {"question":"Was ist dein Lieblingsessen?","question_tr":"En sevdiğin yemek nedir?","level":"A1","alternatives":["Mein Lieblingsessen ist Pizza.","Ich liebe Pasta sehr.","Am liebsten esse ich Suppe."],"alternatives_tr":["En sevdiğim yemek pizza.","Makarnayı çok seviyorum.","En çok çorba yerim."]},
+    {"question":"Wie fährst du zur Arbeit?","question_tr":"İşe nasıl gidiyorsun?","level":"A1","alternatives":["Ich fahre mit dem Bus.","Ich gehe zu Fuß.","Ich fahre mit dem Fahrrad."],"alternatives_tr":["Otobüsle gidiyorum.","Yürüyerek gidiyorum.","Bisikletle gidiyorum."]},
+    {"question":"Wann stehst du auf?","question_tr":"Saat kaçta kalkıyorsun?","level":"A1","alternatives":["Ich stehe um sieben Uhr auf.","Ich stehe sehr früh auf.","Ich stehe um halb acht auf."],"alternatives_tr":["Saat yedide kalkıyorum.","Çok erken kalkıyorum.","Yedi buçukta kalkıyorum."]},
+    {"question":"Hast du Hunger?","question_tr":"Acıktın mı?","level":"A1","alternatives":["Ja, ich habe großen Hunger.","Ich habe ein bisschen Hunger.","Nein, ich habe gerade gegessen."],"alternatives_tr":["Evet, çok acıktım.","Biraz acıktım.","Hayır, az önce yedim."]},
+    {"question":"Wie heißt deine Mutter?","question_tr":"Annenin adı ne?","level":"A1","alternatives":["Meine Mutter heißt Maria.","Sie heißt Anna.","Meine Mutter heißt Petra."],"alternatives_tr":["Annemin adı Maria.","Adı Anna.","Annemin adı Petra."]},
+    {"question":"Was lernst du in der Schule?","question_tr":"Okulda ne öğreniyorsun?","level":"A1","alternatives":["Ich lerne Mathematik und Deutsch.","Ich lerne Englisch und Geschichte.","Wir lernen viele verschiedene Fächer."],"alternatives_tr":["Matematik ve Almanca öğreniyorum.","İngilizce ve Tarih öğreniyorum.","Birçok farklı ders öğreniyoruz."]},
+    {"question":"Magst du Sport?","question_tr":"Sporu seviyor musun?","level":"A1","alternatives":["Ja, ich spiele gerne Fußball.","Ich schwimme sehr gerne.","Nicht so sehr, ich lese lieber."],"alternatives_tr":["Evet, futbol oynamayı severim.","Yüzmeyi çok severim.","O kadar değil, okumayı tercih ederim."]},
+    {"question":"Wie groß bist du?","question_tr":"Boyun ne kadar?","level":"A1","alternatives":["Ich bin 1,75 Meter groß.","Ich bin nicht sehr groß.","Ich bin eins achtzig."],"alternatives_tr":["Boyum 1.75 metre.","Çok uzun değilim.","Bir seksen boyundayım."]},
+    {"question":"Was kaufst du im Supermarkt?","question_tr":"Süpermarkette ne alıyorsun?","level":"A1","alternatives":["Ich kaufe Brot, Milch und Obst.","Ich kaufe Gemüse und Fleisch.","Ich kaufe nur das Nötigste."],"alternatives_tr":["Ekmek, süt ve meyve alıyorum.","Sebze ve et alıyorum.","Sadece gerekli olanları alıyorum."]},
+    {"question":"Hast du ein Auto?","question_tr":"Araban var mı?","level":"A1","alternatives":["Ja, ich habe ein rotes Auto.","Nein, ich fahre mit dem Bus.","Ich habe ein kleines Auto."],"alternatives_tr":["Evet, kırmızı bir arabam var.","Hayır, otobüsle gidiyorum.","Küçük bir arabam var."]},
+    {"question":"Was machst du abends?","question_tr":"Akşamları ne yapıyorsun?","level":"A1","alternatives":["Ich sehe fern.","Ich lese ein Buch.","Ich chatte mit Freunden."],"alternatives_tr":["Televizyon izliyorum.","Kitap okuyorum.","Arkadaşlarımla yazışıyorum."]},
+    {"question":"Wie viele Zimmer hat deine Wohnung?","question_tr":"Dairenin kaç odası var?","level":"A1","alternatives":["Meine Wohnung hat drei Zimmer.","Ich habe eine kleine Zweizimmerwohnung.","Es gibt vier Zimmer bei uns."],"alternatives_tr":["Dairemde üç oda var.","Küçük iki odalı bir dairem var.","Bizde dört oda var."]},
+    {"question":"Sprichst du andere Sprachen?","question_tr":"Başka diller konuşuyor musun?","level":"A1","alternatives":["Ja, ich spreche auch Englisch.","Ich lerne gerade Spanisch.","Nein, nur meine Muttersprache."],"alternatives_tr":["Evet, İngilizce de konuşuyorum.","Şu an İspanyolca öğreniyorum.","Hayır, sadece anadilimi."]},
+    {"question":"Was isst du zum Mittagessen?","question_tr":"Öğle yemeğinde ne yersin?","level":"A1","alternatives":["Ich esse meistens Suppe und Brot.","Ich esse in der Kantine.","Ich koche mir etwas zu Hause."],"alternatives_tr":["Genellikle çorba ve ekmek yerim.","Kantinde yerim.","Evde kendime bir şeyler pişiririm."]},
+    {"question":"Hast du ein Handy?","question_tr":"Cep telefonu var mı?","level":"A1","alternatives":["Ja, ich habe ein neues Smartphone.","Mein Handy ist schon alt.","Ja, aber ich benutze es wenig."],"alternatives_tr":["Evet, yeni bir akıllı telefonum var.","Telefonum zaten eski.","Evet, ama az kullanıyorum."]},
+    {"question":"Wo arbeitest du?","question_tr":"Nerede çalışıyorsun?","level":"A1","alternatives":["Ich arbeite in einem Büro.","Ich arbeite in einem Krankenhaus.","Ich studiere noch."],"alternatives_tr":["Bir ofiste çalışıyorum.","Bir hastanede çalışıyorum.","Henüz okuyorum."]},
+    {"question":"Wie ist deine Familie?","question_tr":"Ailen nasıl?","level":"A1","alternatives":["Ich habe eine kleine Familie.","Wir sind eine große Familie.","Ich lebe allein."],"alternatives_tr":["Küçük bir ailem var.","Büyük bir aileyiz.","Tek başıma yaşıyorum."]},
+    {"question":"Was liest du gerne?","question_tr":"Ne okumayı seversin?","level":"A1","alternatives":["Ich lese gerne Romane.","Ich lese am liebsten Zeitung.","Ich lese gerne Krimis."],"alternatives_tr":["Roman okumayı severim.","En çok gazete okumayı severim.","Polisiye okumayı severim."]},
+    {"question":"Hast du einen Beruf?","question_tr":"Bir mesleğin var mı?","level":"A1","alternatives":["Ja, ich bin Lehrer.","Ich bin Studentin.","Ich arbeite als Köchin."],"alternatives_tr":["Evet, öğretmenim.","Üniversite öğrencisiyim.","Aşçı olarak çalışıyorum."]},
+    {"question":"Wie heißt deine Stadt?","question_tr":"Şehrinin adı ne?","level":"A1","alternatives":["Ich wohne in München.","Meine Stadt heißt Hamburg.","Ich lebe in einer kleinen Stadt."],"alternatives_tr":["Münih'te oturuyorum.","Şehrim Hamburg.","Küçük bir şehirde yaşıyorum."]},
+    {"question":"Welche Farbe magst du?","question_tr":"Hangi rengi seversin?","level":"A1","alternatives":["Ich mag die Farbe Blau.","Meine Lieblingsfarbe ist Grün.","Ich liebe Rot sehr."],"alternatives_tr":["Mavi rengini severim.","En sevdiğim renk yeşil.","Kırmızıyı çok severim."]},
+    {"question":"Kannst du kochen?","question_tr":"Yemek pişirebiliyor musun?","level":"A1","alternatives":["Ja, ich koche sehr gerne.","Ich koche ein bisschen.","Nein, ich esse lieber im Restaurant."],"alternatives_tr":["Evet, yemek pişirmeyi çok severim.","Biraz yemek pişiriyorum.","Hayır, restoranda yemeyi tercih ederim."]},
+    {"question":"Was machst du nach der Arbeit?","question_tr":"İşten sonra ne yapıyorsun?","level":"A1","alternatives":["Ich gehe ins Fitnessstudio.","Ich koche das Abendessen.","Ich sehe fern und entspanne mich."],"alternatives_tr":["Spor salonuna gidiyorum.","Akşam yemeği pişiriyorum.","Televizyon izleyip dinleniyorum."]},
+    {"question":"Hast du Hunger oder Durst?","question_tr":"Acıktın mı yoksa susamadın mı?","level":"A1","alternatives":["Ich habe Hunger.","Ich habe Durst.","Ich habe beides."],"alternatives_tr":["Acıktım.","Susamdım.","Her ikisi de."]},
+    {"question":"Wie kommst du zur Schule?","question_tr":"Okula nasıl gidiyorsun?","level":"A1","alternatives":["Ich gehe zu Fuß.","Meine Mutter bringt mich.","Ich fahre mit dem Bus."],"alternatives_tr":["Yürüyerek gidiyorum.","Annem götürüyor.","Otobüsle gidiyorum."]},
+    {"question":"Was kaufst du gerne?","question_tr":"Ne almayı seversin?","level":"A1","alternatives":["Ich kaufe gerne Bücher.","Ich kaufe gerne Kleidung.","Ich kaufe gerne Essen."],"alternatives_tr":["Kitap almayı severim.","Kıyafet almayı severim.","Yiyecek almayı severim."]},
+    {"question":"Hast du einen Garten?","question_tr":"Bahçen var mı?","level":"A1","alternatives":["Ja, wir haben einen kleinen Garten.","Nein, ich wohne in einer Wohnung.","Ja, aber er ist nicht groß."],"alternatives_tr":["Evet, küçük bir bahçemiz var.","Hayır, dairede oturuyorum.","Evet ama büyük değil."]},
+    {"question":"Was machst du im Sommer?","question_tr":"Yazın ne yapıyorsun?","level":"A1","alternatives":["Ich fahre ans Meer.","Ich besuche meine Familie.","Ich bleibe zu Hause und lese."],"alternatives_tr":["Denize gidiyorum.","Ailemi ziyaret ediyorum.","Evde kalıp okuyorum."]},
+    {"question":"Welche Musik hörst du?","question_tr":"Ne tür müzik dinliyorsun?","level":"A1","alternatives":["Ich höre gerne Pop-Musik.","Ich mag klassische Musik.","Ich höre am liebsten Rock."],"alternatives_tr":["Pop müzik dinlemeyi severim.","Klasik müziği severim.","En çok rock dinlemeyi severim."]},
+    {"question":"Hast du Geschwister?","question_tr":"Kardeşin var mı?","level":"A1","alternatives":["Ja, ich habe zwei Brüder.","Ich habe nur eine Schwester.","Ich bin Einzelkind."],"alternatives_tr":["Evet, iki erkek kardeşim var.","Sadece bir kız kardeşim var.","Tek çocuğum."]},
+    {"question":"Wo kaufst du Lebensmittel?","question_tr":"Gıdaları nerede satın alıyorsun?","level":"A1","alternatives":["Im Supermarkt um die Ecke.","Auf dem Markt.","Im Bioladen."],"alternatives_tr":["Köşedeki süpermarkette.","Pazarda.","Organik markette."]},
+    {"question":"Wie oft gehst du ins Kino?","question_tr":"Sinemaya ne sıklıkla gidiyorsun?","level":"A1","alternatives":["Ich gehe einmal im Monat.","Sehr selten.","Fast jedes Wochenende."],"alternatives_tr":["Ayda bir gidiyorum.","Çok nadir.","Hemen her hafta sonu."]},
+    {"question":"Hast du einen Computer?","question_tr":"Bilgisayarın var mı?","level":"A1","alternatives":["Ja, ich habe einen Laptop.","Ich habe einen alten Desktop-PC.","Nein, ich benutze das Tablet."],"alternatives_tr":["Evet, dizüstü bilgisayarım var.","Eski bir masaüstü bilgisayarım var.","Hayır, tablet kullanıyorum."]},
+    {"question":"Was trinkst du morgens?","question_tr":"Sabahları ne içiyorsun?","level":"A1","alternatives":["Ich trinke Kaffee.","Ich trinke Tee mit Milch.","Ich trinke ein Glas Wasser."],"alternatives_tr":["Kahve içiyorum.","Sütlü çay içiyorum.","Bir bardak su içiyorum."]},
+    {"question":"Magst du Tiere?","question_tr":"Hayvanları seviyor musun?","level":"A1","alternatives":["Ja, ich liebe Hunde.","Ich mag Katzen sehr.","Ja, alle Tiere sind toll."],"alternatives_tr":["Evet, köpekleri seviyorum.","Kedileri çok seviyorum.","Evet, tüm hayvanlar harika."]},
+    {"question":"Was ist dein Hobby?","question_tr":"Hobbin ne?","level":"A1","alternatives":["Mein Hobby ist Malen.","Ich spiele Gitarre.","Ich fotografiere gerne."],"alternatives_tr":["Hobim resim yapmak.","Gitar çalıyorum.","Fotoğraf çekmeyi severim."]},
+    {"question":"Schläfst du viel?","question_tr":"Çok uyuyor musun?","level":"A1","alternatives":["Ja, ich schlafe acht Stunden.","Nein, ich schlafe zu wenig.","Ich schlafe genug."],"alternatives_tr":["Evet, sekiz saat uyuyorum.","Hayır, çok az uyuyorum.","Yeterince uyuyorum."]},
+    {"question":"Was machst du am Abend?","question_tr":"Akşam ne yapıyorsun?","level":"A1","alternatives":["Ich esse mit der Familie.","Ich lese und entspanne mich.","Ich schaue eine Serie."],"alternatives_tr":["Aileyle yemek yiyorum.","Okuyup dinleniyorum.","Bir dizi izliyorum."]},
+    {"question":"Kochst du selbst?","question_tr":"Kendin yemek pişiriyor musun?","level":"A1","alternatives":["Ja, ich koche jeden Tag.","Manchmal, nicht immer.","Nein, ich bestelle lieber."],"alternatives_tr":["Evet, her gün pişiriyorum.","Bazen, her zaman değil.","Hayır, sipariş vermeyi tercih ederim."]},
+    {"question":"Wie war dein Wochenende?","question_tr":"Hafta sonun nasıldı?","level":"A2","alternatives":["Es war sehr schön, ich war am Meer.","Ich habe zu Hause entspannt.","Es war leider nicht so gut."],"alternatives_tr":["Çok güzeldi, denizdeydim.","Evde dinlendim.","Maalesef pek iyi değildi."]},
+    {"question":"Was hast du gestern gemacht?","question_tr":"Dün ne yaptın?","level":"A2","alternatives":["Ich war einkaufen.","Ich habe Freunde besucht.","Ich habe zu Hause gearbeitet."],"alternatives_tr":["Alışverişe gittim.","Arkadaşlarımı ziyaret ettim.","Evde çalıştım."]},
+    {"question":"Wie war die Reise?","question_tr":"Yolculuk nasıldı?","level":"A2","alternatives":["Die Reise war sehr angenehm.","Es war ein bisschen anstrengend.","Super, ich habe viel gesehen."],"alternatives_tr":["Yolculuk çok keyifliydi.","Biraz yorucuydu.","Süper, çok şey gördüm."]},
+    {"question":"Können Sie mir helfen?","question_tr":"Bana yardım edebilir misiniz?","level":"A2","alternatives":["Ja, natürlich! Was brauchen Sie?","Tut mir leid, ich habe keine Zeit.","Gerne, was kann ich tun?"],"alternatives_tr":["Evet, tabii! Neye ihtiyacınız var?","Üzgünüm, vaktim yok.","Memnuniyetle, ne yapabilirim?"]},
+    {"question":"Wo ist die nächste Apotheke?","question_tr":"En yakın eczane nerede?","level":"A2","alternatives":["Die Apotheke ist um die Ecke.","Gehen Sie geradeaus, dann links.","Es gibt eine Apotheke im Einkaufszentrum."],"alternatives_tr":["Eczane köşede.","Düz gidin, sonra sola dönün.","Alışveriş merkezinde bir eczane var."]},
+    {"question":"Wann kommt der nächste Zug?","question_tr":"Bir sonraki tren ne zaman geliyor?","level":"A2","alternatives":["Der nächste Zug kommt in zehn Minuten.","Er fährt um 14 Uhr ab.","Der Zug hat leider Verspätung."],"alternatives_tr":["Bir sonraki tren on dakikada geliyor.","Saat 14'te hareket ediyor.","Trenin maalesef gecikmesi var."]},
+    {"question":"Haben Sie ein Zimmer frei?","question_tr":"Boş odanız var mı?","level":"A2","alternatives":["Ja, wir haben noch ein Doppelzimmer.","Leider sind wir ausgebucht.","Ja, für wie viele Nächte?"],"alternatives_tr":["Evet, hâlâ bir çift kişilik odamız var.","Maalesef doluyuz.","Evet, kaç gece için?"]},
+    {"question":"Was empfehlen Sie hier?","question_tr":"Burada ne önerirsiniz?","level":"A2","alternatives":["Ich empfehle den Fisch, er ist sehr frisch.","Das Tagesgericht ist sehr gut.","Probieren Sie die Hausspezialität."],"alternatives_tr":["Balığı öneririm, çok taze.","Günlük menü çok iyi.","Ev özelliğini deneyin."]},
+    {"question":"Wie viel kostet das?","question_tr":"Bu ne kadar?","level":"A2","alternatives":["Das kostet zwanzig Euro.","Es ist im Angebot für fünfzehn Euro.","Der Preis steht auf dem Etikett."],"alternatives_tr":["Bu yirmi euro.","On beş euroya indirimde.","Fiyat etikette yazıyor."]},
+    {"question":"Ich habe Kopfschmerzen.","question_tr":"Baş ağrım var.","level":"A2","alternatives":["Nehmen Sie ein Schmerzmittel.","Trinken Sie viel Wasser und ruhen Sie sich aus.","Vielleicht sollten Sie zum Arzt gehen."],"alternatives_tr":["Ağrı kesici alın.","Çok su için ve dinlenin.","Belki doktora gitmelisiniz."]},
+    {"question":"Ich möchte einen Tisch reservieren.","question_tr":"Masa rezervasyonu yapmak istiyorum.","level":"A2","alternatives":["Für wie viele Personen?","Auf welchen Namen?","Für welchen Tag und welche Uhrzeit?"],"alternatives_tr":["Kaç kişi için?","Hangi isim üzerine?","Hangi gün ve saat için?"]},
+    {"question":"Kann ich mit Kreditkarte bezahlen?","question_tr":"Kredi kartıyla ödeyebilir miyim?","level":"A2","alternatives":["Ja, wir akzeptieren alle Kreditkarten.","Leider nur Bargeld.","Ja, außer American Express."],"alternatives_tr":["Evet, tüm kredi kartlarını kabul ediyoruz.","Maalesef sadece nakit.","Evet, American Express hariç."]},
+    {"question":"Wie ist das Wetter morgen?","question_tr":"Yarın hava nasıl olacak?","level":"A2","alternatives":["Es soll sonnig werden.","Es wird regnen.","Es wird bewölkt aber trocken sein."],"alternatives_tr":["Güneşli olacak.","Yağmur yağacak.","Bulutlu ama kuru olacak."]},
+    {"question":"Was hast du im Urlaub gemacht?","question_tr":"Tatilde ne yaptın?","level":"A2","alternatives":["Ich habe viel die Sonne genossen.","Ich habe Sehenswürdigkeiten besucht.","Ich habe mich erholt und gut gegessen."],"alternatives_tr":["Çok güneşin tadını çıkardım.","Gezilecek yerleri ziyaret ettim.","Dinlendim ve iyi yedim."]},
+    {"question":"Ich suche das Rathaus.","question_tr":"Belediye binasını arıyorum.","level":"A2","alternatives":["Das Rathaus ist in der Stadtmitte.","Gehen Sie die Hauptstraße entlang.","Nehmen Sie den Bus Nummer drei."],"alternatives_tr":["Belediye binası şehir merkezinde.","Ana cadde boyunca yürüyün.","Üç numaralı otobüsü alın."]},
+    {"question":"Sprechen Sie bitte langsamer.","question_tr":"Lütfen daha yavaş konuşun.","level":"A2","alternatives":["Ja, natürlich, tut mir leid.","Kein Problem, ich wiederhole es.","Verstehen Sie es so besser?"],"alternatives_tr":["Evet, tabii, özür dilerim.","Sorun değil, tekrarlayayım.","Böyle daha iyi anlıyor musunuz?"]},
+    {"question":"Darf ich hier parken?","question_tr":"Buraya park edebilir miyim?","level":"A2","alternatives":["Nein, hier ist Parkverbot.","Ja, aber nur für eine Stunde.","Sie müssen eine Parkuhr benutzen."],"alternatives_tr":["Hayır, burada park yasak.","Evet, ama sadece bir saat.","Park saatini kullanmalısınız."]},
+    {"question":"Ich habe meinen Schlüssel verloren.","question_tr":"Anahtarımı kaybettim.","level":"A2","alternatives":["Das ist ärgerlich! Wo haben Sie ihn zuletzt gesehen?","Schauen Sie in Ihrer Tasche nach.","Gehen Sie zum Fundbüro."],"alternatives_tr":["Bu can sıkıcı! En son nerede gördünüz?","Çantanıza bakın.","Kayıp eşya bürosuna gidin."]},
+    {"question":"Wie lange dauert die Fahrt?","question_tr":"Yolculuk ne kadar sürüyor?","level":"A2","alternatives":["Die Fahrt dauert ungefähr eine Stunde.","Es sind etwa dreißig Minuten.","Das hängt vom Verkehr ab."],"alternatives_tr":["Yolculuk yaklaşık bir saat sürüyor.","Yaklaşık otuz dakika.","Trafiğe bağlı."]},
+    {"question":"Was darf ich Ihnen bringen?","question_tr":"Size ne getirebilirim?","level":"A2","alternatives":["Ich hätte gerne ein Glas Wasser.","Bringen Sie mir bitte die Speisekarte.","Ein Kaffee, bitte."],"alternatives_tr":["Bir bardak su lütfen.","Lütfen menüyü getirin.","Bir kahve, lütfen."]},
+    {"question":"Haben Sie Fieber?","question_tr":"Ateşiniz var mı?","level":"A2","alternatives":["Ja, ich habe fast 39 Grad.","Ich weiß nicht, ich fühle mich nicht gut.","Nein, aber ich habe Halsschmerzen."],"alternatives_tr":["Evet, neredeyse 39 derece.","Bilmiyorum, kendimi iyi hissetmiyorum.","Hayır, ama boğaz ağrım var."]},
+    {"question":"Wann ist die Bäckerei geöffnet?","question_tr":"Fırın ne zaman açık?","level":"A2","alternatives":["Sie öffnet um sieben Uhr morgens.","Die Bäckerei ist täglich bis 18 Uhr offen.","Am Sonntag ist sie geschlossen."],"alternatives_tr":["Sabah yedide açılıyor.","Fırın her gün saat 18'e kadar açık.","Pazar günü kapalı."]},
+    {"question":"Kann ich ein Taxi rufen?","question_tr":"Taksi çağırabilir miyim?","level":"A2","alternatives":["Ja, die Nummer ist 555-0100.","Am besten benutzen Sie eine App.","Ich rufe Ihnen sofort eines."],"alternatives_tr":["Evet, numara 555-0100.","Uygulama kullanmanız en iyisi.","Hemen bir tane çağırıyorum."]},
+    {"question":"Ich verstehe das nicht.","question_tr":"Bunu anlamıyorum.","level":"A2","alternatives":["Soll ich es erklären?","Ich wiederhole es noch einmal.","Auf welchen Teil bezieht sich Ihre Frage?"],"alternatives_tr":["Açıklayayım mı?","Bir kez daha tekrar edeyim.","Sorunuz hangi kısımla ilgili?"]},
+    {"question":"Haben Sie vegetarische Gerichte?","question_tr":"Vejetaryen yemekleriniz var mı?","level":"A2","alternatives":["Ja, wir haben eine vegetarische Auswahl.","Natürlich, fast alle Beilagen sind vegetarisch.","Wir können auch etwas extra zubereiten."],"alternatives_tr":["Evet, vejetaryen seçeneklerimiz var.","Tabii, hemen tüm garnitürler vejetaryen.","Ayrıca özel bir şey de hazırlayabiliriz."]},
+    {"question":"Wann beginnt der Film?","question_tr":"Film ne zaman başlıyor?","level":"A2","alternatives":["Der Film beginnt um 20 Uhr.","In ungefähr zwanzig Minuten.","Er hat schon angefangen."],"alternatives_tr":["Film saat 20'de başlıyor.","Yaklaşık yirmi dakika sonra.","Zaten başladı."]},
+    {"question":"Haben Sie diesen Artikel in Größe M?","question_tr":"Bu ürünün M bedeni var mı?","level":"A2","alternatives":["Ja, ich schaue gleich nach.","Leider ist M ausverkauft.","Wir haben nur noch S und L."],"alternatives_tr":["Evet, hemen bakayım.","Maalesef M tükendi.","Sadece S ve L kaldı."]},
+    {"question":"Kann ich das umtauschen?","question_tr":"Bunu değiştirebilir miyim?","level":"A2","alternatives":["Ja, mit dem Kassenbon kein Problem.","Innerhalb von 14 Tagen ist ein Umtausch möglich.","Haben Sie den Kaufbeleg dabei?"],"alternatives_tr":["Evet, makbuzla sorun yok.","14 gün içinde değişim mümkün.","Satın alma makbuzunuz yanınızda mı?"]},
+    {"question":"Wo ist die Toilette, bitte?","question_tr":"Tuvalet nerede, lütfen?","level":"A2","alternatives":["Die Toilette ist im Keller.","Gehen Sie den Gang entlang, dann rechts.","Die WC-Anlage ist im ersten Stock."],"alternatives_tr":["Tuvalet bodrumdadır.","Koridordan gidin, sonra sağa.","Tuvaletler birinci katta."]},
+    {"question":"Ich möchte ein Konto eröffnen.","question_tr":"Hesap açmak istiyorum.","level":"A2","alternatives":["Haben Sie Ihren Ausweis dabei?","Füllen Sie bitte dieses Formular aus.","Ich verbinde Sie mit einem Berater."],"alternatives_tr":["Kimliğiniz yanınızda mı?","Lütfen bu formu doldurun.","Sizi bir danışmanla bağlıyorum."]},
+    {"question":"Wie lange sind Sie schon in Deutschland?","question_tr":"Almanya'da ne zamandır varsınız?","level":"A2","alternatives":["Ich bin seit einem Jahr hier.","Erst seit ein paar Wochen.","Ich lebe schon seit fünf Jahren hier."],"alternatives_tr":["Bir yıldır buradayım.","Sadece birkaç haftadır.","Beş yıldır burada yaşıyorum."]},
+    {"question":"Haben Sie etwas günstigeres?","question_tr":"Daha ucuz bir şeyiniz var mı?","level":"A2","alternatives":["Ja, schauen Sie sich diese Modelle an.","Das ist leider unser günstigstes Angebot.","Wir haben gerade einen Sonderpreis."],"alternatives_tr":["Evet, şu modellere bakın.","Maalesef bu en ucuz teklifimiz.","Şu an özel bir fiyatımız var."]},
+    {"question":"Darf ich das ausprobieren?","question_tr":"Bunu deneyebilir miyim?","level":"A2","alternatives":["Ja, natürlich, die Umkleidekabine ist dort.","Sicher, nehmen Sie sich die Zeit.","Ja, bitte sehr."],"alternatives_tr":["Evet, tabii, soyunma kabini orada.","Tabii, vaktinizi alın.","Evet, buyurun."]},
+    {"question":"Wann schließt das Geschäft?","question_tr":"Dükkan ne zaman kapanıyor?","level":"A2","alternatives":["Wir schließen um 20 Uhr.","Am Samstag machen wir um 18 Uhr zu.","Wir haben bis 22 Uhr geöffnet."],"alternatives_tr":["Saat 20'de kapanıyoruz.","Cumartesi saat 18'de kapıyoruz.","Saat 22'ye kadar açığız."]},
+    {"question":"Ich fühle mich nicht wohl.","question_tr":"İyi hissetmiyorum.","level":"A2","alternatives":["Was fehlt Ihnen genau?","Seit wann fühlen Sie sich so?","Soll ich einen Arzt rufen?"],"alternatives_tr":["Tam olarak nereniz iyi değil?","Ne zamandır böyle hissediyorsunuz?","Doktor çağırayım mı?"]},
+    {"question":"Haben Sie das Formular ausgefüllt?","question_tr":"Formu doldurdunuz mu?","level":"A2","alternatives":["Ja, hier ist es.","Nein, ich brauche noch Hilfe.","Ich habe eine Frage zu Punkt drei."],"alternatives_tr":["Evet, işte burada.","Hayır, hâlâ yardıma ihtiyacım var.","Üçüncü madde hakkında bir sorum var."]},
+    {"question":"Können Sie das wiederholen?","question_tr":"Tekrar edebilir misiniz?","level":"A2","alternatives":["Ja, natürlich.","Kein Problem, ich sage es langsamer.","Ich schreibe es Ihnen auf."],"alternatives_tr":["Evet, tabii.","Sorun değil, daha yavaş söylüyorum.","Yazıyorum size."]},
+    {"question":"Wie war das Essen?","question_tr":"Yemek nasıldı?","level":"A2","alternatives":["Es war ausgezeichnet.","Es war in Ordnung.","Leider war es zu salzig."],"alternatives_tr":["Mükemmeldi.","İdare ederdi.","Maalesef çok tuzluydu."]},
+    {"question":"Haben Sie eine Empfehlung für ein Hotel?","question_tr":"Bir otel tavsiyeniz var mı?","level":"A2","alternatives":["Das Hotel Central ist sehr gut.","Ich empfehle die Pension am Marktplatz.","Es gibt viele gute Hotels im Stadtzentrum."],"alternatives_tr":["Hotel Central çok iyi.","Pazar alanındaki pansiyonu tavsiye ederim.","Şehir merkezinde birçok iyi otel var."]},
+    {"question":"Was ist der Unterschied zwischen diesen beiden?","question_tr":"Bu ikisi arasındaki fark nedir?","level":"A2","alternatives":["Dieses hier ist aus Leder, das andere aus Kunstleder.","Der Preis ist unterschiedlich.","Das eine hat mehr Funktionen."],"alternatives_tr":["Bu deriden, diğeri suni deriden.","Fiyat farklı.","Birinde daha fazla özellik var."]},
+    {"question":"Wie oft kommen Sie hierher?","question_tr":"Buraya ne sıklıkla geliyorsunuz?","level":"A2","alternatives":["Ich komme fast jeden Tag.","Nur selten, heute zum ersten Mal.","Ungefähr einmal pro Woche."],"alternatives_tr":["Neredeyse her gün geliyorum.","Nadiren, bugün ilk defa.","Yaklaşık haftada bir."]},
+    {"question":"Können Sie mir das auf Englisch sagen?","question_tr":"Bunu bana İngilizce söyleyebilir misiniz?","level":"A2","alternatives":["Ja, of course! How can I help you?","Ich versuche es, mein Englisch ist nicht perfekt.","Einen Moment, ich rufe eine Kollegin."],"alternatives_tr":["Evet, tabii! Size nasıl yardımcı olabilirim?","Deneyeyim, İngilizceme pek güvenemiyorum.","Bir dakika, bir meslektaşımı çağırıyorum."]},
+    {"question":"Was brauchen Sie für die Reise?","question_tr":"Yolculuk için neye ihtiyacınız var?","level":"A2","alternatives":["Ich brauche meinen Reisepass und etwas Geld.","Eine Fahrkarte und mein Gepäck.","Ich habe alles schon vorbereitet."],"alternatives_tr":["Pasaportuma ve biraz paraya ihtiyacım var.","Bilet ve bagajım.","Her şeyi zaten hazırladım."]},
+    {"question":"Ist dieser Platz frei?","question_tr":"Bu yer boş mu?","level":"A2","alternatives":["Ja, bitte setzen Sie sich.","Nein, tut mir leid, der ist besetzt.","Ich weiß es nicht genau."],"alternatives_tr":["Evet, lütfen oturun.","Hayır, üzgünüm, dolu.","Tam olarak bilmiyorum."]},
+    {"question":"Wie lange warten Sie schon?","question_tr":"Ne zamandır bekliyorsunuz?","level":"A2","alternatives":["Ich warte seit einer halben Stunde.","Erst seit ein paar Minuten.","Schon fast eine Stunde, leider."],"alternatives_tr":["Yarım saattir bekliyorum.","Sadece birkaç dakikadır.","Neredeyse bir saat, maalesef."]},
+    {"question":"Haben Sie die Quittung noch?","question_tr":"Fiş hâlâ sizde mi?","level":"A2","alternatives":["Ja, ich habe sie hier.","Nein, ich habe sie weggeworfen.","Ich suche sie gerade."],"alternatives_tr":["Evet, burada.","Hayır, attım.","Şu an arıyorum."]},
+    {"question":"Wie lange bleiben Sie in der Stadt?","question_tr":"Şehirde ne kadar kalıyorsunuz?","level":"A2","alternatives":["Ich bleibe drei Tage.","Nur über das Wochenende.","Etwa eine Woche."],"alternatives_tr":["Üç gün kalıyorum.","Sadece hafta sonu.","Yaklaşık bir hafta."]},
+    {"question":"Haben Sie Geschwister, die auch Deutsch lernen?","question_tr":"Almanca öğrenen kardeşleriniz var mı?","level":"A2","alternatives":["Ja, mein Bruder lernt auch Deutsch.","Nein, nur ich lerne Deutsch.","Meine Schwester spricht schon sehr gut Deutsch."],"alternatives_tr":["Evet, erkek kardeşim de Almanca öğreniyor.","Hayır, sadece ben Almanca öğreniyorum.","Kız kardeşim zaten çok iyi Almanca konuşuyor."]},
+    {"question":"Was sind Ihrer Meinung nach die Vorteile des öffentlichen Nahverkehrs?","question_tr":"Sizce toplu taşımanın avantajları nelerdir?","level":"B1","alternatives":["Öffentliche Verkehrsmittel reduzieren den Verkehr und die Luftverschmutzung.","Man spart Geld, weil man kein Auto braucht.","Es ist stressfreier als selbst zu fahren."],"alternatives_tr":["Toplu taşıma trafiği ve hava kirliliğini azaltır.","Arabaya gerek kalmadığı için para tasarruf edilir.","Kendin sürmekten daha az stresli."]},
+    {"question":"Wie wichtig ist Sport für Ihre Gesundheit?","question_tr":"Sağlığınız için spor ne kadar önemli?","level":"B1","alternatives":["Sport ist sehr wichtig, er hält mich fit.","Regelmäßige Bewegung verbessert die Stimmung.","Ich versuche, dreimal pro Woche Sport zu treiben."],"alternatives_tr":["Spor çok önemli, beni formda tutuyor.","Düzenli egzersiz ruh halini iyileştirir.","Haftada üç kez spor yapmaya çalışıyorum."]},
+    {"question":"Welche Auswirkungen hat Social Media auf junge Menschen?","question_tr":"Sosyal medyanın gençler üzerindeki etkileri nelerdir?","level":"B1","alternatives":["Social Media kann süchtig machen und ablenken.","Es ermöglicht, mit Freunden in Kontakt zu bleiben.","Viele vergleichen sich mit anderen und fühlen sich schlecht."],"alternatives_tr":["Sosyal medya bağımlılık yapabilir ve dikkati dağıtabilir.","Arkadaşlarla iletişimde kalmayı sağlar.","Birçok kişi kendini başkalarıyla kıyaslayıp kötü hissediyor."]},
+    {"question":"Beschreiben Sie Ihre ideale Arbeitsstelle.","question_tr":"İdeal iş yerinizi tarif edin.","level":"B1","alternatives":["Ich möchte in einem kreativen Umfeld arbeiten.","Ein gutes Teamklima ist mir sehr wichtig.","Ich wünsche mir flexible Arbeitszeiten und Homeoffice."],"alternatives_tr":["Yaratıcı bir ortamda çalışmak istiyorum.","İyi bir ekip ortamı benim için çok önemli.","Esnek çalışma saatleri ve uzaktan çalışma istiyorum."]},
+    {"question":"Was können wir für die Umwelt tun?","question_tr":"Çevre için ne yapabiliriz?","level":"B1","alternatives":["Wir sollten weniger Plastikmüll produzieren.","Man kann Energie sparen, indem man seltener fliegt.","Der Kauf regionaler Produkte schützt die Umwelt."],"alternatives_tr":["Daha az plastik atık üretmeliyiz.","Daha az uçarak enerji tasarrufu yapılabilir.","Yerel ürün satın almak çevreyi korur."]},
+    {"question":"Welche Vor- und Nachteile hat das Stadtleben?","question_tr":"Şehir yaşamının avantaj ve dezavantajları nelerdir?","level":"B1","alternatives":["In der Stadt gibt es mehr Jobangebote und Freizeitangebote.","Der Nachteil ist der Lärm und die hohen Mieten.","Das Leben auf dem Land ist ruhiger, aber weniger abwechslungsreich."],"alternatives_tr":["Şehirde daha fazla iş ve boş zaman imkanı var.","Dezavantajı gürültü ve yüksek kiralar.","Kırda yaşam daha sakin ama daha az çeşitli."]},
+    {"question":"Wie gehen Sie mit Stress um?","question_tr":"Stresle nasıl başa çıkıyorsunuz?","level":"B1","alternatives":["Ich mache Yoga und meditiere regelmäßig.","Sport hilft mir, den Stress abzubauen.","Ich versuche, bewusst Pausen einzulegen."],"alternatives_tr":["Düzenli olarak yoga yapıyor ve meditasyon yapıyorum.","Spor stresi atmama yardımcı oluyor.","Bilinçli olarak mola vermeye çalışıyorum."]},
+    {"question":"Was bedeutet Freundschaft für Sie?","question_tr":"Sizin için arkadaşlık ne anlam ifade ediyor?","level":"B1","alternatives":["Freundschaft bedeutet gegenseitiges Vertrauen und Unterstützung.","Echte Freunde sind in schwierigen Zeiten da.","Es geht nicht um die Anzahl der Freunde, sondern um die Qualität."],"alternatives_tr":["Arkadaşlık karşılıklı güven ve destek demektir.","Gerçek arkadaşlar zor zamanlarda yanınızda olur.","Önemli olan arkadaş sayısı değil, kalitesi."]},
+    {"question":"Welche Rolle spielt die Familie in Ihrem Leben?","question_tr":"Ailenin hayatınızdaki rolü nedir?","level":"B1","alternatives":["Meine Familie ist mein wichtigster Rückhalt.","Die Familie gibt einem Stabilität und Geborgenheit.","Manchmal gibt es Konflikte, aber man hält zusammen."],"alternatives_tr":["Ailem en önemli desteğim.","Aile insana istikrar ve güven verir.","Bazen çatışmalar olsa da birlikte dururuz."]},
+    {"question":"Warum ist es wichtig, eine Fremdsprache zu lernen?","question_tr":"Neden yabancı dil öğrenmek önemlidir?","level":"B1","alternatives":["Es öffnet berufliche Möglichkeiten weltweit.","Man versteht andere Kulturen besser.","Es trainiert das Gehirn und verbessert das Gedächtnis."],"alternatives_tr":["Dünya genelinde mesleki imkanlar açar.","Diğer kültürleri daha iyi anlarsınız.","Beyni eğitir ve hafızayı geliştirir."]},
+    {"question":"Was sind die Ursachen von Armut?","question_tr":"Yoksulluğun nedenleri nelerdir?","level":"B1","alternatives":["Mangelnde Bildung ist eine Hauptursache.","Wirtschaftliche Ungleichheit führt zu Armut.","Arbeitslosigkeit ist oft ein entscheidender Faktor."],"alternatives_tr":["Yetersiz eğitim başlıca nedenlerden biridir.","Ekonomik eşitsizlik yoksulluğa yol açar.","İşsizlik çoğu zaman belirleyici bir faktördür."]},
+    {"question":"Wie hat sich die Technologie unser Leben verändert?","question_tr":"Teknoloji hayatımızı nasıl değiştirdi?","level":"B1","alternatives":["Wir können jetzt überall und jederzeit kommunizieren.","Das Leben ist bequemer geworden, aber auch komplizierter.","Viele Berufe sind durch Automatisierung verschwunden."],"alternatives_tr":["Artık her yerde ve her zaman iletişim kurabiliyoruz.","Hayat daha rahat ama aynı zamanda daha karmaşık oldu.","Otomasyon nedeniyle birçok meslek ortadan kalktı."]},
+    {"question":"Was verstehen Sie unter einem gesunden Lebensstil?","question_tr":"Sağlıklı bir yaşam tarzından ne anlıyorsunuz?","level":"B1","alternatives":["Gesunde Ernährung und regelmäßiger Sport sind die Grundlage.","Ausreichend Schlaf und wenig Stress sind wichtig.","Auch soziale Kontakte und positive Gedanken gehören dazu."],"alternatives_tr":["Sağlıklı beslenme ve düzenli spor temeldir.","Yeterli uyku ve az stres önemlidir.","Sosyal bağlar ve olumlu düşünceler de buna dahildir."]},
+    {"question":"Was sind Ihrer Meinung nach die größten Probleme unserer Zeit?","question_tr":"Sizce zamanımızın en büyük sorunları nelerdir?","level":"B1","alternatives":["Der Klimawandel ist das dringendste Problem.","Soziale Ungleichheit nimmt weltweit zu.","Die Digitalisierung verändert die Arbeitswelt grundlegend."],"alternatives_tr":["İklim değişikliği en acil sorundur.","Dünya genelinde sosyal eşitsizlik artıyor.","Dijitalleşme iş dünyasını temelden değiştiriyor."]},
+    {"question":"Welche Eigenschaften sollte ein guter Chef haben?","question_tr":"İyi bir patronun hangi özellikleri olmalıdır?","level":"B1","alternatives":["Er sollte respektvoll und fair sein.","Kommunikationsfähigkeit ist sehr wichtig.","Ein guter Chef hört seinen Mitarbeitern zu."],"alternatives_tr":["Saygılı ve adil olmalıdır.","İletişim becerisi çok önemli.","İyi bir patron çalışanlarını dinler."]},
+    {"question":"Soll man im Ausland studieren? Warum?","question_tr":"Yurt dışında okumak gerekir mi? Neden?","level":"B1","alternatives":["Ja, man lernt neue Kulturen kennen und wird selbstständiger.","Auslandsstudium verbessert die Sprachkenntnisse.","Es eröffnet bessere Karrierechancen."],"alternatives_tr":["Evet, yeni kültürler öğrenir ve daha bağımsız olursunuz.","Yurt dışında okumak dil becerilerini geliştirir.","Daha iyi kariyer fırsatları açar."]},
+    {"question":"Was sind die Vorteile des Lesens?","question_tr":"Okumanın avantajları nelerdir?","level":"B1","alternatives":["Lesen erweitert den Wortschatz und das Wissen.","Es fördert die Vorstellungskraft und das kreative Denken.","Bücher können helfen, andere Perspektiven zu verstehen."],"alternatives_tr":["Okumak kelime dağarcığını ve bilgiyi genişletir.","Hayal gücünü ve yaratıcı düşünceyi geliştirir.","Kitaplar farklı bakış açılarını anlamaya yardımcı olabilir."]},
+    {"question":"Wie kann man Vorurteile abbauen?","question_tr":"Önyargılar nasıl azaltılabilir?","level":"B1","alternatives":["Durch Begegnungen mit anderen Kulturen.","Bildung und Offenheit spielen eine wichtige Rolle.","Man sollte Menschen kennenlernen, bevor man urteilt."],"alternatives_tr":["Diğer kültürlerle karşılaşmalar yoluyla.","Eğitim ve açıklık önemli rol oynuyor.","Yargılamadan önce insanları tanımalısınız."]},
+    {"question":"Was motiviert Sie in Ihrem Leben?","question_tr":"Hayatınızda sizi ne motive ediyor?","level":"B1","alternatives":["Meine Familie und meine Ziele motivieren mich.","Ich möchte etwas Sinnvolles leisten.","Der Wunsch, mich weiterzuentwickeln, treibt mich an."],"alternatives_tr":["Ailem ve hedeflerim beni motive ediyor.","Anlamlı bir şey yapmak istiyorum.","Kendimi geliştirme isteği beni harekete geçiriyor."]},
+    {"question":"Wie wichtig ist Pünktlichkeit in Ihrer Kultur?","question_tr":"Kültürünüzde dakiklik ne kadar önemlidir?","level":"B1","alternatives":["Pünktlichkeit zeigt Respekt für die Zeit anderer.","In manchen Kulturen ist sie sehr wichtig, in anderen weniger.","In Deutschland gilt Pünktlichkeit als sehr wichtig."],"alternatives_tr":["Dakiklik başkalarının zamanına saygı gösterir.","Bazı kültürlerde çok önemli, diğerlerinde daha az.","Almanya'da dakiklik çok önemli kabul edilir."]},
+    {"question":"Was sind die Konsequenzen von Arbeitslosigkeit?","question_tr":"İşsizliğin sonuçları nelerdir?","level":"B1","alternatives":["Arbeitslosigkeit kann zu finanziellen Problemen führen.","Sie beeinflusst das psychische Wohlbefinden negativ.","Soziale Isolation ist eine häufige Folge."],"alternatives_tr":["İşsizlik finansal sorunlara yol açabilir.","Psikolojik iyilik halini olumsuz etkiler.","Sosyal izolasyon yaygın bir sonuçtur."]},
+    {"question":"Wie kann man effektiver lernen?","question_tr":"Nasıl daha etkili öğrenilebilir?","level":"B1","alternatives":["Regelmäßiges Wiederholen ist sehr wichtig.","Man sollte den Stoff in kleinen Einheiten lernen.","Pausen sind genauso wichtig wie das Lernen selbst."],"alternatives_tr":["Düzenli tekrar çok önemlidir.","Konuyu küçük parçalar halinde öğrenmek gerekir.","Molalar öğrenmenin kendisi kadar önemli."]},
+    {"question":"Welche Bedeutung hat Musik in Ihrem Leben?","question_tr":"Müziğin hayatınızdaki önemi nedir?","level":"B1","alternatives":["Musik hilft mir, mich zu entspannen.","Sie weckt Erinnerungen und berührt mich emotional.","Ohne Musik wäre mein Leben viel ärmer."],"alternatives_tr":["Müzik rahatlamamı sağlıyor.","Anıları canlandırır ve beni duygusal olarak etkiler.","Müziksiz hayatım çok daha yoksul olurdu."]},
+    {"question":"Ist es wichtig, ehrenamtlich zu arbeiten?","question_tr":"Gönüllü çalışmak önemli midir?","level":"B1","alternatives":["Ja, es stärkt den Zusammenhalt in der Gesellschaft.","Freiwilligenarbeit gibt dem Leben Sinn.","Man sammelt wertvolle Erfahrungen."],"alternatives_tr":["Evet, toplumdaki dayanışmayı güçlendirir.","Gönüllü çalışma hayata anlam katar.","Değerli deneyimler edinilir."]},
+    {"question":"Sollte man täglich Nachrichten schauen?","question_tr":"Her gün haber izlemek gerekir mi?","level":"B1","alternatives":["Ja, man muss über aktuelle Ereignisse informiert sein.","Es ist wichtig, aber man sollte eine Pause einlegen.","Zu viele Nachrichten können deprimierend sein."],"alternatives_tr":["Evet, güncel olaylar hakkında bilgi sahibi olunmalı.","Önemli ama mola vermek de gerekli.","Çok fazla haber bunaltıcı olabilir."]},
+    {"question":"Was ist Ihrer Meinung nach der beste Weg, eine neue Sprache zu lernen?","question_tr":"Sizce yeni bir dil öğrenmenin en iyi yolu nedir?","level":"B1","alternatives":["Täglich üben und keine Angst vor Fehlern haben.","Das Eintauchen in die Sprache durch Filme und Bücher hilft sehr.","Am besten lernt man, wenn man in dem Land lebt."],"alternatives_tr":["Günlük pratik yapmak ve hatalardan korkmamak.","Film ve kitaplarla dile dalmak çok yardımcı oluyor.","En iyi öğrenme o ülkede yaşayarak olur."]},
+    {"question":"Welche Folgen hat ungesunde Ernährung?","question_tr":"Sağlıksız beslenmenin sonuçları nelerdir?","level":"B1","alternatives":["Sie kann zu Übergewicht und Herzproblemen führen.","Ungesundes Essen schwächt das Immunsystem.","Man hat weniger Energie und konzentriert sich schlechter."],"alternatives_tr":["Fazla kiloya ve kalp sorunlarına yol açabilir.","Sağlıksız yemek bağışıklık sistemini zayıflatır.","Daha az enerjiniz olur ve konsantrasyon azalır."]},
+    {"question":"Was schätzen Sie an Ihrer Heimat am meisten?","question_tr":"Memlekettinizde en çok neyi takdir ediyorsunuz?","level":"B1","alternatives":["Die Kultur und die Traditionen meiner Heimat.","Das Essen und die Gastfreundschaft der Menschen.","Die Natur und die Landschaft."],"alternatives_tr":["Memleketin kültürü ve gelenekleri.","Yemek ve insanların misafirperverliği.","Doğa ve manzara."]},
+    {"question":"Wie gehen Sie mit negativen Gefühlen um?","question_tr":"Olumsuz duygularla nasıl başa çıkıyorsunuz?","level":"B1","alternatives":["Ich rede mit Freunden oder der Familie darüber.","Sport und Musik helfen mir sehr.","Ich versuche, die Situation aus einer anderen Perspektive zu sehen."],"alternatives_tr":["Arkadaşlarımla veya aileyle konuşurum.","Spor ve müzik çok yardımcı oluyor.","Durumu farklı bir bakış açısıyla görmeye çalışıyorum."]},
+    {"question":"Was sind die Vorteile von Teamarbeit?","question_tr":"Takım çalışmasının avantajları nelerdir?","level":"B1","alternatives":["Im Team können verschiedene Fähigkeiten genutzt werden.","Man erreicht gemeinsam bessere Ergebnisse.","Teamarbeit fördert die Kreativität."],"alternatives_tr":["Takımda farklı becerilerden yararlanılabilir.","Birlikte daha iyi sonuçlara ulaşılır.","Takım çalışması yaratıcılığı artırır."]},
+    {"question":"Sollte man Kinder früh zu Selbstständigkeit erziehen?","question_tr":"Çocuklar erken yaşta bağımsızlığa yönlendirilmeli mi?","level":"B1","alternatives":["Ja, es fördert ihre Persönlichkeitsentwicklung.","Selbstständigkeit hilft, mit Problemen umzugehen.","Ja, aber sie brauchen auch die Unterstützung der Eltern."],"alternatives_tr":["Evet, kişilik gelişimlerini destekler.","Bağımsızlık problemlerle başa çıkmaya yardımcı olur.","Evet, ama ebeveyn desteğine de ihtiyaçları var."]},
+    {"question":"Wie verändert sich die Welt durch Globalisierung?","question_tr":"Küreselleşme dünyayı nasıl değiştiriyor?","level":"B1","alternatives":["Kulturen vermischen sich und werden vielfältiger.","Wirtschaftliche Abhängigkeiten nehmen zu.","Menschen können leichter in andere Länder reisen und arbeiten."],"alternatives_tr":["Kültürler karışıyor ve daha çeşitli hale geliyor.","Ekonomik bağımlılıklar artıyor.","İnsanlar diğer ülkelere daha kolay seyahat edip çalışabiliyor."]},
+    {"question":"Was bedeutet Erfolg für Sie persönlich?","question_tr":"Sizin için başarı kişisel olarak ne anlama geliyor?","level":"B1","alternatives":["Erfolg bedeutet, meine eigenen Ziele zu erreichen.","Glücklich zu sein und die Familie gesund zu halten.","Beruflich voranzukommen und finanzielle Sicherheit zu haben."],"alternatives_tr":["Başarı kendi hedeflerime ulaşmak demek.","Mutlu olmak ve ailemin sağlıklı olması.","Mesleki olarak ilerlemek ve finansal güvenceye sahip olmak."]},
+    {"question":"Warum ist Recycling wichtig?","question_tr":"Geri dönüşüm neden önemlidir?","level":"B1","alternatives":["Es schont natürliche Ressourcen.","Recycling reduziert die Müllmengen auf Deponien.","Es hilft, die Umwelt für zukünftige Generationen zu erhalten."],"alternatives_tr":["Doğal kaynakları korur.","Geri dönüşüm çöp depolarındaki miktarı azaltır.","Çevreyi gelecek nesiller için korumaya yardımcı olur."]},
+    {"question":"Was halten Sie von Online-Shopping?","question_tr":"Çevrimiçi alışveriş hakkında ne düşünüyorsunuz?","level":"B1","alternatives":["Es ist sehr bequem und man spart Zeit.","Man kann Preise leicht vergleichen.","Der Nachteil ist, dass man Produkte nicht anfassen kann."],"alternatives_tr":["Çok rahat ve zaman kazandırıyor.","Fiyatlar kolayca karşılaştırılabilir.","Dezavantajı ürünlere dokunamaman."]},
+    {"question":"Wie wichtig ist Schlaf für die Gesundheit?","question_tr":"Uyku sağlık için ne kadar önemli?","level":"B1","alternatives":["Schlaf ist lebenswichtig für Körper und Geist.","Zu wenig Schlaf beeinträchtigt Konzentration und Leistung.","Sieben bis acht Stunden gelten als ideal."],"alternatives_tr":["Uyku beden ve zihin için hayati önem taşır.","Az uyku konsantrasyonu ve performansı bozar.","Yedi ila sekiz saat ideal olarak kabul edilir."]},
+    {"question":"Sollte man sich politisch engagieren?","question_tr":"Siyasi olarak aktif olmak gerekir mi?","level":"B1","alternatives":["Ja, jeder Bürger trägt Verantwortung für die Gesellschaft.","Politisches Engagement kann die Gesellschaft verbessern.","Man kann auch auf lokaler Ebene viel bewegen."],"alternatives_tr":["Evet, her vatandaş topluma karşı sorumluluk taşır.","Siyasi katılım toplumu iyileştirebilir.","Yerel düzeyde de çok şey yapılabilir."]},
+    {"question":"Was machen Sie, wenn Sie krank sind?","question_tr":"Hasta olduğunuzda ne yapıyorsunuz?","level":"B1","alternatives":["Ich bleibe zu Hause und ruhe mich aus.","Ich gehe zum Arzt und nehme Medikamente.","Ich trinke viel Tee und schlafe viel."],"alternatives_tr":["Evde kalır ve dinlenirim.","Doktora gider ve ilaç alırım.","Çok çay içer ve çok uyurum."]},
+    {"question":"Was sind die Vor- und Nachteile der Digitalisierung im Unterricht?","question_tr":"Eğitimde dijitalleşmenin artı ve eksileri nelerdir?","level":"B1","alternatives":["Digitale Mittel machen den Unterricht abwechslungsreicher.","Schüler können individueller lernen.","Aber zu viel Bildschirmzeit ist nicht gesund."],"alternatives_tr":["Dijital araçlar dersi daha çeşitli kılar.","Öğrenciler daha bireysel öğrenebilir.","Ama fazla ekran süresi sağlıklı değil."]},
+    {"question":"Wie könnte man das Bildungssystem verbessern?","question_tr":"Eğitim sistemi nasıl iyileştirilebilir?","level":"B1","alternatives":["Kleinere Klassen würden die Qualität verbessern.","Mehr praktische Erfahrung sollte im Unterricht eingebaut werden.","Lehrkräfte sollten besser bezahlt und unterstützt werden."],"alternatives_tr":["Daha küçük sınıflar kaliteyi artırır.","Derse daha fazla pratik deneyim eklenmelidir.","Öğretmenler daha iyi ücretlendirilmeli ve desteklenmeli."]},
+    {"question":"Inwiefern beeinflusst die Digitalisierung den modernen Arbeitsmarkt?","question_tr":"Dijitalleşme modern iş piyasasını ne ölçüde etkiliyor?","level":"B2","alternatives":["Viele repetitive Tätigkeiten werden durch Automatisierung ersetzt.","Neue Berufsfelder entstehen, während traditionelle verschwinden.","Arbeitnehmer müssen sich ständig weiterbilden, um wettbewerbsfähig zu bleiben."],"alternatives_tr":["Birçok tekrarlayan görev otomasyon tarafından devrralınıyor.","Gelenekseller ortadan kalkarken yeni meslek alanları ortaya çıkıyor.","Çalışanların rekabetçi kalabilmek için sürekli gelişmesi gerekiyor."]},
+    {"question":"Welche Maßnahmen sollten Regierungen ergreifen, um den Klimawandel zu bekämpfen?","question_tr":"Hükümetler iklim değişikliğiyle mücadele etmek için hangi önlemleri almalıdır?","level":"B2","alternatives":["Der Ausbau erneuerbarer Energien muss massiv beschleunigt werden.","Subventionen für fossile Brennstoffe müssen abgeschafft werden.","Internationale Abkommen zur Reduzierung von CO2-Emissionen sind notwendig."],"alternatives_tr":["Yenilenebilir enerjilerin genişletilmesi büyük ölçüde hızlandırılmalıdır.","Fosil yakıt sübvansiyonları kaldırılmalıdır.","CO2 emisyonlarını azaltmak için uluslararası anlaşmalar gereklidir."]},
+    {"question":"Wie verändert künstliche Intelligenz unsere Gesellschaft?","question_tr":"Yapay zeka toplumumuzu nasıl değiştiriyor?","level":"B2","alternatives":["KI optimiert Prozesse in Medizin, Industrie und Bildung.","Datenschutz und ethische Fragen werden immer wichtiger.","Die Abhängigkeit von Technologie birgt auch Risiken."],"alternatives_tr":["YZ tıp, sanayi ve eğitimde süreçleri optimize ediyor.","Veri gizliliği ve etik sorular giderek daha önemli hale geliyor.","Teknolojiye bağımlılık da risk barındırıyor."]},
+    {"question":"Inwiefern ist soziale Ungleichheit ein strukturelles Problem?","question_tr":"Sosyal eşitsizlik ne ölçüde yapısal bir sorundur?","level":"B2","alternatives":["Bildungschancen sind oft von der sozialen Herkunft abhängig.","Strukturelle Diskriminierung verhindert soziale Mobilität.","Wirtschaftliche Systeme begünstigen oft diejenigen, die bereits privilegiert sind."],"alternatives_tr":["Eğitim fırsatları çoğu zaman sosyal kökene bağlıdır.","Yapısal ayrımcılık sosyal hareketliliği engelliyor.","Ekonomik sistemler genellikle zaten ayrıcalıklı olanları destekliyor."]},
+    {"question":"Welche Auswirkungen hat Globalisierung auf lokale Kulturen?","question_tr":"Küreselleşmenin yerel kültürler üzerindeki etkileri nelerdir?","level":"B2","alternatives":["Lokale Traditionen und Sprachen geraten unter Druck.","Kulturelle Vielfalt kann bereichert, aber auch homogenisiert werden.","Wirtschaftliche Globalisierung führt nicht automatisch zu kulturellem Verständnis."],"alternatives_tr":["Yerel gelenekler ve diller baskı altına giriyor.","Kültürel çeşitlilik zenginleşebilir ama aynı zamanda homojenleşebilir.","Ekonomik küreselleşme otomatik olarak kültürel anlayışa yol açmaz."]},
+    {"question":"Sollte Bildung vollständig kostenlos sein?","question_tr":"Eğitim tamamen ücretsiz olmalı mı?","level":"B2","alternatives":["Ja, Bildung ist ein Grundrecht und sollte für alle zugänglich sein.","Kostenlose Bildung würde soziale Ungleichheit erheblich reduzieren.","Qualitätssicherung bleibt eine Herausforderung bei kostenloser Bildung."],"alternatives_tr":["Evet, eğitim temel bir haktır ve herkese erişilebilir olmalıdır.","Ücretsiz eğitim sosyal eşitsizliği önemli ölçüde azaltır.","Ücretsiz eğitimde kalite güvencesi bir zorluk olmaya devam eder."]},
+    {"question":"Wie wirken sich soziale Medien auf die öffentliche Meinungsbildung aus?","question_tr":"Sosyal medya kamuoyu oluşumunu nasıl etkiliyor?","level":"B2","alternatives":["Algorithmisch gefilterte Informationen können Echokammern erzeugen.","Falschinformationen verbreiten sich schneller als Fakten.","Gleichzeitig ermöglichen sie Bürgern, ihre Stimmen zu erheben."],"alternatives_tr":["Algoritmik filtrelenmiş bilgiler yankı odaları yaratabilir.","Yanlış bilgi gerçeklerden daha hızlı yayılır.","Aynı zamanda vatandaşların seslerini duyurmasını sağlıyorlar."]},
+    {"question":"Inwiefern ist Migration eine Bereicherung für die Aufnahmegesellschaft?","question_tr":"Göç ev sahibi toplum için ne ölçüde bir zenginliktir?","level":"B2","alternatives":["Migranten bringen neue Fähigkeiten und Perspektiven mit.","Kulturelle Vielfalt fördert Innovation und kreatives Denken.","Demographisch alternde Gesellschaften profitieren von jungen Arbeitskräften."],"alternatives_tr":["Göçmenler yeni beceriler ve bakış açıları getiriyor.","Kültürel çeşitlilik inovasyonu ve yaratıcı düşünceyi teşvik eder.","Demografik olarak yaşlanan toplumlar genç işgücünden yararlanıyor."]},
+    {"question":"Welche Vor- und Nachteile hat das Homeoffice für Unternehmen?","question_tr":"Uzaktan çalışmanın şirketler için artı ve eksileri nelerdir?","level":"B2","alternatives":["Bürokosten können durch Homeoffice erheblich gesenkt werden.","Die Produktivität kann steigen, wenn Mitarbeiter weniger abgelenkt werden.","Teamzusammenhalt und Unternehmenskultur leiden unter fehlender physischer Präsenz."],"alternatives_tr":["Uzaktan çalışmayla ofis giderleri önemli ölçüde azaltılabilir.","Çalışanlar daha az dikkatlerini dağıtınca verimlilik artabilir.","Ekip dayanışması ve şirket kültürü fiziksel varlığın eksikliğinden etkileniyor."]},
+    {"question":"Wie könnte man die Integration von Migranten verbessern?","question_tr":"Göçmenlerin entegrasyonu nasıl iyileştirilebilir?","level":"B2","alternatives":["Kostenlose Sprachkurse sind der erste und wichtigste Schritt.","Anerkennungsverfahren für ausländische Abschlüsse müssen vereinfacht werden.","Interkulturelle Begegnungen fördern gegenseitiges Verständnis."],"alternatives_tr":["Ücretsiz dil kursları ilk ve en önemli adımdır.","Yabancı diplomaların tanınma süreçleri basitleştirilmelidir.","Kültürlerarası buluşmalar karşılıklı anlayışı teşvik eder."]},
+    {"question":"Ist wirtschaftliches Wachstum die Lösung für soziale Probleme?","question_tr":"Ekonomik büyüme sosyal sorunların çözümü müdür?","level":"B2","alternatives":["Wachstum allein reicht nicht aus, wenn es ungleich verteilt ist.","Nachhaltiges Wachstum muss soziale und ökologische Aspekte berücksichtigen.","Manchmal führt Wachstum sogar zu größerer Ungleichheit."],"alternatives_tr":["Büyüme tek başına yetmez, eğer eşitsiz dağıtılıyorsa.","Sürdürülebilir büyüme sosyal ve ekolojik boyutları gözetmelidir.","Bazen büyüme daha büyük eşitsizliğe yol açar."]},
+    {"question":"Welche Verantwortung tragen Medien in einer Demokratie?","question_tr":"Medyanın demokraside hangi sorumluluğu var?","level":"B2","alternatives":["Medien müssen objektiv berichten und als vierte Gewalt fungieren.","Sie sind verpflichtet, Machtmissbrauch aufzudecken.","Ausgewogene Berichterstattung schützt die öffentliche Meinungsfreiheit."],"alternatives_tr":["Medya nesnel habercilik yapmalı ve dördüncü güç olarak işlev görmelidir.","Güç istismarını ortaya çıkarmakla yükümlüler.","Dengeli habercilik kamuoyu özgürlüğünü korur."]},
+    {"question":"Wie beeinflusst Werbung unser Konsumverhalten?","question_tr":"Reklamcılık tüketim davranışımızı nasıl etkiliyor?","level":"B2","alternatives":["Werbung schafft künstliche Bedürfnisse und fördert Überkonsum.","Psychologische Techniken werden genutzt, um irrationale Kaufentscheidungen zu fördern.","Zielgerichtete Online-Werbung ist besonders effektiv und schwer zu entgehen."],"alternatives_tr":["Reklamcılık yapay ihtiyaçlar yaratır ve aşırı tüketimi teşvik eder.","İrrasyonel satın alma kararlarını teşvik etmek için psikolojik teknikler kullanılıyor.","Hedefli çevrimiçi reklam özellikle etkili ve kaçınması zor."]},
+    {"question":"Sollte die Nutzung sozialer Medien für Kinder gesetzlich eingeschränkt werden?","question_tr":"Çocuklar için sosyal medya kullanımı yasal olarak kısıtlanmalı mı?","level":"B2","alternatives":["Ja, junge Gehirne sind besonders anfällig für Suchtmechanismen.","Eltern tragen die primäre Verantwortung, nicht der Staat.","Strengere Altersprüfungen wären ein sinnvoller Kompromiss."],"alternatives_tr":["Evet, genç beyinler bağımlılık mekanizmalarına karşı özellikle savunmasız.","Birincil sorumluluk devlette değil, ebeveynlerde.","Daha sıkı yaş denetimleri makul bir uzlaşma olur."]},
+    {"question":"Wie kann man einen nachhaltigen Lebensstil praktisch umsetzen?","question_tr":"Sürdürülebilir bir yaşam tarzı pratikte nasıl hayata geçirilir?","level":"B2","alternatives":["Man kann auf Fleisch verzichten und regional einkaufen.","Öffentliche Verkehrsmittel und das Fahrrad ersetzen das Auto.","Bewusster Konsum bedeutet: weniger kaufen, aber qualitativ Hochwertigeres."],"alternatives_tr":["Etten vazgeçip yerel alışveriş yapılabilir.","Toplu taşıma ve bisiklet arabayı ikame edebilir.","Bilinçli tüketim şu anlama gelir: daha az ama kaliteli almak."]},
+    {"question":"Inwiefern ist Datenschutz im digitalen Zeitalter gefährdet?","question_tr":"Dijital çağda veri gizliliği ne ölçüde tehdit altında?","level":"B2","alternatives":["Große Technologieunternehmen sammeln massenhaft persönliche Daten.","Staatliche Überwachungsprogramme untergraben die Privatsphäre.","Nutzer sind sich oft nicht bewusst, welche Daten sie preisgeben."],"alternatives_tr":["Büyük teknoloji şirketleri kişisel verileri toplu olarak topluyor.","Devlet gözetim programları mahremiyeti zedeliyor.","Kullanıcılar genellikle hangi verileri ifşa ettiklerinin farkında değil."]},
+    {"question":"Was sind die gesellschaftlichen Folgen einer alternden Bevölkerung?","question_tr":"Yaşlanan bir nüfusun toplumsal sonuçları nelerdir?","level":"B2","alternatives":["Das Rentensystem gerät unter erheblichen finanziellen Druck.","Der Fachkräftemangel verschärft sich, wenn weniger Junge nachkommen.","Pflegebedarf und Gesundheitskosten steigen stark an."],"alternatives_tr":["Emeklilik sistemi önemli mali baskıyla karşı karşıya kalıyor.","Daha az genç geldiğinde nitelikli işgücü açığı derinleşiyor.","Bakım ihtiyacı ve sağlık maliyetleri büyük ölçüde artıyor."]},
+    {"question":"Wie kann man Fake News erkennen und bekämpfen?","question_tr":"Sahte haberler nasıl tespit edilip mücadele edilebilir?","level":"B2","alternatives":["Quellen sollten immer kritisch geprüft und verglichen werden.","Medienkompetenz muss als Schulfach etabliert werden.","Plattformen tragen die Verantwortung, Desinformation zu kennzeichnen."],"alternatives_tr":["Kaynaklar her zaman eleştirel şekilde kontrol edilmeli ve karşılaştırılmalı.","Medya okuryazarlığı okul dersi olarak kabul görmelidir.","Platformlar dezenformasyonu etiketleme sorumluluğu taşır."]},
+    {"question":"Sollte die Arbeitszeit generell reduziert werden?","question_tr":"Çalışma süresi genel olarak azaltılmalı mı?","level":"B2","alternatives":["Studien zeigen, dass kürzere Arbeitszeiten die Produktivität steigern.","Eine Vier-Tage-Woche könnte die Work-Life-Balance verbessern.","Wirtschaftliche Einbußen müssen jedoch bedacht werden."],"alternatives_tr":["Araştırmalar daha kısa çalışma sürelerinin verimliliği artırdığını gösteriyor.","Dört günlük çalışma haftası iş-yaşam dengesini iyileştirebilir.","Ancak ekonomik kayıplar da göz önünde bulundurulmalı."]},
+    {"question":"Welche Auswirkungen hat Armut auf die Bildungschancen von Kindern?","question_tr":"Yoksulluğun çocukların eğitim fırsatları üzerindeki etkileri nelerdir?","level":"B2","alternatives":["Kinder aus armen Verhältnissen haben oft keinen Zugang zu Lernmitteln.","Stress durch Armut beeinträchtigt die kognitive Entwicklung.","Soziale Stigmatisierung schränkt das Selbstvertrauen ein."],"alternatives_tr":["Yoksul kesimlerden gelen çocukların genellikle öğrenme araçlarına erişimi yok.","Yoksulluğun yarattığı stres bilişsel gelişimi olumsuz etkiliyor.","Sosyal damgalama özgüveni kısıtlıyor."]},
+    {"question":"Wie könnte man die Gleichstellung der Geschlechter am Arbeitsplatz fördern?","question_tr":"İşyerinde cinsiyet eşitliği nasıl teşvik edilebilir?","level":"B2","alternatives":["Transparente Gehaltsstrukturen sind ein wichtiger Schritt.","Quotenregelungen können helfen, obwohl sie umstritten sind.","Flexible Arbeitszeitmodelle ermöglichen eine bessere Vereinbarkeit von Beruf und Familie."],"alternatives_tr":["Şeffaf ücret yapıları önemli bir adımdır.","Kota düzenlemeleri tartışmalı olsa da yardımcı olabilir.","Esnek çalışma modelleri iş ve aile yaşamını daha iyi bağdaştırmayı sağlar."]},
+    {"question":"Welche Bedeutung hat kulturelles Erbe für die Identität einer Nation?","question_tr":"Kültürel mirasın bir ulusun kimliği için önemi nedir?","level":"B2","alternatives":["Es stiftet Gemeinschaftsgefühl und verbindet Generationen miteinander.","Kulturelles Erbe gibt Orientierung in einer sich schnell verändernden Welt.","Es kann aber auch missbraucht werden, um Nationalismus zu schüren."],"alternatives_tr":["Topluluk hissi yaratır ve nesilleri birbirine bağlar.","Kültürel miras hızla değişen bir dünyada yönelim sağlar.","Ancak milliyetçiliği körüklemek için de kötüye kullanılabilir."]},
+    {"question":"Inwiefern kann Kunst als Mittel des gesellschaftlichen Wandels dienen?","question_tr":"Sanat toplumsal değişimin bir aracı olarak ne ölçüde hizmet edebilir?","level":"B2","alternatives":["Kunst provoziert und regt zum kritischen Nachdenken an.","Sie gibt marginalisierten Gruppen eine Stimme.","Historisch hat Kunst immer gesellschaftliche Veränderungen begleitet und angetrieben."],"alternatives_tr":["Sanat kışkırtır ve eleştirel düşünceyi teşvik eder.","Marjinalize edilmiş gruplara bir ses verir.","Tarihsel olarak sanat her zaman toplumsal değişimlere eşlik etmiş ve onları yönlendirmiştir."]},
+    {"question":"Was sind die ethischen Grenzen der wissenschaftlichen Forschung?","question_tr":"Bilimsel araştırmanın etik sınırları nelerdir?","level":"B2","alternatives":["Menschenwürde und Tierwohl müssen immer respektiert werden.","Forschungsergebnisse dürfen nicht für schädliche Zwecke missbraucht werden.","Transparenz und unabhängige Überprüfung sind unerlässlich."],"alternatives_tr":["İnsan onuru ve hayvan refahına her zaman saygı gösterilmelidir.","Araştırma sonuçları zararlı amaçlar için kötüye kullanılmamalıdır.","Şeffaflık ve bağımsız denetim vazgeçilmezdir."]},
+    {"question":"Wie verändert der demographische Wandel das Sozialsystem?","question_tr":"Demografik dönüşüm sosyal sistemi nasıl değiştiriyor?","level":"B2","alternatives":["Weniger Beitragszahler müssen mehr Rentenempfänger finanzieren.","Einwanderung kann als Lösungsansatz dienen, ist aber politisch umstritten.","Das Renteneintrittsalter muss langfristig angepasst werden."],"alternatives_tr":["Daha az katkı payı ödeyici daha fazla emekliyi finanse etmek zorunda.","Göç bir çözüm yolu olabilir ama siyasi açıdan tartışmalı.","Emeklilik yaşının uzun vadede ayarlanması gerekiyor."]},
+    {"question":"Welche Rolle spielt Empathie in der Führung von Unternehmen?","question_tr":"Şirket yönetiminde empatinin rolü nedir?","level":"B2","alternatives":["Empathische Führungskräfte fördern Motivation und Mitarbeiterzufriedenheit.","Sie ermöglichen eine bessere Konfliktlösung im Team.","Empathie und wirtschaftlicher Erfolg schließen sich nicht gegenseitig aus."],"alternatives_tr":["Empatik liderler motivasyonu ve çalışan memnuniyetini artırıyor.","Takımda daha iyi çatışma çözümüne olanak sağlarlar.","Empati ve ekonomik başarı birbirini dışlamıyor."]},
+    {"question":"Sollte es eine globale Mindeststeuer für Unternehmen geben?","question_tr":"Şirketler için küresel bir asgari vergi olmalı mı?","level":"B2","alternatives":["Ja, um Steuervermeidung durch Oasen zu verhindern.","Eine globale Mindeststeuer schafft fairere Wettbewerbsbedingungen.","Die Umsetzung ist komplex und erfordert internationale Kooperation."],"alternatives_tr":["Evet, vergi cennetleri aracılığıyla vergi kaçakçılığını önlemek için.","Küresel asgari vergi daha adil rekabet koşulları yaratır.","Uygulanması karmaşık ve uluslararası işbirliği gerektiriyor."]},
+    {"question":"Wie kann man Diskriminierung am Arbeitsplatz effektiv bekämpfen?","question_tr":"İşyerinde ayrımcılık etkili bir şekilde nasıl mücadele edilebilir?","level":"B2","alternatives":["Anonymisierte Bewerbungsverfahren können unbewusste Vorurteile reduzieren.","Klare Anti-Diskriminierungsrichtlinien müssen durchgesetzt werden.","Schulungen zur Sensibilisierung sind langfristig wirksam."],"alternatives_tr":["Anonim başvuru süreçleri bilinçsiz önyargıları azaltabilir.","Net ayrımcılık karşıtı politikalar uygulanmalıdır.","Farkındalık eğitimleri uzun vadede etkilidir."]},
+    {"question":"Welche Konsequenzen hätte ein bedingungsloses Grundeinkommen?","question_tr":"Koşulsuz temel gelirin sonuçları ne olurdu?","level":"B2","alternatives":["Es würde Armut und Existenzangst erheblich verringern.","Die Finanzierung ist eine große Herausforderung für die Staatshaushalte.","Kritiker befürchten einen Rückgang der Arbeitsmotivation."],"alternatives_tr":["Yoksulluğu ve varoluş kaygısını önemli ölçüde azaltır.","Finansman, devlet bütçeleri için büyük bir zorluktur.","Eleştirmenler çalışma motivasyonunun düşeceğinden endişe ediyor."]},
+    {"question":"Inwiefern trägt Tourismus zur wirtschaftlichen Entwicklung bei?","question_tr":"Turizm ekonomik kalkınmaya ne ölçüde katkıda bulunuyor?","level":"B2","alternatives":["Er schafft Arbeitsplätze und fördert lokale Wirtschaftskreisläufe.","Tourismus kann jedoch auch zur Zerstörung lokaler Kultur führen.","Nachhaltiger Tourismus versucht, diese negativen Folgen zu minimieren."],"alternatives_tr":["İş imkânları yaratır ve yerel ekonomik döngüleri destekler.","Ancak turizm yerel kültürün tahribatına da yol açabilir.","Sürdürülebilir turizm bu olumsuz etkileri en aza indirmeye çalışıyor."]},
+    {"question":"Wie beeinflusst der Wohlstand eines Landes seine internationale Machtstellung?","question_tr":"Bir ülkenin refahı uluslararası güç konumunu nasıl etkiliyor?","level":"B2","alternatives":["Wirtschaftliche Stärke ermöglicht politischen Einfluss weltweit.","Wohlhabende Länder setzen Handelsabkommen zu ihren Gunsten durch.","Soft Power durch Kultur und Wirtschaft ist oft effektiver als militärische Macht."],"alternatives_tr":["Ekonomik güç, dünya genelinde siyasi etki sağlar.","Varlıklı ülkeler ticaret anlaşmalarını kendi lehlerine yaptırıyor.","Kültür ve ekonomi aracılığıyla yumuşak güç çoğu zaman askeri güçten daha etkilidir."]},
+    {"question":"Sollte der Besitz von Waffen für Zivilpersonen stärker reguliert werden?","question_tr":"Sivillerin silah edinimi daha sıkı düzenlenmeli mi?","level":"B2","alternatives":["Strengere Gesetze korrelieren nachweislich mit weniger Waffengewalt.","Selbstschutz ist ein legitimes Bedürfnis, das respektiert werden muss.","Ein vollständiges Verbot wäre in vielen Ländern politisch nicht durchsetzbar."],"alternatives_tr":["Daha sıkı yasalar daha az silahlı şiddetle güçlü bir şekilde ilişkilendirilmiştir.","Öz savunma saygı gösterilmesi gereken meşru bir ihtiyaçtır.","Tam yasak birçok ülkede siyasi olarak uygulanamaz."]},
+    {"question":"Wie kann Bildung dazu beitragen, soziale Mobilität zu fördern?","question_tr":"Eğitim sosyal hareketliliği teşvik etmeye nasıl katkıda bulunabilir?","level":"B2","alternatives":["Gleicher Zugang zu Bildung ist die Grundlage sozialer Gerechtigkeit.","Frühkindliche Förderung ist besonders wirksam für benachteiligte Kinder.","Stipendienprogramme ermöglichen begabten Menschen unabhängig von ihrer Herkunft aufzusteigen."],"alternatives_tr":["Eğitime eşit erişim, sosyal adaletin temelidir.","Erken çocukluk desteği dezavantajlı çocuklar için özellikle etkilidir.","Burs programları yetenekli insanların kökenlerinden bağımsız olarak yükselmesini sağlar."]}
+  ]
+
+};
+  </script>
+  <script>
+
+let currentMode = null;
+let filteredItems = [];
+let currentIndex = 0;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function loadData() {
+  // Shuffle once on load so order is random every session
+  data.vocabulary = shuffle(data.vocabulary);
+  data.sentence_practice = shuffle(data.sentence_practice);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goHome() {
+  currentMode = null;
+  showScreen('screen-home');
+}
+
+function goLevelSelect() {
+  showScreen('screen-level');
+}
+
+async function startMode(mode) {
+  if (!data.vocabulary.length) loadData();
+  currentMode = mode;
+  document.getElementById('level-mode-title').textContent =
+    mode === 'vocabulary' ? 'Vocabulary' : 'Sentence Practice';
+  showScreen('screen-level');
+}
+
+function selectLevel(level) {
+  if (currentMode === 'vocabulary') {
+    const pool = level === 'mixed'
+      ? data.vocabulary
+      : data.vocabulary.filter(item => item.level === level);
+    filteredItems = shuffle(pool);
+    currentIndex = 0;
+    renderVocab();
+    showScreen('screen-vocabulary');
+  } else {
+    const pool = level === 'mixed'
+      ? data.sentence_practice
+      : data.sentence_practice.filter(item => item.level === level);
+    filteredItems = shuffle(pool);
+    currentIndex = 0;
+    renderSentence();
+    showScreen('screen-sentence');
+  }
+}
+
+/* ── VOCABULARY ── */
+function renderVocab() {
+  const total = filteredItems.length;
+
+  if (total === 0) {
+    document.getElementById('vocab-word').textContent = '';
+    document.getElementById('vocab-example-text').textContent = '';
+    document.getElementById('vocab-level').textContent = '';
+    document.getElementById('vocab-counter').textContent = '0 / 0';
+    document.getElementById('vocab-show-btn').classList.add('hidden');
+    document.getElementById('vocab-options').innerHTML =
+      '<div class="no-results"><span>🔍</span>No questions available for this level.</div>';
+    document.getElementById('vocab-options').classList.remove('hidden');
+    document.getElementById('vocab-prev').disabled = true;
+    document.getElementById('vocab-next').disabled = true;
+    return;
+  }
+
+  const item = filteredItems[currentIndex];
+  document.getElementById('vocab-counter').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('vocab-level').textContent = item.level;
+  document.getElementById('vocab-word').textContent = item.word;
+  document.getElementById('vocab-example-text').textContent = item.example;
+  document.getElementById('vocab-example-tr').textContent = item.example_tr || '(Çeviri yok)';
+  document.getElementById('vocab-example-tr').style.display = 'none';
+
+  const grid = document.getElementById('vocab-options');
+  grid.innerHTML = '';
+  grid.classList.add('hidden');
+
+  const showBtn = document.getElementById('vocab-show-btn');
+  showBtn.classList.remove('hidden');
+  showBtn.textContent = '👁 Show Options';
+
+  document.getElementById('vocab-prev').disabled = currentIndex === 0;
+  document.getElementById('vocab-next').disabled = currentIndex === total - 1;
+}
+
+function showVocabOptions() {
+  const item = filteredItems[currentIndex];
+  const grid = document.getElementById('vocab-options');
+
+  const opts = shuffle(item.options);
+  grid.innerHTML = '';
+  opts.forEach(opt => {
+    const card = document.createElement('button');
+    card.className = 'option-card';
+    card.textContent = opt;
+    card.onclick = () => selectOption(grid, opt, item.answer);
+    grid.appendChild(card);
+  });
+
+  grid.classList.remove('hidden');
+  document.getElementById('vocab-show-btn').classList.add('hidden');
+}
+
+function selectOption(grid, selected, answer) {
+  grid.querySelectorAll('.option-card').forEach(c => {
+    c.onclick = null;
+    c.classList.add(c.textContent === answer ? 'correct' : 'wrong');
+  });
+}
+
+/* ── SENTENCE ── */
+function renderSentence() {
+  const total = filteredItems.length;
+
+  if (total === 0) {
+    document.getElementById('sentence-question').textContent = '';
+    document.getElementById('sentence-level').textContent = '';
+    document.getElementById('sentence-counter').textContent = '0 / 0';
+    document.getElementById('sentence-show-btn').classList.add('hidden');
+    document.getElementById('sentence-answers').innerHTML =
+      '<div class="no-results"><span>🔍</span>No questions available for this level.</div>';
+    document.getElementById('sentence-answers').classList.remove('hidden');
+    document.getElementById('sentence-prev').disabled = true;
+    document.getElementById('sentence-next').disabled = true;
+    return;
+  }
+
+  const item = filteredItems[currentIndex];
+  document.getElementById('sentence-counter').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('sentence-level').textContent = item.level;
+  document.getElementById('sentence-question').textContent = item.question;
+  document.getElementById('sentence-question-tr').textContent = item.question_tr;
+  document.getElementById('sentence-question-tr').style.display = 'none';
+
+  const list = document.getElementById('sentence-answers');
+  list.innerHTML = '';
+  list.classList.add('hidden');
+
+  const showBtn = document.getElementById('sentence-show-btn');
+  showBtn.classList.remove('hidden');
+
+  document.getElementById('sentence-prev').disabled = currentIndex === 0;
+  document.getElementById('sentence-next').disabled = currentIndex === total - 1;
+}
+
+function showSentenceAnswers() {
+  const item = filteredItems[currentIndex];
+  const list = document.getElementById('sentence-answers');
+
+  list.innerHTML = '';
+  item.alternatives.forEach((alt, i) => {
+    const card = document.createElement('div');
+    card.className = 'answer-card';
+    card.style.alignItems = 'center';
+    
+    const trHtml = item.alternatives_tr && item.alternatives_tr[i] ? `<span id="answer-tr-${i}" style="display: none; color: #e58e26; font-weight: bold; font-size: 0.9em; margin-top: 0.5rem;">${item.alternatives_tr[i]}</span>` : '';
+    const btnHtml = item.alternatives_tr && item.alternatives_tr[i] ? `<button class="inline-translate-btn answer-translate-btn" onclick="toggleAnswerTranslation(${i})" title="Çeviriyi Göster/Gizle">🇹🇷</button>` : '';
+    
+    card.innerHTML = `<span class="answer-num">${i + 1}</span><div style="display: flex; flex-direction: column; flex: 1;"><span>${alt}</span>${trHtml}</div>${btnHtml}`;
+    list.appendChild(card);
+  });
+
+  list.classList.remove('hidden');
+  document.getElementById('sentence-show-btn').classList.add('hidden');
+}
+
+function toggleVocabTranslation() {
+  const trEl = document.getElementById('vocab-example-tr');
+  trEl.style.display = trEl.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleQuestionTranslation() {
+  const trEl = document.getElementById('sentence-question-tr');
+  trEl.style.display = trEl.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleAnswerTranslation(index) {
+  const trEl = document.getElementById(`answer-tr-${index}`);
+  if (trEl) {
+    trEl.style.display = trEl.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+/* ── NAVIGATION ── */
+function nextItem(mode) {
+  if (currentIndex < filteredItems.length - 1) {
+    currentIndex++;
+    mode === 'vocabulary' ? renderVocab() : renderSentence();
+  }
+}
+
+function prevItem(mode) {
+  if (currentIndex > 0) {
+    currentIndex--;
+    mode === 'vocabulary' ? renderVocab() : renderSentence();
+  }
+}
+
+/* ── KEYBOARD SHORTCUTS ── */
+document.addEventListener('keydown', e => {
+  const vocabActive   = document.getElementById('screen-vocabulary').classList.contains('active');
+  const sentenceActive = document.getElementById('screen-sentence').classList.contains('active');
+  const levelActive   = document.getElementById('screen-level').classList.contains('active');
+
+  if (e.key === 'ArrowRight') {
+    if (vocabActive)    nextItem('vocabulary');
+    if (sentenceActive) nextItem('sentence');
+  } else if (e.key === 'ArrowLeft') {
+    if (vocabActive)    prevItem('vocabulary');
+    if (sentenceActive) prevItem('sentence');
+  } else if (e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    if (vocabActive) {
+      const btn = document.getElementById('vocab-show-btn');
+      if (!btn.classList.contains('hidden')) showVocabOptions();
+    }
+    if (sentenceActive) {
+      const btn = document.getElementById('sentence-show-btn');
+      if (!btn.classList.contains('hidden')) showSentenceAnswers();
+    }
+  } else if (e.key === 'Escape') {
+    if (vocabActive || sentenceActive) goLevelSelect();
+    else if (levelActive) goHome();
+  }
+});
+
+loadData();
+  </script>
+</body>
+</html>
