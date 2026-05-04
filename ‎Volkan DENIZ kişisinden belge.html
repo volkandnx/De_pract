@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Practice</title>
+  <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --accent-vocab: #5b7dff;
+  --accent-sentence: #1dd1a1;
+  --accent-b1: #0984e3;
+  --accent-b2: #9b59b6;
+  --accent-c1: #e67e22;
+  --accent-mixed: #27ae60;
+  --text-primary: #ffffff;
+  --bg-dark: #0f1419;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.screen {
+  display: none;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── HOME SCREEN ── */
+#screen-home.active {
+  justify-content: center;
+  align-items: center;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.logo-icon {
+  font-size: clamp(4rem, 15vw, 8rem);
+  margin-bottom: 1rem;
+}
+
+.app-title {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #5b7dff, #ff6b9d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.app-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: #aaa;
+}
+
+.home-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 4vw, 2rem);
+  width: 100%;
+  max-width: 900px;
+}
+
+.home-btn {
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: clamp(1rem, 3vw, 2rem);
+  background: linear-gradient(135deg, rgba(91, 125, 255, 0.1), rgba(91, 125, 255, 0.05));
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  transition: all 0.3s ease;
+}
+
+.home-btn:hover {
+  transform: translateY(-0.5rem);
+  background: linear-gradient(135deg, rgba(91, 125, 255, 0.2), rgba(91, 125, 255, 0.15));
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.vocab-btn {
+  background: linear-gradient(135deg, rgba(91, 125, 255, 0.15), rgba(91, 125, 255, 0.05));
+  border-color: var(--accent-vocab);
+}
+
+.sentence-btn {
+  background: linear-gradient(135deg, rgba(29, 209, 161, 0.15), rgba(29, 209, 161, 0.05));
+  border-color: var(--accent-sentence);
+}
+
+.btn-icon {
+  font-size: clamp(2rem, 6vw, 4rem);
+}
+
+.btn-label {
+  font-weight: 700;
+}
+
+.btn-sub {
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  color: #aaa;
+  font-weight: 400;
+}
+
+/* ── LEVEL SELECTION SCREEN ── */
+#screen-level.active,
+#screen-vocabulary.active,
+#screen-sentence.active {
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(1rem, 2vw, 2rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 1rem;
+}
+
+.back-btn {
+  padding: clamp(0.5rem, 1vw, 1rem) clamp(1rem, 2vw, 1.5rem);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mode-title {
+  flex: 1;
+  text-align: center;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+}
+
+.counter {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: #aaa;
+  min-width: 5rem;
+  text-align: right;
+}
+
+.level-select-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(2rem, 4vw, 4rem);
+}
+
+.level-select-heading {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  color: #ccc;
+}
+
+.level-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 3vw, 2rem);
+  width: 100%;
+  max-width: 700px;
+}
+
+.level-btn {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: clamp(0.8rem, 2vw, 1.5rem);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.5rem, 1vw, 0.8rem);
+  transition: all 0.3s ease;
+}
+
+.level-btn:hover {
+  transform: translateY(-0.3rem);
+}
+
+.level-code {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+}
+
+.level-desc {
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  color: #aaa;
+  font-weight: 400;
+}
+
+.level-b1 {
+  background: linear-gradient(135deg, rgba(9, 132, 227, 0.1), rgba(9, 132, 227, 0.05));
+  border-color: var(--accent-b1);
+}
+
+.level-b1:hover {
+  background: linear-gradient(135deg, rgba(9, 132, 227, 0.15), rgba(9, 132, 227, 0.1));
+}
+
+.level-b2 {
+  background: linear-gradient(135deg, rgba(155, 89, 182, 0.1), rgba(155, 89, 182, 0.05));
+  border-color: var(--accent-b2);
+}
+
+.level-b2:hover {
+  background: linear-gradient(135deg, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.1));
+}
+
+.level-c1 {
+  background: linear-gradient(135deg, rgba(230, 126, 34, 0.1), rgba(230, 126, 34, 0.05));
+  border-color: var(--accent-c1);
+}
+
+.level-c1:hover {
+  background: linear-gradient(135deg, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.1));
+}
+
+.level-mixed {
+  background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.05));
+  border-color: var(--accent-mixed);
+  grid-column: 1 / -1;
+}
+
+.level-mixed:hover {
+  background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.1));
+}
+
+/* ── VOCABULARY SCREEN ── */
+.vocab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(2rem, 4vw, 4rem);
+  text-align: center;
+}
+
+.level-badge {
+  display: inline-block;
+  padding: clamp(0.3rem, 1vw, 0.6rem) clamp(0.8rem, 2vw, 1.2rem);
+  background-color: rgba(91, 125, 255, 0.2);
+  border: 1px solid var(--accent-vocab);
+  border-radius: 999px;
+  color: var(--accent-vocab);
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  margin-bottom: clamp(1rem, 2vw, 2rem);
+}
+
+.word-display {
+  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-weight: 700;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.example-sentence {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border-radius: clamp(0.8rem, 1.5vw, 1rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.example-label {
+  color: var(--accent-vocab);
+  font-weight: 700;
+}
+
+.question-display {
+  font-size: clamp(1.8rem, 7vw, 3.5rem);
+  font-weight: 700;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.sentence-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(2rem, 4vw, 4rem);
+  text-align: center;
+}
+
+.options-section,
+.answers-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1rem, 2vw, 2rem);
+  width: 100%;
+}
+
+.show-btn {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background-color: var(--accent-vocab);
+  border: none;
+  color: white;
+  border-radius: clamp(0.8rem, 1.5vw, 1rem);
+  cursor: pointer;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+#sentence-show-btn {
+  background-color: var(--accent-sentence);
+}
+
+.show-btn:hover {
+  transform: translateY(-0.3rem);
+  opacity: 0.9;
+}
+
+.show-btn.hidden {
+  display: none;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.8rem, 2vw, 1.5rem);
+  margin-top: clamp(1rem, 2vw, 2rem);
+}
+
+.options-grid.hidden {
+  display: none;
+}
+
+.option-card {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background-color: rgba(91, 125, 255, 0.1);
+  border: 2px solid rgba(91, 125, 255, 0.3);
+  color: var(--text-primary);
+  border-radius: clamp(0.6rem, 1.5vw, 1rem);
+  cursor: pointer;
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.option-card:hover {
+  background-color: rgba(91, 125, 255, 0.2);
+  border-color: rgba(91, 125, 255, 0.5);
+}
+
+.option-card.correct {
+  background-color: rgba(39, 174, 96, 0.3);
+  border-color: var(--accent-mixed);
+  color: #1dd1a1;
+}
+
+.option-card.wrong {
+  background-color: rgba(231, 76, 60, 0.3);
+  border-color: #e74c3c;
+  color: #ff7675;
+}
+
+.answers-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 2vw, 1.5rem);
+  margin-top: clamp(1rem, 2vw, 2rem);
+}
+
+.answers-list.hidden {
+  display: none;
+}
+
+.answer-card {
+  display: flex;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background-color: rgba(29, 209, 161, 0.1);
+  border: 2px solid rgba(29, 209, 161, 0.3);
+  border-left: 4px solid var(--accent-sentence);
+  border-radius: clamp(0.6rem, 1.5vw, 1rem);
+  color: var(--text-primary);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.5;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.answer-num {
+  min-width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent-sentence);
+  color: var(--bg-dark);
+  border-radius: 50%;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: #888;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+}
+
+.no-results span {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: clamp(1rem, 2vw, 2rem);
+  padding: clamp(1rem, 2vw, 2rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn {
+  flex: 1;
+  padding: clamp(0.8rem, 1.5vw, 1.2rem);
+  background-color: rgba(91, 125, 255, 0.15);
+  border: 2px solid rgba(91, 125, 255, 0.3);
+  color: var(--text-primary);
+  border-radius: clamp(0.6rem, 1.5vw, 1rem);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+#sentence-prev,
+#sentence-next {
+  background-color: rgba(29, 209, 161, 0.15);
+  border-color: rgba(29, 209, 161, 0.3);
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: rgba(91, 125, 255, 0.25);
+  border-color: rgba(91, 125, 255, 0.5);
+}
+
+#sentence-prev:hover:not(:disabled),
+#sentence-next:hover:not(:disabled) {
+  background-color: rgba(29, 209, 161, 0.25);
+  border-color: rgba(29, 209, 161, 0.5);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.top-bar-spacer {
+  min-width: 5rem;
+}
+  </style>
+</head>
+<body>
+
+  <!-- HOME SCREEN -->
+  <div id="screen-home" class="screen active">
+    <div class="home-header">
+      <div class="logo-icon">📚</div>
+      <h1 class="app-title">English Practice</h1>
+      <p class="app-subtitle">Volkan DENIZ - Ayse ZELYUT</p>
+    </div>
+    <div class="home-buttons">
+      <button class="home-btn vocab-btn" onclick="startMode('vocabulary')">
+        <span class="btn-icon">🔤</span>
+        <span class="btn-label">Vocabulary</span>
+        <span class="btn-sub">Word Recognition</span>
+      </button>
+      <button class="home-btn sentence-btn" onclick="startMode('sentence')">
+        <span class="btn-icon">💬</span>
+        <span class="btn-label">Sentence<br>Practice</span>
+        <span class="btn-sub">Answer Formation</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- LEVEL SELECTION SCREEN -->
+  <div id="screen-level" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goHome()">← Main Menu</button>
+      <div class="mode-title" id="level-mode-title">Vocabulary</div>
+      <div class="top-bar-spacer"></div>
+    </div>
+    <div class="level-select-content">
+      <p class="level-select-heading">Select a level to begin</p>
+      <div class="level-grid">
+        <button class="level-btn level-b1" onclick="selectLevel('B1')">
+          <span class="level-code">B1</span>
+          <span class="level-desc">Pre-Intermediate</span>
+        </button>
+        <button class="level-btn level-b2" onclick="selectLevel('B2')">
+          <span class="level-code">B2</span>
+          <span class="level-desc">Upper-Intermediate</span>
+        </button>
+        <button class="level-btn level-c1" onclick="selectLevel('C1')">
+          <span class="level-code">C1</span>
+          <span class="level-desc">Advanced</span>
+        </button>
+        <button class="level-btn level-mixed" onclick="selectLevel('mixed')">
+          <span class="level-code">🔀</span>
+          <span class="level-desc">Mixed – All Levels</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOCABULARY SCREEN -->
+  <div id="screen-vocabulary" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goLevelSelect()">← Levels</button>
+      <div class="mode-title">Vocabulary</div>
+      <div class="counter" id="vocab-counter">1 / 10</div>
+    </div>
+
+    <div class="vocab-content">
+      <div class="level-badge" id="vocab-level">B2</div>
+      <div class="word-display" id="vocab-word">Persistence</div>
+      <div class="example-sentence">
+        <span class="example-label">Example:</span>
+        <span id="vocab-example-text">His persistence finally paid off when he got the job.</span>
+      </div>
+    </div>
+
+    <div class="options-section">
+      <button class="show-btn" id="vocab-show-btn" onclick="showVocabOptions()">
+        👁 Show Options
+      </button>
+      <div class="options-grid hidden" id="vocab-options"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <button class="nav-btn" id="vocab-prev" onclick="prevItem('vocabulary')">◀ Previous</button>
+      <button class="nav-btn next-btn" id="vocab-next" onclick="nextItem('vocabulary')">Next ▶</button>
+    </div>
+  </div>
+
+  <!-- SENTENCE SCREEN -->
+  <div id="screen-sentence" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goLevelSelect()">← Levels</button>
+      <div class="mode-title">Sentence Practice</div>
+      <div class="counter" id="sentence-counter">1 / 8</div>
+    </div>
+
+    <div class="sentence-content">
+      <div class="level-badge" id="sentence-level">C1</div>
+      <div class="question-display" id="sentence-question">
+        What would you do if you were the president?
+      </div>
+    </div>
+
+    <div class="answers-section">
+      <button class="show-btn" id="sentence-show-btn" onclick="showSentenceAnswers()">
+        💡 Show Answers
+      </button>
+      <div class="answers-list hidden" id="sentence-answers"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <button class="nav-btn" id="sentence-prev" onclick="prevItem('sentence')">◀ Previous</button>
+      <button class="nav-btn next-btn" id="sentence-next" onclick="nextItem('sentence')">Next ▶</button>
+    </div>
+  </div>
+
+  <script>
+let data = {"vocabulary":[{"word":"Achieve","level":"B1","options":["Başarmak","Kaçınmak","Kutlamak","Unutmak"],"answer":"Başarmak","example":"She worked hard to achieve her goals."},{"word":"Advice","level":"B1","options":["Tavsiye","Hata","Endişe","Seçim"],"answer":"Tavsiye","example":"I asked my teacher for advice about my future."},{"word":"Allow","level":"B1","options":["İzin vermek","Reddetmek","Kaçınmak","Öğrenmek"],"answer":"İzin vermek","example":"My parents allow me to stay up late on weekends."},{"word":"Appear","level":"B1","options":["Görünmek","Kaybetmek","Çözmek","Taşımak"],"answer":"Görünmek","example":"The sun appeared behind the clouds."},{"word":"Arrange","level":"B1","options":["Düzenlemek","Karıştırmak","Yıkmak","Kaçınmak"],"answer":"Düzenlemek","example":"Can you arrange the chairs in a circle?"},{"word":"Avoid","level":"B1","options":["Kaçınmak","Başarmak","Yardım etmek","Seçmek"],"answer":"Kaçınmak","example":"I try to avoid eating too much sugar."},{"word":"Believe","level":"B1","options":["İnanmak","Reddetmek","Kaybetmek","Ölçmek"],"answer":"İnanmak","example":"Do you believe in magic?"},{"word":"Boring","level":"B1","options":["Sıkıcı","Heyecan verici","Tehlikeli","Komik"],"answer":"Sıkıcı","example":"The movie was so boring that I fell asleep."},{"word":"Brave","level":"B1","options":["Cesur","Korkak","Tembel","Sinirli"],"answer":"Cesur","example":"Firefighters are very brave people."},{"word":"Carry","level":"B1","options":["Taşımak","Bırakmak","Çizmek","Okumak"],"answer":"Taşımak","example":"Can you carry this bag for me?"},{"word":"Celebrate","level":"B1","options":["Kutlamak","Ağlamak","Unutmak","Eleştirmek"],"answer":"Kutlamak","example":"We celebrate our birthdays with a cake and party."},{"word":"Change","level":"B1","options":["Değiştirmek","Korumak","Saymak","Toplamak"],"answer":"Değiştirmek","example":"I want to change my hair color."},{"word":"Cheap","level":"B1","options":["Ucuz","Pahalı","Büyük","Ağır"],"answer":"Ucuz","example":"These shoes are cheap but good quality."},{"word":"Choose","level":"B1","options":["Seçmek","Reddetmek","Unutmak","Kaybetmek"],"answer":"Seçmek","example":"You can choose any book from the library."},{"word":"Clever","level":"B1","options":["Zeki","Aptal","Tembel","Korkak"],"answer":"Zeki","example":"She is very clever and does well in school."},{"word":"Collect","level":"B1","options":["Toplamak","Dağıtmak","Kaybetmek","Satmak"],"answer":"Toplamak","example":"I collect stamps from different countries."},{"word":"Comfortable","level":"B1","options":["Rahat","Zor","Tehlikeli","Sıkışık"],"answer":"Rahat","example":"This chair is very comfortable to sit in."},{"word":"Compete","level":"B1","options":["Yarışmak","Kaçmak","Dinlenmek","Uyumak"],"answer":"Yarışmak","example":"Ten teams compete in the tournament."},{"word":"Complain","level":"B1","options":["Şikayet etmek","Övmek","Yardım etmek","Beklemek"],"answer":"Şikayet etmek","example":"Some customers complain about the service."},{"word":"Complete","level":"B1","options":["Tamamlamak","Başlamak","Bozmak","Ertelemek"],"answer":"Tamamlamak","example":"I need to complete my homework before dinner."},{"word":"Correct","level":"B1","options":["Doğru","Yanlış","Belirsiz","Gereksiz"],"answer":"Doğru","example":"That answer is correct."},{"word":"Create","level":"B1","options":["Yaratmak","Yıkmak","Kopya etmek","Saklamak"],"answer":"Yaratmak","example":"Artists create beautiful paintings."},{"word":"Curious","level":"B1","options":["Meraklı","İlgisiz","Kıskanç","Üzgün"],"answer":"Meraklı","example":"The child is curious about everything."},{"word":"Dangerous","level":"B1","options":["Tehlikeli","Güvenli","Kolay","Yararlı"],"answer":"Tehlikeli","example":"Swimming alone in the ocean is dangerous."},{"word":"Decide","level":"B1","options":["Karar vermek","Şüphelenmek","Reddetmek","Beklemek"],"answer":"Karar vermek","example":"We need to decide where to go on vacation."},{"word":"Delicious","level":"B1","options":["Lezzetli","Tatsız","Kokan","Çiğ"],"answer":"Lezzetli","example":"The pizza was delicious."},{"word":"Describe","level":"B1","options":["Tanımlamak","Gizlemek","Silmek","Karıştırmak"],"answer":"Tanımlamak","example":"Can you describe what you saw?"},{"word":"Different","level":"B1","options":["Farklı","Benzer","Aynı","Ortak"],"answer":"Farklı","example":"My brother and I have different opinions."},{"word":"Discover","level":"B1","options":["Keşfetmek","Gizlemek","Kaybetmek","Unutmak"],"answer":"Keşfetmek","example":"Christopher Columbus discovered America in 1492."},{"word":"Dream","level":"B1","options":["Hayal etmek","Planlamak","Çalışmak","Korkmak"],"answer":"Hayal etmek","example":"I dream of traveling around the world."},{"word":"Earn","level":"B1","options":["Kazanmak","Harcamak","Kaybetmek","Borç almak"],"answer":"Kazanmak","example":"He earns good money at his job."},{"word":"Enjoy","level":"B1","options":["Zevk almak","Acı çekmek","Sıkılmak","Korkmak"],"answer":"Zevk almak","example":"I enjoy reading books in the afternoon."},{"word":"Enter","level":"B1","options":["Girmek","Çıkmak","Saklanmak","Kaçmak"],"answer":"Girmek","example":"Please enter through the front door."},{"word":"Excellent","level":"B1","options":["Mükemmel","Korkunç","Sıradan","Yetersiz"],"answer":"Mükemmel","example":"You did an excellent job on this project."},{"word":"Exciting","level":"B1","options":["Heyecan verici","Sıkıcı","Üzücü","Yorucu"],"answer":"Heyecan verici","example":"The match was very exciting and everyone cheered."},{"word":"Expensive","level":"B1","options":["Pahalı","Ucuz","Bedava","Uygun fiyatlı"],"answer":"Pahalı","example":"Designer clothes are very expensive."},{"word":"Explain","level":"B1","options":["Açıklamak","Gizlemek","Şikayet etmek","Reddetmek"],"answer":"Açıklamak","example":"Can you explain how this machine works?"},{"word":"Fail","level":"B1","options":["Başarısız olmak","Başarmak","Kazanmak","Büyümek"],"answer":"Başarısız olmak","example":"If you don't study, you might fail the exam."},{"word":"Famous","level":"B1","options":["Ünlü","Anonim","Sıradan","Yabancı"],"answer":"Ünlü","example":"Leonardo DiCaprio is a famous actor."},{"word":"Finish","level":"B1","options":["Bitirmek","Başlamak","Duruşturma","Devam etmek"],"answer":"Bitirmek","example":"I finish work at five o'clock every day."},{"word":"Follow","level":"B1","options":["Takip etmek","Öncü olmak","Kaçmak","Geri gelmek"],"answer":"Takip etmek","example":"Please follow me to the conference room."},{"word":"Friendly","level":"B1","options":["Cana yakın","Soğuk","Kaba","Düşmanca"],"answer":"Cana yakın","example":"The staff at this hotel are very friendly."},{"word":"Funny","level":"B1","options":["Komik","Ciddi","Sıkıcı","Korkunç"],"answer":"Komik","example":"That joke is really funny, I laughed a lot."},{"word":"Generous","level":"B1","options":["Cömert","Cimri","Bencil","Kıskanç"],"answer":"Cömert","example":"He is generous and always helps people in need."},{"word":"Guess","level":"B1","options":["Tahmin etmek","Bilmek","Görmek","Duymak"],"answer":"Tahmin etmek","example":"Can you guess what color I'm thinking of?"},{"word":"Happen","level":"B1","options":["Gerçekleşmek","Planlamak","Hayal etmek","Önlemek"],"answer":"Gerçekleşmek","example":"What happened while I was away?"},{"word":"Healthy","level":"B1","options":["Sağlıklı","Hasta","Zayıf","Yorgun"],"answer":"Sağlıklı","example":"Eating vegetables is good for a healthy lifestyle."},{"word":"Helpful","level":"B1","options":["Yardımsever","Bencil","Tembel","Kaba"],"answer":"Yardımsever","example":"The librarian was very helpful in finding the book."},{"word":"Honest","level":"B1","options":["Dürüst","Yalancı","Kurnaz","Bencil"],"answer":"Dürüst","example":"An honest person always tells the truth."},{"word":"Hope","level":"B1","options":["Ümit etmek","Korkmak","Hayal kırıklığına uğramak","Reddetmek"],"answer":"Ümit etmek","example":"I hope we win the championship this year."},{"word":"Imagine","level":"B1","options":["Hayal kurmak","Gerçekleştirmek","Unutmak","Reddetmek"],"answer":"Hayal kurmak","example":"Imagine you have a million dollars. What would you do?"},{"word":"Important","level":"B1","options":["Önemli","Önemsiz","Gereksiz","Basit"],"answer":"Önemli","example":"Education is important for everyone."},{"word":"Improve","level":"B1","options":["Geliştirmek","Bozmak","Durdurmak","Azaltmak"],"answer":"Geliştirmek","example":"Practice will help you improve your English."},{"word":"Include","level":"B1","options":["Dahil etmek","Dışlamak","Silmek","Saklamak"],"answer":"Dahil etmek","example":"The price includes breakfast and dinner."},{"word":"Interesting","level":"B1","options":["İlginç","Sıkıcı","Anlamsız","Gereksiz"],"answer":"İlginç","example":"I read an interesting article about space exploration."},{"word":"Join","level":"B1","options":["Katılmak","Ayrılmak","Reddetmek","Kaçmak"],"answer":"Katılmak","example":"Would you like to join our team?"},{"word":"Keep","level":"B1","options":["Tutmak","Bırakmak","Kaybetmek","Dağıtmak"],"answer":"Tutmak","example":"Keep your ticket because you will need it later."},{"word":"Kind","level":"B1","options":["Nazik","Kaba","Sert","Bencil"],"answer":"Nazik","example":"She is a kind person who helps everyone."},{"word":"Learn","level":"B1","options":["Öğrenmek","Unutmak","Reddetmek","Atlamak"],"answer":"Öğrenmek","example":"I am learning to play the guitar."},{"word":"Leave","level":"B1","options":["Ayrılmak","Gelmek","Kalmak","Girmek"],"answer":"Ayrılmak","example":"I will leave for work at 8 o'clock."},{"word":"Lonely","level":"B1","options":["Yalnız","Kalabalık","Mutlu","Meşgul"],"answer":"Yalnız","example":"She felt lonely after her friends moved away."},{"word":"Lose","level":"B1","options":["Kaybetmek","Bulmak","Saklamak","Tutmak"],"answer":"Kaybetmek","example":"I lost my keys this morning."},{"word":"Meet","level":"B1","options":["Tanışmak","Ayrılmak","Kaçmak","Görmezden gelmek"],"answer":"Tanışmak","example":"I want to meet your new friend."},{"word":"Mention","level":"B1","options":["Bahsetmek","Gizlemek","Reddetmek","Unutmak"],"answer":"Bahsetmek","example":"Did you mention my name in the email?"},{"word":"Mistake","level":"B1","options":["Hata","Başarı","Cevap","Karar"],"answer":"Hata","example":"Everyone makes mistakes sometimes."},{"word":"Necessary","level":"B1","options":["Gerekli","Gereksiz","İsteğe bağlı","Anlamsız"],"answer":"Gerekli","example":"Oxygen is necessary for life."},{"word":"Nervous","level":"B1","options":["Gergin","Rahat","Sakin","Mutlu"],"answer":"Gergin","example":"I was nervous before the presentation."},{"word":"Offer","level":"B1","options":["Teklif etmek","Reddetmek","Almak","Saklamak"],"answer":"Teklif etmek","example":"I offer you a cup of coffee."},{"word":"Organize","level":"B1","options":["Düzenlemek","Karıştırmak","Bozmak","Dağıtmak"],"answer":"Düzenlemek","example":"Let's organize the event together."},{"word":"Patient","level":"B1","options":["Sabırlı","Sabırsız","Sinirli","Aceleci"],"answer":"Sabırlı","example":"A good teacher is patient with students."},{"word":"Polite","level":"B1","options":["Kibar","Kaba","Sert","Bencil"],"answer":"Kibar","example":"It is polite to say 'please' and 'thank you'."},{"word":"Popular","level":"B1","options":["Popüler","Bilinmeyen","Nadir","Garip"],"answer":"Popüler","example":"Soccer is a popular sport worldwide."},{"word":"Prefer","level":"B1","options":["Tercih etmek","Reddetmek","Kaçınmak","Nefret etmek"],"answer":"Tercih etmek","example":"I prefer tea to coffee."},{"word":"Prepare","level":"B1","options":["Hazırlamak","İhmal etmek","Ertelemek","Bozmak"],"answer":"Hazırlamak","example":"I need to prepare for my exam."},{"word":"Promise","level":"B1","options":["Söz vermek","İnkâr etmek","Reddetmek","Unutmak"],"answer":"Söz vermek","example":"I promise to come back tomorrow."},{"word":"Protect","level":"B1","options":["Korumak","Tehlikeye atmak","Saldırmak","Bırakmak"],"answer":"Korumak","example":"Parents protect their children."},{"word":"Proud","level":"B1","options":["Gururlu","Utanmış","Alçakgönüllü","Üzgün"],"answer":"Gururlu","example":"I am proud of my achievements."},{"word":"Provide","level":"B1","options":["Sağlamak","Almak","Engellemek","Azaltmak"],"answer":"Sağlamak","example":"The school provides free meals for students."},{"word":"Reach","level":"B1","options":["Ulaşmak","Uzaklaşmak","Kaybetmek","Kaçmak"],"answer":"Ulaşmak","example":"Can you reach that book on the shelf?"},{"word":"Recognise","level":"B1","options":["Tanımak","Görmezden gelmek","Unutmak","Reddetmek"],"answer":"Tanımak","example":"I recognized my old friend at the reunion."},{"word":"Recommend","level":"B1","options":["Önermek","Eleştirmek","Reddetmek","Yasaklamak"],"answer":"Önermek","example":"I recommend this restaurant to everyone."},{"word":"Refuse","level":"B1","options":["Reddetmek","Kabul etmek","Onaylamak","İstemek"],"answer":"Reddetmek","example":"He refused to help us with the project."},{"word":"Relax","level":"B1","options":["Dinlenmek","Çalışmak","Koşmak","Gerginleşmek"],"answer":"Dinlenmek","example":"I relax by listening to music after work."},{"word":"Remember","level":"B1","options":["Hatırlamak","Unutmak","Kaybetmek","İhmal etmek"],"answer":"Hatırlamak","example":"Do you remember what I told you yesterday?"},{"word":"Repeat","level":"B1","options":["Tekrar etmek","Durdurmak","Değiştirmek","Atlamak"],"answer":"Tekrar etmek","example":"Please repeat the question because I didn't hear it."},{"word":"Safe","level":"B1","options":["Güvenli","Tehlikeli","Riskli","Korkunç"],"answer":"Güvenli","example":"This neighborhood is very safe."},{"word":"Search","level":"B1","options":["Aramak","Bulmak","Saklamak","Beklemek"],"answer":"Aramak","example":"I searched for my glasses but couldn't find them."},{"word":"Share","level":"B1","options":["Paylaşmak","Saklamak","Biriktirmek","Çalmak"],"answer":"Paylaşmak","example":"Let's share the pizza between us."},{"word":"Simple","level":"B1","options":["Basit","Karmaşık","Zor","Gelişmiş"],"answer":"Basit","example":"The instructions are simple and easy to follow."},{"word":"Solve","level":"B1","options":["Çözmek","Karmaşıklaştırmak","Yaratmak","Kaçmak"],"answer":"Çözmek","example":"Can you solve this math problem?"},{"word":"Succeed","level":"B1","options":["Başarmak","Başarısız olmak","Pes etmek","Düşmek"],"answer":"Başarmak","example":"With hard work, you will succeed."},{"word":"Support","level":"B1","options":["Desteklemek","Karşı çıkmak","Engellemek","Terk etmek"],"answer":"Desteklemek","example":"My family supports my career choice."},{"word":"Surprised","level":"B1","options":["Şaşırmış","Hazırlıklı","Sakin","Beklemiş"],"answer":"Şaşırmış","example":"I was surprised to see you here."},{"word":"Travel","level":"B1","options":["Seyahat etmek","Kalmak","Uyumak","Çalışmak"],"answer":"Seyahat etmek","example":"I love to travel to new countries."},{"word":"Trust","level":"B1","options":["Güvenmek","Şüphelenmek","Korkmak","Nefret etmek"],"answer":"Güvenmek","example":"I trust my best friend completely."},{"word":"Understand","level":"B1","options":["Anlamak","Yanlış anlamak","Görmezden gelmek","Reddetmek"],"answer":"Anlamak","example":"Do you understand this lesson?"},{"word":"Useful","level":"B1","options":["Faydalı","Gereksiz","Zararlı","Anlamsız"],"answer":"Faydalı","example":"This tool is very useful for the job."},{"word":"Volunteer","level":"B1","options":["Gönüllü olmak","Zorla yapmak","Reddetmek","Kaçınmak"],"answer":"Gönüllü olmak","example":"She volunteers at the local hospital."},{"word":"Worried","level":"B1","options":["Endişeli","Rahat","Sakin","Umursamaz"],"answer":"Endişeli","example":"I am worried about the exam tomorrow."},{"word":"Persistence","level":"B2","options":["Kararlılık","Tereddüt","Hız","Korku"],"answer":"Kararlılık","example":"His persistence finally paid off."},{"word":"Ambiguous","level":"B2","options":["Belirsiz","Açık","Kesin","Doğru"],"answer":"Belirsiz","example":"The contract had an ambiguous clause."},{"word":"Flourish","level":"B2","options":["Gelişmek","Sönmek","Azalmak","Yıkılmak"],"answer":"Gelişmek","example":"The business began to flourish after the campaign."},{"word":"Contemplate","level":"B2","options":["Düşünmek","Görmezden gelmek","Unutmak","Acele etmek"],"answer":"Düşünmek","example":"She sat and contemplated her future."},{"word":"Inevitable","level":"B2","options":["Kaçınılmaz","Önlenebilir","Beklenmedik","Geçici"],"answer":"Kaçınılmaz","example":"Change is inevitable in life."},{"word":"Profound","level":"B2","options":["Derin","Yüzeysel","Basit","Sıradan"],"answer":"Derin","example":"The book had a profound effect on me."},{"word":"Tedious","level":"B2","options":["Sıkıcı","Heyecan verici","Kolay","Hızlı"],"answer":"Sıkıcı","example":"Filling out forms is tedious work."},{"word":"Resilient","level":"B2","options":["Dayanıklı","Kırılgan","Çabuk pes eden","Dikkatsiz"],"answer":"Dayanıklı","example":"Children are often more resilient than adults."},{"word":"Diligent","level":"B2","options":["Çalışkan","Tembel","Dikkatsiz","Sabırsız"],"answer":"Çalışkan","example":"She is a diligent student."},{"word":"Skeptical","level":"B2","options":["Şüpheci","İnanan","Güvenen","Hevesli"],"answer":"Şüpheci","example":"He was skeptical about the new diet plan."},{"word":"Accomplish","level":"B2","options":["Başarmak","Başarısız olmak","Pes etmek","Kaçmak"],"answer":"Başarmak","example":"We accomplished our goals this year."},{"word":"Acknowledge","level":"B2","options":["Kabul etmek","İnkâr etmek","Görmezden gelmek","Reddetmek"],"answer":"Kabul etmek","example":"He acknowledged his mistake."},{"word":"Adequate","level":"B2","options":["Yeterli","Yetersiz","Aşırı","Eksik"],"answer":"Yeterli","example":"The budget is adequate for the project."},{"word":"Advocate","level":"B2","options":["Savunmak","Karşı çıkmak","Eleştirmek","Reddetmek"],"answer":"Savunmak","example":"She advocates for environmental protection."},{"word":"Allocate","level":"B2","options":["Tahsis etmek","Biriktirmek","Dağıtmak","Çalmak"],"answer":"Tahsis etmek","example":"We need to allocate resources wisely."},{"word":"Anticipate","level":"B2","options":["Öngörmek","Şaşırmak","Görmezden gelmek","Unutmak"],"answer":"Öngörmek","example":"I anticipate we will have good results."},{"word":"Appealing","level":"B2","options":["Çekici","İtici","Sıradan","Sıkıcı"],"answer":"Çekici","example":"The offer is very appealing."},{"word":"Assess","level":"B2","options":["Değerlendirmek","Görmezden gelmek","Karıştırmak","Azaltmak"],"answer":"Değerlendirmek","example":"We need to assess the situation carefully."},{"word":"Authentic","level":"B2","options":["Özgün","Sahte","Kopya","Taklit"],"answer":"Özgün","example":"This is an authentic vintage painting."},{"word":"Capable","level":"B2","options":["Yetenekli","Beceriksiz","Yetersiz","Başarısız"],"answer":"Yetenekli","example":"She is capable of doing the job."},{"word":"Challenge","level":"B2","options":["Zorluk","Kolaylık","Rahatlık","Başarı"],"answer":"Zorluk","example":"This project is a challenge but interesting."},{"word":"Crucial","level":"B2","options":["Çok önemli","Önemsiz","Gereksiz","İsteğe bağlı"],"answer":"Çok önemli","example":"This decision is crucial for the company."},{"word":"Deliberate","level":"B2","options":["Kasıtlı","Kazara","Anlık","Otomatik"],"answer":"Kasıtlı","example":"It was a deliberate choice."},{"word":"Demonstrate","level":"B2","options":["Göstermek","Gizlemek","Saklamak","Engellemek"],"answer":"Göstermek","example":"Please demonstrate how to use this device."},{"word":"Deny","level":"B2","options":["İnkâr etmek","Kabul etmek","Onaylamak","Doğrulamak"],"answer":"İnkâr etmek","example":"He denied ever meeting the person."},{"word":"Dominant","level":"B2","options":["Baskın","Zayıf","Geri planda","Etkisiz"],"answer":"Baskın","example":"The dominant color in the painting is blue."},{"word":"Effective","level":"B2","options":["Etkili","Etkisiz","Verimsiz","Başarısız"],"answer":"Etkili","example":"This medicine is very effective."},{"word":"Eliminate","level":"B2","options":["Ortadan kaldırmak","Oluşturmak","Artırmak","Korumak"],"answer":"Ortadan kaldırmak","example":"We need to eliminate waste."},{"word":"Emerge","level":"B2","options":["Ortaya çıkmak","Kaybolmak","Gizlenmek","Çökmek"],"answer":"Ortaya çıkmak","example":"New issues have emerged."},{"word":"Emphasis","level":"B2","options":["Vurgu","Sessizlik","Görmezden gelme","Önemsizlik"],"answer":"Vurgu","example":"The emphasis is on quality."},{"word":"Encounter","level":"B2","options":["Karşılaşmak","Kaçmak","Görmezden gelmek","Aramak"],"answer":"Karşılaşmak","example":"I encountered an old friend today."},{"word":"Enhance","level":"B2","options":["Artırmak","Azaltmak","Kötüleştirmek","Engellemek"],"answer":"Artırmak","example":"This will enhance your skills."},{"word":"Establish","level":"B2","options":["Kurmak","Yıkmak","Kapatmak","Bırakmak"],"answer":"Kurmak","example":"They established a new company."},{"word":"Evaluate","level":"B2","options":["Değerlendirmek","Görmezden gelmek","Atlamak","Karıştırmak"],"answer":"Değerlendirmek","example":"We will evaluate the results next week."},{"word":"Evidence","level":"B2","options":["Kanıt","Şüphe","Tahmin","Yalan"],"answer":"Kanıt","example":"There is no evidence of foul play."},{"word":"Expand","level":"B2","options":["Genişlemek","Küçülmek","Azalmak","Daralmak"],"answer":"Genişlemek","example":"The company plans to expand next year."},{"word":"Flexible","level":"B2","options":["Esnek","Katı","Sert","Değişmez"],"answer":"Esnek","example":"We need flexible working hours."},{"word":"Focus","level":"B2","options":["Odaklanmak","Dağılmak","Oyalanmak","Kaçmak"],"answer":"Odaklanmak","example":"You need to focus on your studies."},{"word":"Fulfill","level":"B2","options":["Yerine getirmek","İhmal etmek","Ertelemek","Reddetmek"],"answer":"Yerine getirmek","example":"I will fulfill my promise."},{"word":"Generate","level":"B2","options":["Üretmek","Tüketmek","Yok etmek","Engellemek"],"answer":"Üretmek","example":"This method will generate income."},{"word":"Genuine","level":"B2","options":["Gerçek","Sahte","Yapay","Yapmacık"],"answer":"Gerçek","example":"This is genuine leather."},{"word":"Gradual","level":"B2","options":["Kademeli","Ani","Hızlı","Beklenmedik"],"answer":"Kademeli","example":"There has been gradual improvement."},{"word":"Highlight","level":"B2","options":["Vurgulamak","Gizlemek","Görmezden gelmek","Azaltmak"],"answer":"Vurgulamak","example":"I want to highlight the main points."},{"word":"Identify","level":"B2","options":["Belirlemek","Gizlemek","Atlamak","Karıştırmak"],"answer":"Belirlemek","example":"Can you identify the problem?"},{"word":"Implement","level":"B2","options":["Uygulamak","Planlamak","Reddetmek","İptal etmek"],"answer":"Uygulamak","example":"We will implement the new policy."},{"word":"Imply","level":"B2","options":["İma etmek","Açıkça söylemek","İnkâr etmek","Yazmak"],"answer":"İma etmek","example":"He implied that he was unhappy."},{"word":"Impose","level":"B2","options":["Dayatmak","Önermek","İstemek","Beklemek"],"answer":"Dayatmak","example":"The government imposed new taxes."},{"word":"Incentive","level":"B2","options":["Teşvik","Ceza","Engel","Tehdit"],"answer":"Teşvik","example":"The bonus is an incentive to work harder."},{"word":"Incredible","level":"B2","options":["İnanılmaz","Sıradan","Beklenmedik","Mümkün"],"answer":"İnanılmaz","example":"That story is incredible."},{"word":"Influence","level":"B2","options":["Etkilemek","Görmezden gelmek","Serbest bırakmak","Engellemek"],"answer":"Etkilemek","example":"Friends influence our decisions."},{"word":"Insight","level":"B2","options":["İçgörü","Yüzeysellik","Cehalet","Yanlış anlama"],"answer":"İçgörü","example":"Your insight on this matter is valuable."},{"word":"Intense","level":"B2","options":["Yoğun","Hafif","Sıradan","Zayıf"],"answer":"Yoğun","example":"The competition was intense."},{"word":"Interact","level":"B2","options":["Etkileşim kurmak","İzole olmak","Kaçınmak","Görmezden gelmek"],"answer":"Etkileşim kurmak","example":"Students interact with each other in class."},{"word":"Justify","level":"B2","options":["Haklı çıkarmak","Suçlamak","Eleştirmek","Reddetmek"],"answer":"Haklı çıkarmak","example":"Can you justify your decision?"},{"word":"Maintain","level":"B2","options":["Sürdürmek","Durdurmak","Bozmak","Değiştirmek"],"answer":"Sürdürmek","example":"We must maintain the equipment."},{"word":"Manipulate","level":"B2","options":["Yönlendirmek","Serbest bırakmak","Güvenmek","İhmal etmek"],"answer":"Yönlendirmek","example":"Don't try to manipulate me."},{"word":"Minimize","level":"B2","options":["En aza indirmek","Artırmak","Büyütmek","Abartmak"],"answer":"En aza indirmek","example":"We need to minimize costs."},{"word":"Motivate","level":"B2","options":["Motive etmek","Cesaretsizleştirmek","Durdurmak","Engellemek"],"answer":"Motive etmek","example":"Good teachers motivate their students."},{"word":"Objective","level":"B2","options":["Nesnel","Taraflı","Önyargılı","Duygusal"],"answer":"Nesnel","example":"We need an objective analysis."},{"word":"Overcome","level":"B2","options":["Üstesinden gelmek","Boyun eğmek","Başarısız olmak","Kaçmak"],"answer":"Üstesinden gelmek","example":"I overcame my fear of flying."},{"word":"Perceive","level":"B2","options":["Algılamak","Görmezden gelmek","Yanlış anlamak","Reddetmek"],"answer":"Algılamak","example":"How do people perceive you?"},{"word":"Priority","level":"B2","options":["Öncelik","İkinci plân","Sonraki adım","Gereksizlik"],"answer":"Öncelik","example":"Education is a priority for us."},{"word":"Pursue","level":"B2","options":["Takip etmek","Bırakmak","Pes etmek","Görmezden gelmek"],"answer":"Takip etmek","example":"She pursues her dreams."},{"word":"Relevant","level":"B2","options":["İlgili","Alakasız","Gereksiz","Önemsiz"],"answer":"İlgili","example":"This information is relevant to our discussion."},{"word":"Remarkable","level":"B2","options":["Dikkat çekici","Sıradan","Önemsiz","Göz ardı edilen"],"answer":"Dikkat çekici","example":"His performance was remarkable."},{"word":"Represent","level":"B2","options":["Temsil etmek","Gizlemek","Reddetmek","Terk etmek"],"answer":"Temsil etmek","example":"I represent our company at the meeting."},{"word":"Resolve","level":"B2","options":["Çözmek","Karmaşıklaştırmak","Ertelemek","Görmezden gelmek"],"answer":"Çözmek","example":"We will resolve this issue soon."},{"word":"Significant","level":"B2","options":["Önemli","Önemsiz","Küçük","Anlamsız"],"answer":"Önemli","example":"This is a significant discovery."},{"word":"Sufficient","level":"B2","options":["Yeterli","Yetersiz","Eksik","Az"],"answer":"Yeterli","example":"One hour is sufficient for the task."},{"word":"Tolerance","level":"B2","options":["Hoşgörü","İntolerans","Öfke","Kıskançlık"],"answer":"Hoşgörü","example":"We need more tolerance in society."},{"word":"Ultimate","level":"B2","options":["Nihai","İlk","Ara","Geçici"],"answer":"Nihai","example":"That is the ultimate goal."},{"word":"Vital","level":"B2","options":["Hayati","Gereksiz","Önemsiz","Opsiyonel"],"answer":"Hayati","example":"Water is vital for life."},{"word":"Vulnerable","level":"B2","options":["Savunmasız","Güçlü","Korunaklı","Sağlam"],"answer":"Savunmasız","example":"Children are vulnerable to diseases."},{"word":"Yield","level":"B2","options":["Verim vermek","Tüketmek","Azaltmak","Engellemek"],"answer":"Verim vermek","example":"This investment will yield good returns."},{"word":"Aberration","level":"C1","options":["Sapma","Norm","Kural","Standart"],"answer":"Sapma","example":"His behavior was an aberration from his usual pattern."},{"word":"Abstain","level":"C1","options":["Çekimser kalmak","Aktif olmak","Katılmak","Desteklemek"],"answer":"Çekimser kalmak","example":"Some members abstain from voting."},{"word":"Acrimony","level":"C1","options":["Sertlik","Sevgi","Sempati","Hoşgörü"],"answer":"Sertlik","example":"Their divorce was full of acrimony."},{"word":"Adept","level":"C1","options":["Usta","Acemi","Beceriksiz","Yetersiz"],"answer":"Usta","example":"She is adept at solving problems."},{"word":"Alleviate","level":"C1","options":["Hafifletmek","Artırmak","Kötüleştirmek","Şiddetlendirmek"],"answer":"Hafifletmek","example":"This medicine will alleviate your pain."},{"word":"Ambivalent","level":"C1","options":["Kararsız","Kararlı","Kesin","Emin"],"answer":"Kararsız","example":"I feel ambivalent about the decision."},{"word":"Ameliorate","level":"C1","options":["İyileştirmek","Kötüleştirmek","Bozmak","Yıkmak"],"answer":"İyileştirmek","example":"We must ameliorate living conditions."},{"word":"Anachronism","level":"C1","options":["Çağdışı","Modern","Güncel","İlerici"],"answer":"Çağdışı","example":"Using a typewriter is an anachronism."},{"word":"Antagonist","level":"C1","options":["Muhalif","Dost","Müttefik","Destekçi"],"answer":"Muhalif","example":"The antagonist opposes the hero."},{"word":"Apathy","level":"C1","options":["İlgisizlik","Heves","Merak","Coşku"],"answer":"İlgisizlik","example":"Public apathy is a major problem."},{"word":"Apprehensive","level":"C1","options":["Endişeli","Rahat","Özgüvenli","Sakin"],"answer":"Endişeli","example":"I am apprehensive about the result."},{"word":"Arbitrary","level":"C1","options":["Keyfi","Kurallı","Sistemli","Gerekçeli"],"answer":"Keyfi","example":"The decision seemed arbitrary and unfair."},{"word":"Archaic","level":"C1","options":["Eski","Modern","Güncel","Yeni"],"answer":"Eski","example":"This word is archaic and rarely used."},{"word":"Articulate","level":"C1","options":["Açık ifade eden","Kekelemek","Anlatamamak","Karmaşık"],"answer":"Açık ifade eden","example":"He is very articulate in his speech."},{"word":"Astute","level":"C1","options":["Kurnaz","Saf","Aptal","Kandırılabilir"],"answer":"Kurnaz","example":"She made an astute observation."},{"word":"Atrocity","level":"C1","options":["Vahşet","İnsanlık","Merhamet","Lütuf"],"answer":"Vahşet","example":"War crimes are terrible atrocities."},{"word":"Augment","level":"C1","options":["Artırmak","Azaltmak","Küçültmek","Kesmek"],"answer":"Artırmak","example":"We will augment our team."},{"word":"Austerity","level":"C1","options":["Kemer sıkma","Bolluk","İsraf","Rahatlık"],"answer":"Kemer sıkma","example":"The government imposed austerity measures."},{"word":"Autonomy","level":"C1","options":["Özerklik","Bağımlılık","Boyun eğme","Kontrol altında olma"],"answer":"Özerklik","example":"Students need autonomy in learning."},{"word":"Benevolent","level":"C1","options":["Hayırsever","Zalim","Bencil","Kötü niyetli"],"answer":"Hayırsever","example":"He is a benevolent philanthropist."},{"word":"Brevity","level":"C1","options":["Kısalık","Uzunluk","Ayrıntılılık","Gereksiz söz"],"answer":"Kısalık","example":"Brevity is the soul of wit."},{"word":"Candid","level":"C1","options":["Açık sözlü","İkiyüzlü","Kurnaz","Çekimser"],"answer":"Açık sözlü","example":"Give me a candid opinion please."},{"word":"Catalyst","level":"C1","options":["Katalizör","Engel","Frenleme","Geciktirici"],"answer":"Katalizör","example":"This event was a catalyst for change."},{"word":"Circumvent","level":"C1","options":["Atlatmak","Doğrudan karşılaşmak","Kabul etmek","Uymak"],"answer":"Atlatmak","example":"Don't try to circumvent the rules."},{"word":"Cogent","level":"C1","options":["İkna edici","Mantıksız","Zayıf","Tutarsız"],"answer":"İkna edici","example":"His argument was cogent and persuasive."},{"word":"Coherent","level":"C1","options":["Tutarlı","Dağınık","Tutarsız","Anlaşılmaz"],"answer":"Tutarlı","example":"The plan is coherent and well-organized."},{"word":"Complicit","level":"C1","options":["Suç ortağı","Masum","Habersiz","Kurban"],"answer":"Suç ortağı","example":"He was complicit in the fraud."},{"word":"Concede","level":"C1","options":["Kabul etmek","Direnmek","İnkâr etmek","Savaşmak"],"answer":"Kabul etmek","example":"Finally, he conceded defeat."},{"word":"Convoluted","level":"C1","options":["Girift","Basit","Açık","Anlaşılır"],"answer":"Girift","example":"His explanation was convoluted and confusing."},{"word":"Corroborate","level":"C1","options":["Doğrulamak","Çürütmek","İnkâr etmek","Reddetmek"],"answer":"Doğrulamak","example":"Can you corroborate this story?"},{"word":"Culminate","level":"C1","options":["Doruk noktasına ulaşmak","Başlamak","Azalmak","Durdurmak"],"answer":"Doruk noktasına ulaşmak","example":"The festival culminates with fireworks."},{"word":"Cynical","level":"C1","options":["Alaycı","İyimser","Güvenen","Saf"],"answer":"Alaycı","example":"He has a cynical view of politics."},{"word":"Debacle","level":"C1","options":["Büyük başarısızlık","Zafer","Başarı","Şöhret"],"answer":"Büyük başarısızlık","example":"The project was a complete debacle."},{"word":"Deference","level":"C1","options":["Saygı","Saygısızlık","Küçümseme","İsyan"],"answer":"Saygı","example":"Show deference to your elders."},{"word":"Deplete","level":"C1","options":["Tükenmek","Doldurmak","Artırmak","Biriktirmek"],"answer":"Tükenmek","example":"We must not deplete natural resources."},{"word":"Deviate","level":"C1","options":["Sapmak","Doğru gitmek","Kurallara uymak","Sürdürmek"],"answer":"Sapmak","example":"Don't deviate from the plan."},{"word":"Dichotomy","level":"C1","options":["İkilik","Birlik","Uyum","Denge"],"answer":"İkilik","example":"There is a dichotomy between theory and practice."},{"word":"Discreet","level":"C1","options":["Ketum","Dikkatsiz","Ağzı gevşek","Pervasız"],"answer":"Ketum","example":"Be discreet about this information."},{"word":"Disparate","level":"C1","options":["Birbirinden farklı","Benzer","Ortak","Aynı"],"answer":"Birbirinden farklı","example":"These groups have disparate interests."},{"word":"Dispel","level":"C1","options":["Dağıtmak","Yaratmak","Güçlendirmek","Artırmak"],"answer":"Dağıtmak","example":"Her words dispelled my doubts."},{"word":"Disposition","level":"C1","options":["Eğilim","Karar","Yasa","Zorunluluk"],"answer":"Eğilim","example":"He has a cheerful disposition."},{"word":"Dogmatic","level":"C1","options":["Katı görüşlü","Açık fikirli","Esnek","Sorgulayan"],"answer":"Katı görüşlü","example":"His dogmatic approach prevents change."},{"word":"Dubious","level":"C1","options":["Şüpheli","Güvenilir","Kesin","Açık"],"answer":"Şüpheli","example":"His claims are dubious at best."},{"word":"Eloquent","level":"C1","options":["Belagatli","Kekeme","Düz konuşan","Sessiz"],"answer":"Belagatli","example":"She gave an eloquent speech."},{"word":"Emulate","level":"C1","options":["Taklit etmek","Reddetmek","Küçümsemek","Eleştirmek"],"answer":"Taklit etmek","example":"Try to emulate successful people."},{"word":"Erratic","level":"C1","options":["Düzensiz","Tutarlı","Düzenli","Güvenilir"],"answer":"Düzensiz","example":"His behavior is erratic and unpredictable."},{"word":"Evasive","level":"C1","options":["Kaçamak","Doğrudan","Açık sözlü","Şeffaf"],"answer":"Kaçamak","example":"He gave an evasive answer."},{"word":"Exacerbate","level":"C1","options":["Kötüleştirmek","İyileştirmek","Çözmek","Hafifletmek"],"answer":"Kötüleştirmek","example":"Stress exacerbates the problem."},{"word":"Exemplify","level":"C1","options":["Örnek teşkil etmek","Gizlemek","İstisna olmak","Reddetmek"],"answer":"Örnek teşkil etmek","example":"This exemplifies the issue perfectly."},{"word":"Expedite","level":"C1","options":["Hızlandırmak","Geciktirmek","Durdurmak","Ertelemek"],"answer":"Hızlandırmak","example":"Please expedite this order."},{"word":"Explicit","level":"C1","options":["Açık","Belirsiz","Örtük","Kapalı"],"answer":"Açık","example":"The instructions are explicit."},{"word":"Fabricate","level":"C1","options":["Uydurmak","Gerçeği söylemek","Kabul etmek","Doğrulamak"],"answer":"Uydurmak","example":"Don't fabricate stories."},{"word":"Fallacy","level":"C1","options":["Yanılgı","Gerçek","Kanıt","Doğru sonuç"],"answer":"Yanılgı","example":"That is a common fallacy."},{"word":"Fathom","level":"C1","options":["Kavramak","Görmezden gelmek","Yanlış anlamak","Reddetmek"],"answer":"Kavramak","example":"I cannot fathom his behavior."},{"word":"Fervour","level":"C1","options":["Coşku","İlgisizlik","Soğukluk","Tembellik"],"answer":"Coşku","example":"She pursues her goals with great fervour."},{"word":"Fluctuate","level":"C1","options":["Dalgalanmak","Sabit kalmak","Sürdürmek","Donmak"],"answer":"Dalgalanmak","example":"Prices fluctuate constantly."},{"word":"Formidable","level":"C1","options":["Zorlu","Önemsiz","Zayıf","Kolayca aşılabilir"],"answer":"Zorlu","example":"That is a formidable challenge."},{"word":"Frugal","level":"C1","options":["Tutumlu","Savurgan","Cömert","İsrafçı"],"answer":"Tutumlu","example":"He lives a frugal lifestyle."},{"word":"Futile","level":"C1","options":["Boşuna","Etkili","Anlamlı","Başarılı"],"answer":"Boşuna","example":"Resistance would be futile."},{"word":"Inadvertent","level":"C1","options":["Kasıtsız","Kasıtlı","Planlı","Bilinçli"],"answer":"Kasıtsız","example":"It was an inadvertent mistake."},{"word":"Incongruous","level":"C1","options":["Uyumsuz","Uyumlu","Tutarlı","Yerinde"],"answer":"Uyumsuz","example":"His comment seemed incongruous."},{"word":"Indifferent","level":"C1","options":["Kayıtsız","Meraklı","İlgili","Hevesli"],"answer":"Kayıtsız","example":"He seemed indifferent to the outcome."},{"word":"Infer","level":"C1","options":["Çıkarım yapmak","Açıkça söylemek","Yazmak","Reddetmek"],"answer":"Çıkarım yapmak","example":"Can you infer the meaning?"},{"word":"Inhibit","level":"C1","options":["Engellemek","Teşvik etmek","Serbest bırakmak","Desteklemek"],"answer":"Engellemek","example":"Laws inhibit certain behaviors."},{"word":"Innate","level":"C1","options":["Doğuştan","Sonradan kazanılan","Öğrenilmiş","Yapay"],"answer":"Doğuştan","example":"She has an innate talent for music."},{"word":"Insidious","level":"C1","options":["Sinsi","Açık","Dürüst","Belirgin"],"answer":"Sinsi","example":"An insidious disease spreads slowly."},{"word":"Intricate","level":"C1","options":["Karmaşık","Basit","Kaba","Sıradan"],"answer":"Karmaşık","example":"The design is very intricate."},{"word":"Languish","level":"C1","options":["Sürünmek","Gelişmek","Büyümek","Güçlenmek"],"answer":"Sürünmek","example":"The economy began to languish."},{"word":"Latent","level":"C1","options":["Gizli","Açık","Görünür","Aktif"],"answer":"Gizli","example":"There is latent anger beneath the surface."},{"word":"Lucid","level":"C1","options":["Berrak","Belirsiz","Karmaşık","Anlaşılmaz"],"answer":"Berrak","example":"The explanation was lucid and clear."},{"word":"Magnanimous","level":"C1","options":["Büyük kalpli","Kinci","Bencil","Küçük kalpli"],"answer":"Büyük kalpli","example":"He was magnanimous in victory."},{"word":"Meticulous","level":"C1","options":["Titiz","Dikkatsiz","Özensiz","Umursamaz"],"answer":"Titiz","example":"Her work is meticulous and accurate."},{"word":"Mitigate","level":"C1","options":["Azaltmak","Artırmak","Şiddetlendirmek","Kötüleştirmek"],"answer":"Azaltmak","example":"This will mitigate the damage."},{"word":"Nuance","level":"C1","options":["Nüans","Bariz fark","Belirgin özellik","Açık mesaj"],"answer":"Nüans","example":"There is a nuance I missed."},{"word":"Oblivious","level":"C1","options":["Farkında olmayan","Dikkatli","Uyanık","Bilinçli"],"answer":"Farkında olmayan","example":"He was oblivious to the danger."},{"word":"Obsolete","level":"C1","options":["Eskimiş","Güncel","Yeni","Modern"],"answer":"Eskimiş","example":"That technology is now obsolete."},{"word":"Ostracize","level":"C1","options":["Dışlamak","Kabul etmek","Dahil etmek","Kucaklamak"],"answer":"Dışlamak","example":"They ostracized him from the group."},{"word":"Painstaking","level":"C1","options":["Titiz","Dikkatsiz","Aceleci","Özensiz"],"answer":"Titiz","example":"This painstaking work took hours."},{"word":"Paradigm","level":"C1","options":["Paradigma","İstisna","Sapma","Anomali"],"answer":"Paradigma","example":"Science shifted to a new paradigm."},{"word":"Paradox","level":"C1","options":["Paradoks","Açık gerçek","Basit sonuç","Kolay çözüm"],"answer":"Paradoks","example":"This is a strange paradox."},{"word":"Partisan","level":"C1","options":["Tarafgir","Tarafsız","Nesnel","Bağımsız"],"answer":"Tarafgir","example":"His views are too partisan."},{"word":"Perpetuate","level":"C1","options":["Sürdürmek","Sona erdirmek","Durdurmak","Değiştirmek"],"answer":"Sürdürmek","example":"We must not perpetuate this myth."},{"word":"Plausible","level":"C1","options":["Makul","İnanılmaz","Saçma","Mantıksız"],"answer":"Makul","example":"That is a plausible explanation."},{"word":"Polarize","level":"C1","options":["Kutuplaştırmak","Birleştirmek","Uzlaştırmak","Birbirine yaklaştırmak"],"answer":"Kutuplaştırmak","example":"This issue tends to polarize people."},{"word":"Pragmatic","level":"C1","options":["Pratik","İdealist","Hayalci","Teorik"],"answer":"Pratik","example":"We need a pragmatic approach."},{"word":"Precarious","level":"C1","options":["Güvensiz","Güvenli","Sağlam","İstikrarlı"],"answer":"Güvensiz","example":"His position is precarious."},{"word":"Pretentious","level":"C1","options":["Gösterişli","Mütevazı","Alçakgönüllü","Sade"],"answer":"Gösterişli","example":"His manner is pretentious."},{"word":"Proliferate","level":"C1","options":["Çoğalmak","Azalmak","Yok olmak","Küçülmek"],"answer":"Çoğalmak","example":"Online scams proliferate daily."},{"word":"Reconcile","level":"C1","options":["Uzlaştırmak","Ayrıştırmak","Çatıştırmak","Uzaklaştırmak"],"answer":"Uzlaştırmak","example":"They reconciled after the fight."},{"word":"Redundant","level":"C1","options":["Gereksiz","Gerekli","Önemli","Temel"],"answer":"Gereksiz","example":"This information is redundant."},{"word":"Relentless","level":"C1","options":["Amansız","Yumuşak","Anlayışlı","Duraksayan"],"answer":"Amansız","example":"His relentless pursuit of excellence is admirable."},{"word":"Rhetoric","level":"C1","options":["Retorik","Sessizlik","Eylem","Uygulamalı adım"],"answer":"Retorik","example":"His rhetoric is persuasive but empty."},{"word":"Scrutinize","level":"C1","options":["İncelemek","Görmezden gelmek","Kabul etmek","Atlamak"],"answer":"İncelemek","example":"We will scrutinize the proposal carefully."},{"word":"Subvert","level":"C1","options":["Yıkmak","Desteklemek","Güçlendirmek","Korumak"],"answer":"Yıkmak","example":"They tried to subvert the government."},{"word":"Tenacious","level":"C1","options":["İnatçı","Vazgeçen","Kolayca pes eden","Değişken"],"answer":"İnatçı","example":"She is tenacious in her goals."},{"word":"Unprecedented","level":"C1","options":["Benzeri görülmemiş","Sıradan","Alışılmış","Tekrar eden"],"answer":"Benzeri görülmemiş","example":"This is an unprecedented situation."},{"word":"Vindictive","level":"C1","options":["Kinci","Affedici","Anlayışlı","Merhametli"],"answer":"Kinci","example":"His vindictive nature cost him dearly."},{"word":"Wane","level":"C1","options":["Azalmak","Güçlenmek","Artmak","Büyümek"],"answer":"Azalmak","example":"Her interest began to wane."},{"word":"Wary","level":"C1","options":["Tedirgin","Dikkatsiz","Kayıtsız","Güvenen"],"answer":"Tedirgin","example":"Be wary of strangers."},{"word":"Zealous","level":"C1","options":["Hevesli","İlgisiz","Tembel","Pes eden"],"answer":"Hevesli","example":"He is zealous in his beliefs."}],"sentence_practice":[{"question":"What do you like to do in your free time?","level":"B1","alternatives":["I love reading books and listening to music.","I usually go for a walk or meet my friends.","I enjoy watching films and playing video games."]},{"question":"Describe your best friend.","level":"B1","alternatives":["My best friend is very kind and makes me laugh.","She is honest and I can talk to her about everything.","My best friend has known me for many years and we trust each other."]},{"question":"What is your daily routine?","level":"B1","alternatives":["I wake up at 7, have breakfast, and go to work at 8.","I exercise for an hour, then work until 5 o'clock.","I study in the morning, have lunch, and relax in the afternoon."]},{"question":"What is your favourite food and why?","level":"B1","alternatives":["I love pizza because it is delicious and satisfying.","My favourite food is pasta with tomato sauce.","I enjoy eating fresh sushi because it is healthy and tasty."]},{"question":"Tell me about your family.","level":"B1","alternatives":["I have two parents and one sister.","My family is close and we spend time together every weekend.","I have a big family with many cousins and aunts."]},{"question":"What is your favourite season and why?","level":"B1","alternatives":["I like summer because the weather is warm.","Spring is my favourite because flowers bloom everywhere.","I prefer autumn because the leaves change beautiful colours."]},{"question":"Where would you like to go on holiday?","level":"B1","alternatives":["I want to visit Paris and see the Eiffel Tower.","I would like to go to Japan to experience the culture.","I dream of going to the beach in Thailand."]},{"question":"What sport do you enjoy?","level":"B1","alternatives":["I enjoy playing football with my friends.","Tennis is my favourite sport because it is exciting.","I like swimming because it keeps me fit and healthy."]},{"question":"Describe your hometown.","level":"B1","alternatives":["My hometown is a small city with friendly people.","It is located near the mountains and is very beautiful.","My hometown is busy but has a nice park in the center."]},{"question":"What did you do last weekend?","level":"B1","alternatives":["I went shopping with my family.","I visited my grandparents and had dinner together.","I stayed home and watched films all day."]},{"question":"What is your favourite film? Why?","level":"B1","alternatives":["I like action films because they are exciting.","My favourite is a romantic comedy because it makes me laugh.","I enjoy adventure films with interesting stories."]},{"question":"What are your hobbies?","level":"B1","alternatives":["I enjoy painting and drawing in my spare time.","My hobbies are reading and playing the guitar.","I like cooking, gardening, and photography."]},{"question":"How do you get to school or work?","level":"B1","alternatives":["I take the bus every day.","I drive my car to work.","I walk because it is close to my house."]},{"question":"What do you usually eat for breakfast?","level":"B1","alternatives":["I eat bread with cheese and drink coffee.","I prefer cereal with milk and fruit.","I usually have eggs, bacon, and toast."]},{"question":"Describe your bedroom.","level":"B1","alternatives":["My bedroom is small but comfortable and cozy.","It has a blue wall and a big window.","My bedroom has a bed, desk, and bookshelf."]},{"question":"What are you good at?","level":"B1","alternatives":["I am good at languages and learning quickly.","I am talented at drawing and painting.","I am skilled at sports and team games."]},{"question":"What time do you usually go to bed?","level":"B1","alternatives":["I go to bed at 11 o'clock on weekdays.","I sleep around 10 o'clock during the week.","I go to bed late at midnight on weekends."]},{"question":"Do you prefer summer or winter? Why?","level":"B1","alternatives":["I prefer summer because I can go to the beach.","I like winter because of the snow and holidays.","I enjoy both seasons but prefer summer for outdoor activities."]},{"question":"What was your favourite subject at school?","level":"B1","alternatives":["My favourite subject was English because I love languages.","I enjoyed science the most because of interesting experiments.","History was my favourite because I liked learning about the past."]},{"question":"Describe a typical weekend for you.","level":"B1","alternatives":["I sleep late, have lunch with friends, and relax at home.","I do sports in the morning and visit family in the afternoon.","I go shopping, watch films, and have dinner out."]},{"question":"What is the most important thing you own?","level":"B1","alternatives":["My phone because I use it every day.","A photo of my family because it is precious.","My laptop because I need it for work and studying."]},{"question":"Tell me about a place you have visited.","level":"B1","alternatives":["I visited Rome and saw the Colosseum.","I went to the beach in Spain last year.","I travelled to London and enjoyed the museums."]},{"question":"What do you usually do after school or work?","level":"B1","alternatives":["I go to the gym or exercise.","I have a snack and relax at home.","I meet friends or do homework."]},{"question":"Do you like cooking? What can you make?","level":"B1","alternatives":["Yes, I can make pasta and simple salads.","I like cooking and can prepare basic meals.","I enjoy cooking rice dishes and vegetables."]},{"question":"What kind of music do you listen to?","level":"B1","alternatives":["I like pop and rock music.","I enjoy jazz and classical music.","I prefer hip-hop and contemporary music."]},{"question":"Tell me about your neighbourhood.","level":"B1","alternatives":["My neighbourhood is quiet and peaceful.","It is a busy area with shops and restaurants.","It has a nice park and friendly people."]},{"question":"What do you enjoy watching on TV?","level":"B1","alternatives":["I watch films and documentaries.","I enjoy sports matches and cooking shows.","I like comedy series and drama programmes."]},{"question":"Who is your role model and why?","level":"B1","alternatives":["My role model is my teacher because she is kind.","I admire scientists who help humanity.","My parents are my role models because they work hard."]},{"question":"What languages do you speak?","level":"B1","alternatives":["I speak English and my native language.","I speak three languages: English, French, and German.","I can speak English and some Spanish."]},{"question":"How often do you exercise?","level":"B1","alternatives":["I exercise three times a week.","I go to the gym every day.","I exercise on weekends when I have time."]},{"question":"Do you prefer reading books or watching films? Why?","level":"B1","alternatives":["I prefer films because they are faster and more visual.","I like books because I can imagine the scenes.","I enjoy both equally depending on my mood."]},{"question":"What was the best birthday you ever had?","level":"B1","alternatives":["My best birthday was when my family surprised me with a party.","I had a great day with my friends at the beach.","My best birthday was when I received the gift I wanted."]},{"question":"Describe your daily schedule.","level":"B1","alternatives":["I wake at 7, work until 5, then relax and sleep.","I study in the morning, have lunch, and exercise.","I start work at 8, have breaks, and finish at 6."]},{"question":"What is something you want to learn?","level":"B1","alternatives":["I want to learn to play the piano.","I would like to learn how to cook better.","I want to become fluent in another language."]},{"question":"Tell me about a memorable meal.","level":"B1","alternatives":["I had a wonderful meal with my family at Christmas.","I remember a special dinner on my birthday.","A beautiful meal at a restaurant by the sea was memorable."]},{"question":"What is your favourite shop and why?","level":"B1","alternatives":["I like the mall because it has many shops.","My favourite shop has good prices and nice clothes.","I enjoy shopping there because the staff are friendly."]},{"question":"How do you spend time with your family?","level":"B1","alternatives":["We have dinner together every evening.","We play games and watch films together.","We go out for walks and visit relatives."]},{"question":"What pet would you like to have and why?","level":"B1","alternatives":["I would like a dog because they are loyal.","I want a cat because they are independent.","I would like a bird because they are beautiful."]},{"question":"Tell me about the weather in your country.","level":"B1","alternatives":["We have four seasons with warm summers and cold winters.","The weather is usually warm and sunny.","We have rainy winters and dry summers."]},{"question":"What do you think is important in a friendship?","level":"B1","alternatives":["Trust and honesty are most important.","I believe loyalty and understanding matter.","Friends should be supportive and kind to each other."]},{"question":"Describe the school you went to.","level":"B1","alternatives":["My school was a modern building with many classrooms.","It had a large playground and a good library.","My school was in the city with about 500 students."]},{"question":"What would you do on a rainy day?","level":"B1","alternatives":["I would watch films or read a book.","I would stay inside and cook or draw.","I would relax at home and listen to music."]},{"question":"Tell me about a gift you received.","level":"B1","alternatives":["I received a book that I love very much.","I got a beautiful watch for my birthday.","Someone gave me a camera and I enjoy photography now."]},{"question":"What is your favourite colour and why?","level":"B1","alternatives":["Blue is my favourite because it is calming.","I love red because it is bright and energetic.","Green is my favourite because it reminds me of nature."]},{"question":"How do you celebrate your birthday?","level":"B1","alternatives":["I have a party with friends and family.","I go out to eat at my favourite restaurant.","I celebrate quietly with my closest friends."]},{"question":"Do you prefer the city or the countryside? Why?","level":"B1","alternatives":["I prefer the city because of the activities and jobs.","I like the countryside for its peace and nature.","I enjoy both depending on what I want to do."]},{"question":"What is your morning routine?","level":"B1","alternatives":["I wake up, shower, eat breakfast, and get ready.","I exercise first, then shower and have coffee.","I make breakfast, read news, then prepare to leave."]},{"question":"Tell me about a bad day you had.","level":"B1","alternatives":["I had a bad day when I failed my exam.","I had a terrible day when I lost my wallet.","A bad day was when I had an argument with a friend."]},{"question":"What is something that makes you happy?","level":"B1","alternatives":["Spending time with my family makes me happy.","When I achieve my goals, I feel very happy.","Time with friends and good food make me happy."]},{"question":"Describe a person in your family.","level":"B1","alternatives":["My mother is kind, hardworking, and very caring.","My father is tall, intelligent, and funny.","My sister is kind and always helps me with homework."]},{"question":"What would you do if you were the president?","level":"B2","alternatives":["I would improve the education system significantly.","I would focus on reducing poverty and inequality.","I would invest in environmental protection and healthcare."]},{"question":"Describe a time when you overcame a difficult challenge.","level":"B2","alternatives":["When I was bullied at school, I learned to stand up for myself.","I overcame my fear of public speaking through practice.","When my family faced financial problems, we worked together."]},{"question":"What are the advantages and disadvantages of social media?","level":"B2","alternatives":["It helps us connect globally, but it wastes time and spreads false information.","Social media is great for businesses but harmful to mental health.","It allows sharing but creates addiction and privacy concerns."]},{"question":"If you could live in any country, where would it be and why?","level":"B2","alternatives":["I would choose Japan for its technology and culture.","I would like to live in Canada for the beautiful nature.","I would prefer France for its art, food, and history."]},{"question":"How has technology changed the way we communicate?","level":"B2","alternatives":["We now communicate instantly across the world.","Video calls have replaced many face-to-face meetings.","Technology made communication faster but less personal."]},{"question":"What is your opinion on online education?","level":"B2","alternatives":["Online education is flexible but lacks social interaction.","It is accessible to everyone but requires discipline.","It can be effective with good teaching, but engagement is difficult."]},{"question":"Describe your ideal job and explain why.","level":"B2","alternatives":["I want to be a teacher because I enjoy helping others.","I would like to work in environmental protection to help nature.","I want to be a doctor to save lives and help people."]},{"question":"What changes would you make to improve your city?","level":"B2","alternatives":["I would improve public transportation and reduce pollution.","I would build more green spaces and parks.","I would improve education and healthcare services."]},{"question":"What is your opinion on environmental issues?","level":"B2","alternatives":["Climate change is serious and we must act now.","We need to reduce plastic use and protect forests.","Governments should enforce stricter environmental laws."]},{"question":"How important is learning foreign languages in today's world?","level":"B2","alternatives":["Very important because the world is globalized now.","Languages open career opportunities and cultural understanding.","It is essential for international communication and business."]},{"question":"Do you think television has a positive or negative influence on society?","level":"B2","alternatives":["Television provides information but can be addictive.","It educates people but also spreads violence and materialism.","TV is good for news and entertainment, but too much is harmful."]},{"question":"What are the pros and cons of living in a big city?","level":"B2","alternatives":["Cities have jobs and culture, but pollution and crowding.","More opportunities but higher costs and stress.","Better services but less community feeling."]},{"question":"If you could meet any historical figure, who and why?","level":"B2","alternatives":["I would like to meet Einstein to understand physics.","I would meet Gandhi to learn about peaceful resistance.","I would meet Marie Curie to understand her scientific discoveries."]},{"question":"Describe a time when you had to make a difficult decision.","level":"B2","alternatives":["I had to choose between two job offers.","I decided to move to another city for education.","I had to choose between two important opportunities."]},{"question":"How do you think education will change in 20 years?","level":"B2","alternatives":["There will be more online and personalized learning.","Technology will play a bigger role with AI tutors.","Students will learn differently with virtual reality."]},{"question":"What are the most important qualities of a good leader?","level":"B2","alternatives":["Good leaders are honest, decisive, and inspire others.","They listen to people and make fair decisions.","They have vision, integrity, and emotional intelligence."]},{"question":"Do you think money can buy happiness? Why or why not?","level":"B2","alternatives":["Money can buy comfort, but true happiness comes from relationships.","It brings security but relationships matter more.","Money helps meet needs, but happiness requires more than that."]},{"question":"How has your life changed since you were a child?","level":"B2","alternatives":["I have become more independent and responsible.","I have learned more about myself and the world.","I have more freedom but also more responsibilities."]},{"question":"What do you think about the relationship between technology and privacy?","level":"B2","alternatives":["Technology invades privacy through data collection.","We must balance innovation with personal privacy protection.","Companies know too much about us through technology."]},{"question":"Describe an experience that changed your perspective.","level":"B2","alternatives":["Travelling abroad showed me different ways of living.","Meeting people from different cultures changed my views.","A failure taught me the value of persistence."]},{"question":"What would you do if you won a large amount of money?","level":"B2","alternatives":["I would help my family and invest wisely.","I would travel and pursue my dreams.","I would donate some to charity and save the rest."]},{"question":"How do you think social media affects young people?","level":"B2","alternatives":["It affects mental health and creates unrealistic expectations.","Young people become addicted and compare themselves to others.","It harms self-esteem but also builds community."]},{"question":"What are the advantages of working from home?","level":"B2","alternatives":["You save time and money on commuting.","You have more flexibility and spend time with family.","You can focus better and have a better work-life balance."]},{"question":"What is your opinion on fast food?","level":"B2","alternatives":["Fast food is convenient but unhealthy.","It's good sometimes but shouldn't be regular.","It's quick and affordable but lacks nutrition."]},{"question":"If you could change one thing about your country, what would it be?","level":"B2","alternatives":["I would reduce corruption in government.","I would improve healthcare and education systems.","I would create more job opportunities for young people."]},{"question":"Describe a time when teamwork was important.","level":"B2","alternatives":["During a school project, we achieved more together.","In sports, teamwork helped us win the championship.","At work, collaboration solved a difficult problem."]},{"question":"Do you think famous people should be role models?","level":"B2","alternatives":["They should because people look up to them.","Only if they live according to their values.","Fame doesn't make someone automatically a good role model."]},{"question":"What are your thoughts on climate change?","level":"B2","alternatives":["It's a serious threat that requires immediate action.","We must reduce emissions and protect the environment.","Climate change is real and humans must adapt."]},{"question":"To what extent do you agree that technology has done more harm than good?","level":"C1","alternatives":["Technology has both benefits and serious drawbacks to society overall.","While it improves efficiency, it creates new problems like addiction.","Technology is neutral; the impact depends on how we use it."]},{"question":"Discuss the ethical implications of genetic engineering.","level":"C1","alternatives":["It raises concerns about designer babies and inequality.","We must consider the long-term consequences on humanity.","It offers benefits but requires strict ethical guidelines."]},{"question":"How do cultural differences affect international business relationships?","level":"C1","alternatives":["Understanding culture is essential for business success.","Different values and communication styles create challenges.","Cultural sensitivity can prevent misunderstandings and build trust."]},{"question":"To what extent should freedom of speech be limited?","level":"C1","alternatives":["Speech should be free but not incite violence or harm.","Some limitations are necessary to protect minorities.","The balance between freedom and responsibility is complex."]},{"question":"Critically evaluate the role of media in shaping public opinion.","level":"C1","alternatives":["Media has enormous power to influence how people think.","Bias in media creates polarized views in society.","Media shapes narratives and people's perception of reality."]},{"question":"Discuss the relationship between economic growth and environmental sustainability.","level":"C1","alternatives":["Growth often comes at the cost of environmental degradation.","We need to find ways to balance both concerns.","Sustainable practices can lead to long-term economic health."]},{"question":"What are the sociological effects of urbanization on communities?","level":"C1","alternatives":["Urbanization breaks down traditional communities and values.","It creates diverse societies but can increase isolation.","Cities offer opportunities but social cohesion often weakens."]},{"question":"To what extent is success determined by talent or hard work?","level":"C1","alternatives":["Both are essential; talent without work is wasted potential.","Hard work can overcome lack of talent in most cases.","Success requires talent, work, timing, and luck combined."]},{"question":"Critically analyse the impact of globalisation on national identity.","level":"C1","alternatives":["Globalisation homogenizes cultures and threatens local traditions.","Nations struggle to maintain identity in a global economy.","Cultural exchange can strengthen identity through understanding."]},{"question":"How do childhood experiences shape adult personality?","level":"C1","alternatives":["Early experiences fundamentally shape psychological development.","Family dynamics and childhood trauma affect adult relationships.","Childhood influences values, fears, and coping mechanisms."]},{"question":"Discuss the ethics of social media data collection.","level":"C1","alternatives":["Companies exploit personal data for profit without consent.","Data privacy rights should be strictly protected by law.","Users don't understand what data is collected about them."]},{"question":"To what extent has feminism changed society for the better?","level":"C1","alternatives":["It advanced women's rights significantly but inequality remains.","Feminism has challenged outdated power structures.","Progress has been made, but gender disparities persist."]},{"question":"What role should governments play in regulating the economy?","level":"C1","alternatives":["Too much regulation stifles innovation and growth.","Some regulation is necessary to prevent abuse.","The balance between free markets and regulation is crucial."]},{"question":"Critically evaluate the effectiveness of international aid.","level":"C1","alternatives":["Aid often gets lost to corruption and doesn't help.","Some aid works, but distribution systems are inefficient.","International aid should focus on sustainable development."]},{"question":"How does language influence the way we think?","level":"C1","alternatives":["Language shapes perception and thoughts in profound ways.","Different languages reveal different conceptual frameworks.","Language both reflects and constrains how we think."]},{"question":"To what extent is social inequality inevitable in capitalism?","level":"C1","alternatives":["Capitalism inherently creates wealth gaps and inequality.","Market economies can reduce inequality through regulation.","Some inequality is inevitable, but we can manage it better."]},{"question":"Discuss the psychological effects of social media on mental health.","level":"C1","alternatives":["Social media increases anxiety, depression, and low self-esteem.","Constant comparison and validation-seeking harm mental health.","Social media can worsen existing mental health issues."]},{"question":"What are the philosophical implications of artificial intelligence?","level":"C1","alternatives":["AI challenges our definition of consciousness and humanity.","If AI becomes conscious, we face new ethical dilemmas.","AI raises questions about the nature of intelligence itself."]},{"question":"To what extent is democracy the most effective form of government?","level":"C1","alternatives":["Democracy is imperfect but better than alternatives.","Democracy doesn't guarantee good outcomes or rights.","The effectiveness of democracy depends on institutions."]},{"question":"Critically assess the role of art in society.","level":"C1","alternatives":["Art expresses what cannot be said through words.","Art preserves culture and challenges societal norms.","Art provides meaning and emotional connection in society."]},{"question":"How does media construct and reinforce gender stereotypes?","level":"C1","alternatives":["Media perpetuates narrow gender roles and expectations.","Advertising particularly reinforces traditional gender stereotypes.","Media representation influences how people see gender roles."]},{"question":"Discuss the implications of an aging population on healthcare systems.","level":"C1","alternatives":["Aging populations increase healthcare costs significantly.","Systems must adapt to care for chronic diseases.","Elderly care will strain resources and budgets globally."]},{"question":"To what extent should education prioritise academic knowledge over practical skills?","level":"C1","alternatives":["Both are essential; academia without skills is incomplete.","Practical skills are often more valuable in employment.","Education should balance theory and practical application."]},{"question":"What are the ethical considerations surrounding euthanasia?","level":"C1","alternatives":["It raises questions about right to die and medical ethics.","Each case has unique circumstances and moral complexity.","Society must balance compassion with protection of life."]},{"question":"How does cultural imperialism affect developing nations?","level":"C1","alternatives":["Western culture dominates and erases local traditions.","Developing nations lose cultural identity through globalization.","Cultural imperialism creates dependency and resentment."]},{"question":"Critically evaluate the concept of meritocracy.","level":"C1","alternatives":["Meritocracy is a myth because privilege affects opportunity.","Systems are never truly merit-based due to structural inequality.","Merit exists but is influenced by privilege and circumstance."]},{"question":"To what extent does history repeat itself?","level":"C1","alternatives":["History doesn't repeat exactly but patterns emerge.","Similar situations produce similar outcomes due to human nature.","Context varies so history rarely repeats precisely."]},{"question":"Discuss the role of religion in modern secular societies.","level":"C1","alternatives":["Religion remains important for millions despite secularization.","Secular and religious worldviews increasingly conflict.","Societies must balance religious freedom with secular values."]},{"question":"How does architecture reflect the values of a society?","level":"C1","alternatives":["Buildings reveal what a society prioritizes and values.","Architecture shows economic power, aesthetic preferences, and beliefs.","Design choices reflect cultural identity and social hierarchies."]},{"question":"What are the implications of mass surveillance for civil liberties?","level":"C1","alternatives":["Mass surveillance fundamentally threatens privacy and freedom.","People self-censor when they know they are watched.","Governments use surveillance to control and suppress dissent."]},{"question":"Critically analyse the concept of 'the greater good'.","level":"C1","alternatives":["'Greater good' can justify oppression of minorities.","It's often used to ignore individual rights and freedoms.","Finding balance between individual and collective wellbeing is complex."]},{"question":"How do economic disparities affect access to education?","level":"C1","alternatives":["Poverty limits educational opportunities for billions.","Economic inequality perpetuates education gaps between rich and poor.","Quality education remains inaccessible to disadvantaged populations."]},{"question":"To what extent is beauty subjective?","level":"C1","alternatives":["Beauty is entirely cultural and subjective.","Some universal standards of beauty might exist.","Beauty is both biological and culturally constructed."]},{"question":"Discuss the ethical dimensions of animal rights.","level":"C1","alternatives":["Animals deserve protection from unnecessary suffering.","We must balance human needs with animal welfare.","Animal exploitation requires ethical justification in modern society."]},{"question":"How has the rise of populism affected democratic institutions?","level":"C1","alternatives":["Populism undermines checks and balances and institutional stability.","It challenges established elites but can be anti-democratic.","Populism reveals legitimate grievances but often threatens democracy."]},{"question":"To what extent can individuals be held responsible for systemic injustice?","level":"C1","alternatives":["Individuals benefit from systems they didn't create but perpetuate them.","Personal responsibility exists within structural constraints.","Both individual choice and systemic forces shape outcomes."]},{"question":"Critically evaluate the impact of consumerism on wellbeing.","level":"C1","alternatives":["Consumerism creates illusions of happiness through material goods.","It drives environmental destruction and social inequality.","Consumer culture harms mental health and authentic connection."]},{"question":"How has colonialism continued to shape contemporary geopolitics?","level":"C1","alternatives":["Colonial borders created conflicts that persist today.","Power imbalances from colonialism still disadvantage former colonies.","Colonial legacy affects wealth distribution and international relations."]},{"question":"To what extent is national identity a social construct?","level":"C1","alternatives":["National identity is invented and maintained through narratives.","Nations are imagined communities built on shared stories.","Identity is constructed but has real psychological effects."]},{"question":"Discuss the relationship between power and knowledge.","level":"C1","alternatives":["Power determines what knowledge is considered legitimate.","Those with knowledge often have power in society.","Knowledge and power reinforce each other in institutions."]},{"question":"How do confirmation bias and echo chambers affect political discourse?","level":"C1","alternatives":["They polarize society by reinforcing existing beliefs.","People filter information to confirm their worldview.","Echo chambers prevent understanding of opposing perspectives."]},{"question":"Critically analyse the concept of cultural appropriation.","level":"C1","alternatives":["Appropriation exploits marginalized cultures for profit.","Context matters in whether cultural exchange becomes appropriation.","The line between appreciation and appropriation is complex."]},{"question":"To what extent can morality be universal?","level":"C1","alternatives":["Some moral principles may be universal across cultures.","Morality is culturally relative and context-dependent.","Universal and relative morality likely coexist."]}]};
+let currentMode = null;
+let filteredItems = [];
+let currentIndex = 0;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function loadData() {
+  // Shuffle once on load so order is random every session
+  data.vocabulary = shuffle(data.vocabulary);
+  data.sentence_practice = shuffle(data.sentence_practice);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goHome() {
+  currentMode = null;
+  showScreen('screen-home');
+}
+
+function goLevelSelect() {
+  showScreen('screen-level');
+}
+
+async function startMode(mode) {
+  if (!data.vocabulary.length) loadData();
+  currentMode = mode;
+  document.getElementById('level-mode-title').textContent =
+    mode === 'vocabulary' ? 'Vocabulary' : 'Sentence Practice';
+  showScreen('screen-level');
+}
+
+function selectLevel(level) {
+  if (currentMode === 'vocabulary') {
+    const pool = level === 'mixed'
+      ? data.vocabulary
+      : data.vocabulary.filter(item => item.level === level);
+    filteredItems = shuffle(pool);
+    currentIndex = 0;
+    renderVocab();
+    showScreen('screen-vocabulary');
+  } else {
+    const pool = level === 'mixed'
+      ? data.sentence_practice
+      : data.sentence_practice.filter(item => item.level === level);
+    filteredItems = shuffle(pool);
+    currentIndex = 0;
+    renderSentence();
+    showScreen('screen-sentence');
+  }
+}
+
+/* ── VOCABULARY ── */
+function renderVocab() {
+  const total = filteredItems.length;
+
+  if (total === 0) {
+    document.getElementById('vocab-word').textContent = '';
+    document.getElementById('vocab-example-text').textContent = '';
+    document.getElementById('vocab-level').textContent = '';
+    document.getElementById('vocab-counter').textContent = '0 / 0';
+    document.getElementById('vocab-show-btn').classList.add('hidden');
+    document.getElementById('vocab-options').innerHTML =
+      '<div class="no-results"><span>🔍</span>No questions available for this level.</div>';
+    document.getElementById('vocab-options').classList.remove('hidden');
+    document.getElementById('vocab-prev').disabled = true;
+    document.getElementById('vocab-next').disabled = true;
+    return;
+  }
+
+  const item = filteredItems[currentIndex];
+  document.getElementById('vocab-counter').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('vocab-level').textContent = item.level;
+  document.getElementById('vocab-word').textContent = item.word;
+  document.getElementById('vocab-example-text').textContent = item.example;
+
+  const grid = document.getElementById('vocab-options');
+  grid.innerHTML = '';
+  grid.classList.add('hidden');
+
+  const showBtn = document.getElementById('vocab-show-btn');
+  showBtn.classList.remove('hidden');
+  showBtn.textContent = '👁 Show Options';
+
+  document.getElementById('vocab-prev').disabled = currentIndex === 0;
+  document.getElementById('vocab-next').disabled = currentIndex === total - 1;
+}
+
+function showVocabOptions() {
+  const item = filteredItems[currentIndex];
+  const grid = document.getElementById('vocab-options');
+
+  const opts = shuffle(item.options);
+  grid.innerHTML = '';
+  opts.forEach(opt => {
+    const card = document.createElement('button');
+    card.className = 'option-card';
+    card.textContent = opt;
+    card.onclick = () => selectOption(grid, opt, item.answer);
+    grid.appendChild(card);
+  });
+
+  grid.classList.remove('hidden');
+  document.getElementById('vocab-show-btn').classList.add('hidden');
+}
+
+function selectOption(grid, selected, answer) {
+  grid.querySelectorAll('.option-card').forEach(c => {
+    c.onclick = null;
+    c.classList.add(c.textContent === answer ? 'correct' : 'wrong');
+  });
+}
+
+/* ── SENTENCE ── */
+function renderSentence() {
+  const total = filteredItems.length;
+
+  if (total === 0) {
+    document.getElementById('sentence-question').textContent = '';
+    document.getElementById('sentence-level').textContent = '';
+    document.getElementById('sentence-counter').textContent = '0 / 0';
+    document.getElementById('sentence-show-btn').classList.add('hidden');
+    document.getElementById('sentence-answers').innerHTML =
+      '<div class="no-results"><span>🔍</span>No questions available for this level.</div>';
+    document.getElementById('sentence-answers').classList.remove('hidden');
+    document.getElementById('sentence-prev').disabled = true;
+    document.getElementById('sentence-next').disabled = true;
+    return;
+  }
+
+  const item = filteredItems[currentIndex];
+  document.getElementById('sentence-counter').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('sentence-level').textContent = item.level;
+  document.getElementById('sentence-question').textContent = item.question;
+
+  const list = document.getElementById('sentence-answers');
+  list.innerHTML = '';
+  list.classList.add('hidden');
+
+  const showBtn = document.getElementById('sentence-show-btn');
+  showBtn.classList.remove('hidden');
+
+  document.getElementById('sentence-prev').disabled = currentIndex === 0;
+  document.getElementById('sentence-next').disabled = currentIndex === total - 1;
+}
+
+function showSentenceAnswers() {
+  const item = filteredItems[currentIndex];
+  const list = document.getElementById('sentence-answers');
+
+  list.innerHTML = '';
+  item.alternatives.forEach((alt, i) => {
+    const card = document.createElement('div');
+    card.className = 'answer-card';
+    card.innerHTML = `<span class="answer-num">${i + 1}</span><span>${alt}</span>`;
+    list.appendChild(card);
+  });
+
+  list.classList.remove('hidden');
+  document.getElementById('sentence-show-btn').classList.add('hidden');
+}
+
+/* ── NAVIGATION ── */
+function nextItem(mode) {
+  if (currentIndex < filteredItems.length - 1) {
+    currentIndex++;
+    mode === 'vocabulary' ? renderVocab() : renderSentence();
+  }
+}
+
+function prevItem(mode) {
+  if (currentIndex > 0) {
+    currentIndex--;
+    mode === 'vocabulary' ? renderVocab() : renderSentence();
+  }
+}
+
+/* ── KEYBOARD SHORTCUTS ── */
+document.addEventListener('keydown', e => {
+  const vocabActive   = document.getElementById('screen-vocabulary').classList.contains('active');
+  const sentenceActive = document.getElementById('screen-sentence').classList.contains('active');
+  const levelActive   = document.getElementById('screen-level').classList.contains('active');
+
+  if (e.key === 'ArrowRight') {
+    if (vocabActive)    nextItem('vocabulary');
+    if (sentenceActive) nextItem('sentence');
+  } else if (e.key === 'ArrowLeft') {
+    if (vocabActive)    prevItem('vocabulary');
+    if (sentenceActive) prevItem('sentence');
+  } else if (e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    if (vocabActive) {
+      const btn = document.getElementById('vocab-show-btn');
+      if (!btn.classList.contains('hidden')) showVocabOptions();
+    }
+    if (sentenceActive) {
+      const btn = document.getElementById('sentence-show-btn');
+      if (!btn.classList.contains('hidden')) showSentenceAnswers();
+    }
+  } else if (e.key === 'Escape') {
+    if (vocabActive || sentenceActive) goLevelSelect();
+    else if (levelActive) goHome();
+  }
+});
+
+loadData();
+  </script>
+</body>
+</html>
